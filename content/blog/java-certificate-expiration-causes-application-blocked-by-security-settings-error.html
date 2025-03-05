@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Certificate Expiration causes "Application Blocked by Security Settings" error - FIXED</title>
+    <meta name="slug" content="java-certificate-expiration-causes-application-blocked-by-security-settings-error" />
+    <meta name="date" content="2015-06-22 15:16:00" />
+    <meta name="authors" content="Barbara Hill Meyers" />
+</head>
+<body>
+
+<p><a href="http://software.broadinstitute.org/blog/2017/03/16/java-applet-based-visualizers-no-longer-function-in-any-browser" style="background-color: rgb(255, 255, 255);"><strong>UPDATE MARCH 17, 2017 : Java applet visualizers no longer work in any browser. Please click here to read the blog post.</strong></a></p>
+<hr/>
+<p><strong>June 23, 2015 1:00PM UPDATE: This issue has now been resolved. Please <u><a href="/contact">let us know</a></u> if you continue to encounter issues with launching visualizers.</strong></p>
+<p> </p>
+<p>Our Java certificate recently expired, and we are now in the process of renewing it. During this time, visualizers will fail to launch, returning the following error:</p>
+<p><img alt="" src="/uploaded/content_blocked.png" style="width: 526px; height: 254px;"/></p>
+<p> </p>
+<p>If you encounter this error, you'll need to add the URL for the GenePattern server to your Java exceptions, as detailed on the<u> <a href="https://www.java.com/en/download/faq/exception_sitelist.xml" target="_blank">Java</a></u> site. The URL for the server can be found in the URL bar in the top of your browser. The URL you add to the exceptions list should look something like:</p>
+<p><samp>http://genepattern.broadinstitute.org</samp></p>
+<p>Once you have added the exception, you may need to refresh your window. You will then see a message like this when you attempt to launch a visualizer:</p>
+<p><img alt="" src="/uploaded/content_accept.png" style="width: 564px; height: 399px;"/></p>
+<p>Click the Check Box next to "I accept the risk and want to run this application" (and optionally, via Show Options, choose to do this always for this provider). Then, click <em>Run</em> and the visualizer should launch.</p>
+<p> </p>
+<p>We apologize for any inconvenience. Please <u><a href="/contact" target="_blank">let us know</a></u> if you continue to have difficulties.</p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

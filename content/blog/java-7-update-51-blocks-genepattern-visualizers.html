@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java 7 update 51 blocks GenePattern visualizers</title>
+    <meta name="slug" content="java-7-update-51-blocks-genepattern-visualizers" />
+    <meta name="date" content="2014-01-21 16:37:00" />
+    <meta name="authors" content="David Eby" />
+</head>
+<body>
+
+<p><a href="http://software.broadinstitute.org/blog/2017/03/16/java-applet-based-visualizers-no-longer-function-in-any-browser" style="background-color: rgb(255, 255, 255);"><strong>UPDATE MARCH 17, 2017 : Java applet visualizers no longer work in any browser. Please click here to read the blog post.</strong></a></p>
+<hr/>
+<p>A new Java update (7u51) was <a href="https://blogs.oracle.com/java/entry/java_se_7_update_51">released by Oracle</a> a week ago and - as has been the pattern with other recent updates - once again tightens security on applets run from web browsers.  This affects all GenePattern visualizers as well as certain other components, most prominently the File Uploader.  The GenePattern team is currently evaluating the best way to modify these components to avoid these issues in the future.</p>
+<p>This update introduces a new security exception list which will allow you to register an exception for GenePattern so that you can use visualizers in the interim.  The instructions are stratightforward (based on <a href="http://java.com/en/download/faq/exception_sitelist.xml">this page</a> from Oracle):</p>
+<ol>
+<li>Open the Java Control Panel.  On a Mac this is accessed through System Preferences.  See <a href="http://java.com/en/download/help/win_controlpanel.xml">these instructions</a> to find it on Windows.</li>
+<li>Switch to the Security tab.</li>
+<li>In the section titled Exception Site List, click the Edit Site List button.</li>
+<li>In the dialog that appears, add the base URL for your GenePattern server.  For our public server this will be http://genepattern.broadinstitute.org.  Click OK and accept the warning that follows, then click OK once more to save the changes.</li>
+<li>The GenePattern visualizers will still be blocked in your browser, but now you will be prompted to permit them to run just as with the previous Java update (7u45).  See our <a href="/blog/2013/11/21/genepattern-and-java-7-update-45">prior blog post on the subject</a> for instructions.</li>
+</ol>
+<p>Depending on how Java was updated, it is also possible that you will need to restart your browser and/or your computer as well.</p>
+<p>Our apologies for the added steps.  We are in the process of figuring out how best to respond to these changes.</p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

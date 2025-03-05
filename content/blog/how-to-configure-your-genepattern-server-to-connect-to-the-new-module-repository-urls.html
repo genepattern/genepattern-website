@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>How to configure your GenePattern server to connect to the new module repository URLs</title>
+    <meta name="slug" content="how-to-configure-your-genepattern-server-to-connect-to-the-new-module-repository-urls" />
+    <meta name="date" content="2019-07-30 15:52:00" />
+    <meta name="authors" content="Barbara Hill" />
+</head>
+<body>
+
+<p>As mentioned in our <a href="https://groups.google.com/forum/#!topic/genepattern-help/A4HK93VLLgI" target="_blank">help forum</a>, our module repositories have been brought back online.</p>
+<p>Below are the steps required to get the 'Install from Repository' page to work on your own server ahead of the next release of GenePattern.</p>
+<h4>step 1: Replace your repo.yaml file with this file</h4>
+<p><a href="https://github.com/genepattern/genepattern-server/blob/develop/resources/repo.yaml">https://github.com/genepattern/genepattern-server/blob/develop/resources/repo.yaml</a></p>
+<p>*note that you will need to reload the job configuration for this to take effect</p>
+<p> </p>
+<h4>step 2: Edit genepattern.properties file</h4>
+<p>Set the *RepositoryURL(s) to use the new location. Make the following edits in your 'genepattern.properties' file. As usual, for best results, first shut down the server, then make the edits, then start the server.</p>
+<pre style="background: rgb(238, 238, 238); border: 1px solid rgb(204, 204, 204); padding: 5px 10px;">
+# GenePattern Production module repository url
+ModuleRepositoryURL=https://<wbr/>modulerepository.genepattern.<wbr/>org/gpModuleRepository/
+DefaultModuleRepositoryURL=ht<wbr/>tps://modulerepository.<wbr/>genepattern.org/<wbr/>gpModuleRepository/
+ModuleRepositoryURLs=https://<wbr/>modulerepository.genepattern.<wbr/>org/gpModuleRepository/,https:<wbr/>//modulerepository.<wbr/>genepattern.org/<wbr/>gparcModuleRepository/,https:/<wbr/>/modulerepository.genepattern.<wbr/>org/betaModuleRepository/
+
+
+SuiteRepositoryURL=https://<wbr/>modulerepository.genepattern.<wbr/>org/gpModuleRepository/suite 
+DefaultSuiteRepositoryURL=htt<wbr/>ps://modulerepository.<wbr/>genepattern.org/<wbr/>gpModuleRepository/suite 
+SuiteRepositoryURLs=https://<wbr/>modulerepository.genepattern.<wbr/>org/gpModuleRepository/suite</pre>
+<p>Note: The <var>DefaultPatchURL</var> and <var>DefaultPatchRepositoryURL</var> properties are no longer required. Feel free to delete them from the file.</p>
+<p> </p>
+<h4>step 3: Update TASK_INSTALL.REPO_URL in the database</h4>
+<p>This step is only needed for the <strong>Source</strong> label and icon in the user interface, e.g. <em>Production</em>, <em>Gparc</em>, or <em>Beta</em>. Update the <strong>TASK_INSTALL.REPO_URL</strong> column in the database to match the newer urls. This example update statement was tested on our Amazon hosted servers with a MySQL database. </p>
+<pre style="line-height: 1.42857;">
+UPDATE task_install 
+SET repo_url = REPLACE(
+                   REPLACE(
+                       REPLACE(repo_url, 'http://software.broadinstitute.org/webservices/gpModuleRepository', 'https://modulerepository.genepattern.org/gpModuleRepository/'),
+                   'http://software.broadinstitute.org/webservices/gparcModuleRepository', 'https://modulerepository.genepattern.org/gparcModuleRepository/'),
+              'http://software.broadinstitute.org/webservices/betaModuleRepository', 'https://modulerepository.genepattern.org/betaModuleRepository/')
+</pre>
+<p>Note: If you are using an Oracle database, you will need to commit </p>
+<h4> </h4>
+<h4>step 4: Update GP_USER_PROP['ModuleRepositoryURL'] in the database</h4>
+<p>As an additional step (not required) change the per-user 'ModuleRepositoryURL' setting. This example update statement was tested on our Amazon hosted servers with a MySQL database. </p>
+<pre style="line-height: 1.42857;">
+UPDATE gp_user_prop
+    SET value = 'https://modulerepository.genepattern.org/gpModuleRepository/' 
+WHERE `key` = 'ModuleRepositoryURL'</pre>
+<p>Note: If you are using an Oracle database, you will need to commit , and you do not need the `` around "key"</p>
+<p> </p>
+<p>If you run into any issues or have any questions, please feel free to contact us.</p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

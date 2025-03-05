@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="{% block html_lang %}{{ DEFAULT_LANG }}{% endblock html_lang %}">
+<head>
+	{% block head %}
+		<title>{% block title %}{{ SITENAME|striptags }}{% endblock title %}</title>
+		<meta charset="utf-8" />
+		<meta name="generator" content="Pelican" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/style.css" />
+		<script src="{{ SITEURL }}/theme/js/site.js"></script>
+		<link href="{{ SITEURL }}/theme/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon"/>
+		{% if SITESUBTITLE %}
+			<meta name="description" content="{{ SITESUBTITLE }}" />
+		{% endif %}
+		{% if SITESUBTITLE %}
+			<meta name="description" content="{{ SITESUBTITLE }}" />
+		{% endif %}
+		{% if STYLESHEET_URL %}
+			<link rel="stylesheet" type="text/css" href="{{ STYLESHEET_URL }}" />
+		{% endif %}
+		{% if FEED_ALL_ATOM %}
+			<link href="{{ FEED_DOMAIN }}/{% if FEED_ALL_ATOM_URL %}{{ FEED_ALL_ATOM_URL }}{% else %}{{ FEED_ALL_ATOM }}{% endif %}" type="application/atom+xml" rel="alternate" title="{{ SITENAME|striptags }} Full Atom Feed" />
+		{% endif %}
+		{% if FEED_ALL_RSS %}
+			<link href="{{ FEED_DOMAIN }}/{% if FEED_ALL_RSS_URL %}{{ FEED_ALL_RSS_URL }}{% else %}{{ FEED_ALL_RSS }}{% endif %}" type="application/rss+xml" rel="alternate" title="{{ SITENAME|striptags }} Full RSS Feed" />
+		{% endif %}
+		{% if FEED_ATOM %}
+			<link href="{{ FEED_DOMAIN }}/{%if FEED_ATOM_URL %}{{ FEED_ATOM_URL }}{% else %}{{ FEED_ATOM }}{% endif %}" type="application/atom+xml" rel="alternate" title="{{ SITENAME|striptags }} Atom Feed" />
+		{% endif %}
+		{% if FEED_RSS %}
+			<link href="{{ FEED_DOMAIN }}/{% if FEED_RSS_URL %}{{ FEED_RSS_URL }}{% else %}{{ FEED_RSS }}{% endif %}" type="application/rss+xml" rel="alternate" title="{{ SITENAME|striptags }} RSS Feed" />
+		{% endif %}
+		{% if CATEGORY_FEED_ATOM and category %}
+			<link href="{{ FEED_DOMAIN }}/{% if CATEGORY_FEED_ATOM_URL %}{{ CATEGORY_FEED_ATOM_URL.format(slug=category.slug) }}{% else %}{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}{% endif %}" type="application/atom+xml" rel="alternate" title="{{ SITENAME|striptags }} Categories Atom Feed" />
+		{% endif %}
+		{% if CATEGORY_FEED_RSS and category %}
+		<link href="{{ FEED_DOMAIN }}/{% if CATEGORY_FEED_RSS_URL %}{{ CATEGORY_FEED_RSS_URL.format(slug=category.slug) }}{% else %}{{ CATEGORY_FEED_RSS.format(slug=category.slug) }}{% endif %}" type="application/rss+xml" rel="alternate" title="{{ SITENAME|striptags }} Categories RSS Feed" />
+		{% endif %}
+		{% if TAG_FEED_ATOM and tag %}
+			<link href="{{ FEED_DOMAIN }}/{% if TAG_FEED_ATOM_URL %}{{ TAG_FEED_ATOM_URL.format(slug=tag.slug) }}{% else %}{{ TAG_FEED_ATOM.format(slug=tag.slug) }}{% endif %}" type="application/atom+xml" rel="alternate" title="{{ SITENAME|striptags }} Tags Atom Feed" />
+		{% endif %}
+		{% if TAG_FEED_RSS and tag %}
+			<link href="{{ FEED_DOMAIN }}/{% if TAG_FEED_RSS_URL %}{{ TAG_FEED_RSS_URL.format(slug=tag.slug) }}{% else %}{{ TAG_FEED_RSS.format(slug=tag.slug) }}{% endif %}" type="application/rss+xml" rel="alternate" title="{{ SITENAME|striptags }} Tags RSS Feed" />
+		{% endif %}
+	{% endblock head %}
+</head>
+<body>
+	{% block body %}
+		{% block header %}
+			<div class="container fluid gp-navbar">
+				<div class="navbar-header">
+					<button class="navbar-toggle gp-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar gp-icon-bar"></span>
+						<span class="icon-bar gp-icon-bar"></span>
+						<span class="icon-bar gp-icon-bar"></span>
+					</button>
+					<a class="navbar-brand gp-logo" href="/#"><img alt="GenePattern" src="{{ SITEURL }}/theme/images/logo.png"/></a>
+				</div>
+				{% block nav %}
+					<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+						<ul class="nav navbar-nav gp-nav">
+							<li class="dropdown">
+								<a data-toggle="dropdown" href="#">Run<b class='caret'></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="https://cloud.genepattern.org">Public Server</a></li>
+									<li><a href="https://github.com/genepattern/genepattern-server/releases/latest">Download</a></li>
+								</ul>
+							</li>
+							<li class="dropdown">
+								<a data-toggle="dropdown" href="#">Learn<b class='caret'></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="/user-guide">User Guide</a></li>
+									<li><a href="/quick-start">10-Minute Tutorial</a></li>
+									<li><a href="/tutorial">Differential Expression Tutorial</a></li>
+									<li><a href="/file-formats-guide">File Formats Guide</a></li>
+									<li><a href="/administrators-guide">Administrators Guide</a></li>
+									<li><a href="/programmers-guide">Programmers Guide</a></li>
+									<li><a href="/concepts">Concepts</a></li>
+									<li class='divider'></li>
+									<li><a href="/video-tutorials">Video Tutorials</a></li>
+								</ul>
+							</li>
+							<li><a href="modules">Modules</a></li>
+							<li class="dropdown">
+								<a data-toggle="dropdown" href="#">Analysis<b class='caret'></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="/rna-seq-analysis">RNA-seq-Based Gene Expression</a></li>
+									<li><a href="/gene-expression-analysis">Array-Based Gene Expression</a></li>
+									<li><a href="/variant-and-copy-number-analysis">Variant and Copy Number</a></li>
+									<li><a href="/proteomics">Proteomics</a></li>
+									<li><a href="/flow-cytometry">Flow Cytometry</a></li>
+									<li><a href="/data-format-conversion">Data Format Conversion</a></li>
+								</ul>
+							</li>
+							<li class="dropdown">
+								<a data-toggle="dropdown" href="#">Resources<b class='caret'></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="/FAQ">FAQ</a></li>
+									<li class='divider'></li>
+									<li><a href="https://groups.google.com/forum/#!forum/genepattern-help">Forum</a></li>
+									<li><a href="/doc/relnotes/current">Release Notes</a></li>
+									<li><a href="/datasets">Datasets</a></li>
+									<li><a href="/press-releases">Press Releases</a></li>
+									<li class='divider'></li>
+									<li><a href="/team">GenePattern Team</a></li>
+								</ul>
+							</li>
+							<li><a href="/contact">Contact</a></li>
+							<li><a href="/blog">Blog</a></li>
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right gp-nav">
+							<div id="cse" style="width: 255px; margin: 0 auto">
+								<div class="gcse-searchbox" style="display:block; width:250px;!important" class="input-group"></div>
+							</div>
+						</ul>
+					</nav>
+				{% endblock nav %}
+			</div>
+		{% endblock header %}
+
+		{% block content %}
+		{% endblock content %}
+
+		{% block footer %}
+			<footer class="container fluid gp-footer">
+				<div class="fluid text-center">&copy;2006-<script>document.write(/\d{4}/.exec(Date())[0])</script> Regents of the University of California, Broad Institute, MIT</div>
+			</footer>
+		{% endblock footer %}
+	{% endblock body %}
+	</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Known Issues</title>
+</head>
+<body>
+<p>This page includes the known issues for GenePattern running in different browsers, GenePattern running on local servers, and GenePattern module-related issues as of June, 2016&nbsp;in GenePattern version 3.9.8.</p>
+
+<h3>Browsers</h3>
+
+<p>See our <a href="/hardware-requirements-and-software-compatibility#browser_recs">browser recommendations</a>.</p>
+
+<ul>
+	<li><strong>Older Java Applet visualizers are no longer supported in Chrome. Please read our<u>&nbsp;<a href="/blog/2015/12/01/older-java-applet-visualizers-no-longer-work-in-chrome" target="_blank">blog post</a></u>&nbsp;for more information.</strong></li>
+	<li><strong>Older Java Applet visualizers are blocked by default in Firefox. Pleaes read this <a href="/blog/2016/03/07/older-java-applet-visualizers-blocked-by-default-in-updated-firefox" target="_blank"><u>blog post</u></a> for more information.</strong></li>
+	<li>In Internet Explorer, the Job Status page does not automatically refresh.&nbsp; Workaround: Refresh the page manually.</li>
+	<li>In Internet Explorer (11, no&nbsp;other versions are supported) you may need to refresh to get new modules to appear in the pipeline designer. This is due to the nature of the caching mechanism in IE.</li>
+</ul>
+
+<h3 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(51, 51, 51);">Java</h3>
+
+<ul>
+	<li>There are known issues regarding some updates to Java 6 and Java 7 that can cause problems for GenePattern users, specifically in using visualizer modules and the file uploader (the Java applet used to upload files larger than 2GB).&nbsp; For more information, see&nbsp;<a href="/blog">the GenePattern blog</a>.</li>
+</ul>
+
+<h3 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(51, 51, 51);">Pipelines</h3>
+
+<ul>
+	<li>There is a known issue in&nbsp;<strong>GenePattern 3.6</strong>&nbsp;that deleting an attached input file from a pipeline crashes the browser.</li>
+	<li>There is a known issue regarding&nbsp;<strong>pipelines created in GenePattern 3.3.3</strong>&nbsp;that have data files included and that have been&nbsp;<strong>imported to a new server at version 3.5.0 or higher</strong>&nbsp;of GenePattern. If you are having problems with such a pipeline:</li>
+</ul>
+
+<p style="margin-left: 80px;">1. On the new server, select your pipeline and click&nbsp;<em>edit</em>&nbsp;to open it in the Pipeline Designer.<br />
+2. Click&nbsp;<em>Save</em>. You don&#39;t need to make any other changes to your pipeline.</p>
+
+<h3 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(51, 51, 51);">Module-Related Issues</h3>
+
+<ul>
+	<li>There is a known issue regarding an update to the Java 6 platform which can cause problems for GenePattern users, specifically in using&nbsp;<strong>visualizer modules and the file uploader.</strong>&nbsp; For more information, see&nbsp;<a href="/blog/2012/10/26/october-2012-java-6-update-and-genepattern-visualizer-issues">this GenePattern blog entry</a>.</li>
+	<li>Some GenePattern modules do not work when the input filename contains a space character. Workaround: Rename the input file without a space character.</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<h2>Local GenePattern Servers</h2>
+
+<h3>Running a Local GenePattern Server on Mac OS</h3>
+
+<p><strong>GenePattern versions 3.9.1 and earlier - </strong>this has been<strong> resolved&nbsp;</strong>in <a href="/doc/relnotes/3.9.2">version 3.9.2</a></p>
+
+<ul>
+	<li>For many of our users on<strong> OS X&nbsp;Mavericks (10.9) and Yosemite (10.10)</strong>&nbsp;the older&nbsp;installers will not be allowed to run, due to Apple&#39;s security features.</li>
+	<li>There is a known issue with installing on OS X <strong>Lion</strong> (10.7) or on OS X <strong>Mountain Lion</strong> (10.8).&nbsp; If you get an &quot;Installation: Successfulnull&quot; error or an error that looks like this:</li>
+</ul>
+
+<pre>
+<code>1. Move Folder:              Destination: /Library/Frameworks/R.framework/Versions
+WARNING - There was a problem copying /Library/Frameworks/R.framework/Versions/2.5</code></pre>
+
+<p style="margin-left: 40px;">you may need to install R2.5 separately.&nbsp; Download R2.5 from CRAN and follow the instruction in this section of <a href="/administrators-guide#using-different-versions-of-r">the Administrators Guide</a>.</p>
+
+<ul>
+	<li>There are known issues with installing on OS X <strong>Mountain Lion</strong> (10.8):
+
+	<ul>
+		<li>by default, Mountain Lion does not allow the installation of GenePattern because it is not from a &quot;certified Apple Developer&quot;.&nbsp; Workaround: Set Gatekeeper to allow applications to be installed from any source (see <a href="http://www.chriswrites.com/2012/03/5-mountain-lion-features-you-may-have-missed/">http://www.chriswrites.com/2012/03/5-mountain-lion-features-you-may-have-missed/</a> for more information).</li>
+		<li>if you select the option to install icons in the dock during install, the icons will not appear in the dock.&nbsp; They will appear when the server is running.&nbsp; Workaround: You can place them in the dock manually.</li>
+	</ul>
+	</li>
+</ul>
+
+<h3 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(51, 51, 51);">Module-Related Issues</h3>
+
+<ul>
+	<li>The MultiplotPreprocess, CoxRegression, LogisticRegression modules will not run on a local GenePattern server on Mac OS X 10.6, 10.7, or 10.8 or Windows 7 or 8 because R 2.0.1 will not install on these OS X versions.</li>
+</ul>
+</body>
+</html>

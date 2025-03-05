@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>October 2012 Java 6 update and GenePattern visualizer issues</title>
+    <meta name="slug" content="october-2012-java-6-update-and-genepattern-visualizer-issues" />
+    <meta name="date" content="2012-10-26 14:47:00" />
+    <meta name="authors" content="David Eby" />
+</head>
+<body>
+<p><a href="/blog/2017/03/16/java-applet-based-visualizers-no-longer-function-in-any-browser" style="background-color: rgb(255, 255, 255);"><strong>UPDATE MARCH 17, 2017 : Java applet visualizers no longer work in any browser. Please click here to read the blog post.</strong></a></p>
+<hr/>
+<p>(Originally posted 2012-11-09)</p>
+<p>Oracle recently released an update to their Java 6 platform which could cause problems for GenePattern users.  The update disables the underlying technologies used by several of GenePattern components, specifically the visualization modules (such as ComparativeMarkerSelectionViewer and HeatMapViewer) and the file uploader.  The GenePattern team is currently evaluating options to address this issue.</p>
+<div>This update came out within the last couple of weeks, so you may or may not have already applied this change depending on the update policies of your organization and the settings on your own computer.  It is known by several different names, including at least the following:</div>
+<ul>
+<li>Java SE 6 Update 37</li>
+<li>JRE 6u37 or JDK 6u37</li>
+<li>Java for Mac OS X 10.6 Update 11</li>
+<li>Java for OS X 2012-006 (Mac OS X 10.7 or Later)</li>
+<li>JRE 1.6.0_37 or JDK 1.6.0_37</li>
+</ul>
+<div>The update removes the Java Plug-in for web browser and Java Web Start features which had been present in earlier versions of Java 6.  The most visible sign that you are affected will be the display of a 'Missing Plug-in' or similar error message when trying to run a visualizer or use the uploader.  Here's an example from Firefox 16.0.1 running on Mac OS X Lion (the exact message may differ depending on your browser and operating system):</div>
+<div style="text-align: center; "><img alt="" src="/uploaded/content_hcv_error.jpg?1351277203" style="width: 487px; height: 424px; "/></div>
+<div> </div>
+<div>You can also check whether the update has been installed by running 'java -version' from the command line (Command Prompt in Windows, Terminal in OS X, or a UNIX shell prompt).  A response similar to:</div>
+<div><strong><span style="font-family:courier new,courier,monospace;">   java version "1.6.0_37"</span></strong></div>
+<div>indicates that the update has been installed on your computer.</div>
+<div> </div>
+<div>Unfortunately, as it stands we cannot give our users a blanket recommendation about how to proceed as there are disadvantages to any approach.  There are three options:</div>
+<ul>
+<li>Apply the update.  You will be affected by the GenePattern issues mentioned here but will be covered by the most current Java 6 release available from Oracle.  If you aren't using those GenePattern features or have a server-only installation then this is a safe option.</li>
+<li>Avoid the update, at least for now, or roll back if you've applied it.  Doing so will allow you to continue using GenePattern as before <strong>but there may be serious security implications</strong> (more details below).</li>
+<li>Upgrade to Java 7. (Updated 2013-5-16)  Our current testing seems to indicate that the GenePattern webapp and server both run on Java 7, but some modules and visualizers may not work.  Please report any problems you encounter on Java 7 to gp-help AT broadinstitute DOT org.
+	<ul>
+<li>Note that the Java 7 browser plug-in will not work with Chrome on a Mac at this time, so it will be necessary to use either Firefox or Safari to run GenePattern visualizers or to upload large files (&gt;2GB).</li>
+</ul>
+</li>
+</ul>
+<div>Oracle has issued <a href="http://www.oracle.com/technetwork/java/javase/6u37-relnotes-1863283.html">release notes</a> and an associated <a href="http://www.oracle.com/technetwork/topics/security/javacpuoct2012-1515924.html">Critical Patch Advisory</a> with <a href="http://www.oracle.com/technetwork/topics/security/javacpuoct2012-1515924.html#AppendixJAVA">Risk Matrix</a> about the update itself and the security implications around it.  For Mac users, Apple has a <a href="http://support.apple.com/kb/HT5549">knowledge base entry</a> on the matter.  We encourage you to review this information before making any decisions and consult with your organization's IT department before making any changes.  For users within the Broad Institute, the IT recommendations can be found here.  We cannot, however, make any recommendations on behalf of other organizations.</div>
+<div> </div>
+<div> </div>
+<div> </div>
+<div> </div>
+</body>
+</html>

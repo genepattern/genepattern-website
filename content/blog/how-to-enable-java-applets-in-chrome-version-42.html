@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>How to enable GenePattern Visualizers in Chrome version 42+</title>
+    <meta name="slug" content="how-to-enable-java-applets-in-chrome-version-42" />
+    <meta name="date" content="2015-04-24 13:15:00" />
+    <meta name="authors" content="Barbara Hill Meyers" />
+</head>
+<body>
+
+<h2 style="font-style:italic;"><a href="http://software.broadinstitute.org/blog/2017/03/16/java-applet-based-visualizers-no-longer-function-in-any-browser" style="background-color: rgb(255, 255, 255);"><strong>UPDATE MARCH 17, 2017 : Java applet visualizers no longer work in any browser. Please click here to read the blog post.</strong></a></h2>
+<hr/>
+<h2 style="font-style:italic;"><strong>UPDATE: </strong><strong>As of September 1, 2015 Chrome no longer supports the NPAPI plugin - this work around is, therefore, no longer valid.</strong></h2>
+<p><b>A new blog post has been added here: </b><a href="/blog/2015/12/01/older-java-applet-visualizers-no-longer-work-in-chrome">http://www.broadinstitute.org/blog/2015/12/01/older-java-applet-visualizers-no-longer-work-in-chrome</a></p>
+<p> </p>
+<p>In April of 2015, Google changed the way that Chrome version 42 supports plugins, which means that GenePattern visualizers may have recently stopped working for you, if you are using Chrome.</p>
+<p>From <a href="https://java.com/en/download/help/enable_browser.xml" target="_blank">Java.com</a>:</p>
+<p><img alt="" src="/uploaded/content_chrome42javaplugins.png" style="width: 599px; height: 107px;"/></p>
+<p>The symptoms in GenePattern are as follows:</p>
+<ol>
+<li>Run a visualizer module</li>
+<li>On job status page, nothing happens
+	<ul>
+<li>Java console does not come up (if it was configured to do so)</li>
+<li>No errors in the URL bar indicating that you need to enable a plugin (ie you did not see something like this)</li>
+</ul>
+</li>
+</ol>
+<p style="margin-left: 40px;"><img alt="" src="/uploaded/content_allowjavamacchrome_url.png" style="height: 26px; width: 850px;"/>​</p>
+<p>To fix this you must configure your browse to enable the required plugin architecture. Details and instructions can be found on<a href="https://java.com/en/download/faq/chrome.xml" target="_blank"> Java.com</a> and we've included them here for quick reference.</p>
+<p><strong>Enabling NPAPI in Chrome Version 42 and later</strong><br/>
+As of Chrome Version 42, an additional configuration step is required to continue using NPAPI plugins.</p>
+<ol>
+<li>In your URL bar, enter:<br/>
+<span style="font-family:courier new,courier,monospace;">chrome://flags/#enable-npapi</span></li>
+<li>Click the <strong>Enable</strong> link for the <strong>Enable NPAPI</strong> configuration option.</li>
+<li>Click the<strong> Relaunch</strong> button that now appears at the bottom of the configuration page.</li>
+</ol>
+<p>Again the full details can be found <a href="https://java.com/en/download/faq/chrome.xml" target="_blank">here</a>.</p>
+<p><b>Mac Users</b>:</p>
+<p style="margin-left: 40px;">Note that this only applies if you have installed 64-bit Chrome on your machine. Older versions of Chrome on Mac (38 and lower) do not support GenePattern visualizers.</p>
+<p style="margin-left: 40px;">Mac users May also need to allow java to run, even after enabling NPAPI. If you see this icon in the upper right of your Chrome browser, in the URL bar, click it and select either the option to run once, or the option to run always.</p>
+<p style="margin-left: 40px;"><img alt="" src="/uploaded/content_allowjavamacchrome_1.png" style="width: 322px; height: 226px;"/></p>
+<p> </p>
+<p>If this does not allow to use the GenePattern visualizers, please see <a href="/FAQ#visualizers">this FAQ</a> for more troubleshooting options.</p>
+<p>As always, please feel free to <a href="http://www.broadinstitute.org/contact">contact us</a> with any comments or questions.</p>
+<p> </p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

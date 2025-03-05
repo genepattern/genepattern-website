@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Installing GenePattern from a WAR File</title>
+</head>
+<body>
+<p>Installation of GenePattern is typically done using the InstallAnywhere installer that is available from the GenePattern web site (<a href="http://genepattern.org/download">http://genepattern.org/download</a>). For some installations, this is not an option however such as when the platform is not supported (anything other than Windows, Linux and Macintosh) or if the desire is to install into an existing web server and not use the Apache Tomcat installation created by the installer. In these situations, an alternative is to install GenePattern from a WAR file (Web ARchive). WAR files are a standard distribution mechanism for web applications. Since GenePattern typically installs more than just the web application and since it needs to perform tasks beyond those typical of a web application, installing GenePattern from a web-archive involves several additional steps beyond deploying the WAR file.</p>
+
+<p>The GenePattern installer typically installs the following components onto a computer:</p>
+
+<ul>
+	<li>Apache Tomcat web server</li>
+	<li>R programming language Environment (Windows, Mac)</li>
+	<li>Perl interpreter (Windows)</li>
+</ul>
+
+<p>In addition to the installations, the installer typically customizes the following files for the installation:</p>
+
+<ul>
+	<li>GenePatternServer/resources/genepattern.properties</li>
+	<li>GenepatternServer/resources/omnigene.properties</li>
+	<li>GenePatternServer/Tomcat/webapps/gp/WEB-INF/web.xml</li>
+	<li>GenePatternServer/Tomcat/webapps/gp/WEB-INF/classes/log4j.properties</li>
+</ul>
+
+<p>Finally, the installer also creates applications to start and stop the GenePattern server and optionally creates shortcuts to these applications as well as to the web applications home page in the users selected directory.</p>
+
+<p>When installing GenePattern from a WAR file, it is necessary to make these installations and customizations to the contents of the WAR file before it can be usefully installed into an existing web server. Shortcuts and Start/Stop applications will need to be created by hand if they are desired and do not already exist for the web server the WAR file is installed into.</p>
+
+<p>At runtime, the GenePattern server must launch processes running java, Perl and R. In order to do this, the server requires information about the local file system beyond what is packaged in the WAR file.</p>
+
+<p>To simplify the task of customizing the WAR file, an ant build script is provided with the WAR file that will perform the file customizations based on values provided by the installing user.</p>
+
+<h2>Upgrading a Current Installation</h2>
+
+<p>The WAR file installation does not provide the option of upgrading from a current GenePattern installation. It creates a new GenePattern installation.</p>
+
+<ul>
+	<li>To preserve GenePattern configuration settings from your current installation, create backup copies of the following GenePattern configuration files: genepattern.properties, permissionMap.xml, and userGroups.xml configuration files. After installing the new version of GenePattern, compare the backup files with the newly installed files and modify the new files as necessary. Do not replace the newly installed configuration files with the backup copies.</li>
+	<li>To preserve custom pipelines, suites, and modules, export them from your current GenePattern installation. After installing the new version of GenePattern, install the exported pipelines, suites and modules. Pipelines, suites and modules installed from the GenePattern module repository do not need to be exported. You can install them from the GenePattern module repository after installing the new version of GenePattern.</li>
+</ul>
+
+<p><strong>Note:</strong> GenePattern 3.1 and later uses R2.5. GenePattern 3.0 used R2.0.1. To ensure that you have access to GenePattern modules written for either R2.0.1 or R2.5, install R2.5 without overwriting your R2.0.1 installation. For a list of the R-based GenePattern modules, see <a href="/doc/relnotes/3.1">GenePattern 3.1 Release Notes</a>.</p>
+
+<h2>Requirements</h2>
+
+<p>Before customizing and installing the GenePattern WAR file into an existing web server, the following applications and libraries must be installed on the target computer:</p>
+
+<table class="table table-striped">
+	<tbody>
+		<tr>
+			<td><strong>Component</strong></td>
+			<td><strong>Version</strong></td>
+			<td><strong>Web site</strong></td>
+		</tr>
+		<tr>
+			<td>Perl</td>
+			<td>5.8.8+</td>
+			<td><a href="http://www.activestate.com/Products/ActivePerl/" target="_blank">http://www.activestate.com/Products/ActivePerl/</a></td>
+		</tr>
+		<tr>
+			<td>Java JRE</td>
+			<td>1.6.*</td>
+			<td><a href="http://java.sun.com/" target="_blank">http://java.sun.com</a></td>
+		</tr>
+		<tr>
+			<td>ant</td>
+			<td>1.7.0+</td>
+			<td><a href="http://ant.apache.org/" target="_blank">http://ant.apache.org/</a></td>
+		</tr>
+		<tr>
+			<td>R <em>(optional)</em></td>
+			<td>2.5.0</td>
+			<td><a href="http://www.r-project.org/" target="_blank">http://www.r-project.org/</a></td>
+		</tr>
+		<tr>
+			<td>Tomcat <em>(if necessary)</em></td>
+			<td>5.5+</td>
+			<td><a href="http://tomcat.apache.org/">http://tomcat.apache.org/</a></td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Before running the customization script, you must have the Java and ant executables on your path.</p>
+
+<p>You will also need the WAR file, <a href="/download_installer/installers/latest/warfile/gp_war.zip">gp_war.zip</a>.</p>
+
+<h2>Typographical Conventions</h2>
+
+<p>Values you are expected to type are in</p>
+
+<p style="text-indent:.5in">Courier &ndash; Blue 12pt</p>
+
+<p>Responses and prompts from the ant script are in</p>
+
+<p style="text-indent:.5in">Courier New -- Grey 10pt</p>
+
+<h2>Installation Overview</h2>
+
+<ol style="margin-top:0in">
+	<li>Install Perl.</li>
+	<li>Install Java JRE.</li>
+	<li>Install R (optional).</li>
+</ol>
+
+<p style="margin-left:.5in">If R is not installed, GenePattern will still run but you will not be able to install any R-based tasks such as SVM.</p>
+
+<ol style="margin-top:0in">
+	<li>Install (if necessary) the web server into which you will deploy GenePattern. If you are using Apache Tomcat, you can use the base distribution; Tomcat does not need to installed as a service.</li>
+	<li>Customize the WAR file (see the &ldquo;Customizing GenePattern&rdquo; section below).</li>
+	<li>Deploy the GenePattern install directory.</li>
+	<li>Deploy the WAR file or customized gp directory into your web server following the instructions for the web server you are using.</li>
+	<li>Install tasks.</li>
+	<li>Test the installation.</li>
+</ol>
+
+<h2>Customizing GenePattern</h2>
+
+<p>Customization of GenePattern will be performed by an ant build file <span class="GramE">customizeWar.xml, that</span> is provided in the <a href="/download_installer/installers/latest/warfile/gp_war.zip">gp_war.zip</a> file.</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Unzip gp_war.zip into a temporary directory</em></strong></p>
+
+<p>&gt; <span class="GramE">cp</span> gp_war.zip tempdir</p>
+
+<p style="margin-left:.5in">&gt; <span class="GramE">cd</span> tempdir</p>
+
+<p style="text-indent:.5in">&gt; unzip gp_war.zip</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Test that ant is installed and has the necessary version</em></strong></p>
+
+<p>&gt;ant &ndash;version</p>
+
+<p>Apache Ant version 1.7.0 compiled on December 13 2006</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Run the customizing ant build file</em></strong></p>
+
+<p>&gt;ant &ndash;buildfile customizeWar.xml</p>
+
+<p style="margin-left:.5in">C:\Temp\war&gt;ant -buildfile customizeWar.xml</p>
+
+<p style="margin-left:.5in">Buildfile: customizeWar.xml</p>
+
+<p style="margin-left:.5in">&nbsp;</p>
+
+<p style="margin-left:.5in"><span class="GramE">getLocalValues</span>:</p>
+
+<p style="margin-left:.5in">&nbsp;</p>
+
+<p>This will begin running an ant task that will query you for the information necessary to customize GenePattern to your environment. At the end of data entry, you will be given an opportunity to accept or cancel the installation before any files are modified. If you accept the changes and later wish to change something, you will either need to edit the GenePattern configuration files by hand or return to a freshly unzipped version of the WAR file as the ant script can only be run on an unmodified version of the WAR file.</p>
+
+<p>For any prompts that present a default value, you may hit return to accept the default value without changing it.</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide the hostname</em></strong></p>
+
+<p>Ant will prompt you for the hostname of the computer. Enter just the name and not the full canonical hostname of the computer (e.g. computerX not computerX.broadinstitute.org)</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] Host name: (name only, don&#39;t include full domain)</p>
+
+<p style="text-indent:.5in">ComputerX</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide the Domain name</em></strong></p>
+
+<p>Enter the domain of this computer or this site. This value will be used for later properties such as the webmaster email address and LSID Authority.</p>
+
+<p style="text-indent:.5in">&nbsp;</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] Domain:</p>
+
+<p style="text-indent:.5in">broadinstitute.org</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide the WebMaster email address</em></strong></p>
+
+<p>This is the email address that will be notified of problems in the GenePattern server. It is displayed on several pages in the web application. Hitting return without entering anything will accept the default value.</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] webmaster username (default=ted@broadinstitute.org):</p>
+
+<p style="text-indent:.5in">webmaster@broadinstitute.org</p>
+
+<p style="text-indent:.5in">&nbsp;</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide the WebServer port</em></strong></p>
+
+<p>GenePattern will use this to construct URLs. Use the port for the web server you into which you will deploy. For most installations the default of 8080 can be accepted.</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] webserver port (default=8080):</p>
+
+<p style="text-indent:.5in">8080</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide the HSQL port</em></strong></p>
+
+<p>This is the port used by GenePattern&rsquo;s HSQL database. For most installations the default of 9001 can be accepted.</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] HSQL port (default=9001):</p>
+
+<p style="text-indent:.5in">9001</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide the Java home path</em></strong></p>
+
+<p>This will default to the java VM used to run ant. For GenePattern, the JAVA_HOME variable must point to a <strong>Java 1.6</strong> installation such as JDK1.6.0.</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] JAVA_HOME (default=C:\Program Files\Java\jre1.6.0_21\jre):</p>
+
+<p style="text-indent:.5in">c:/program files/java/jre1.6.0_21</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide the R directory</em></strong></p>
+
+<p>This is the path to your installation of the R programming environment.</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] R directory (no default):</p>
+
+<p style="text-indent:.5in">c:/r/r-2.5.0</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide the Perl directory</em></strong></p>
+
+<p>This is the path to the installation of Perl GenePattern should use to execute perl-based modules.</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] Perl directory (no default):</p>
+
+<p style="text-indent:.5in">c:/perl/bin</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Set the purge jobs delay</em></strong></p>
+
+<p>This is the number of days that files created during execution of a task will be kept on the server. When files are older than this number of days they will be deleted to save space on the server.</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] # <span class="GramE">days</span> to hold data before purging (default=7):</p>
+
+<p style="text-indent:.5in">7</p>
+
+<p>S<strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">et the purge time</em></strong></p>
+
+<p>This is the time of day that the files will be purged. Format is HH:MM using the 24 hour clock.</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] time of day to run job purge (default=23:00):</p>
+
+<p style="text-indent:.5in">23:00</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Set the LSID Authority</em></strong></p>
+
+<p>The LSID authority is a unique name used to identify any modules that are created or modified on this server. It must be unique for each GenePattern server instance. It is highly recommended that you accept the default value for this which is a combination of the port, username and fully specified computer name.</p>
+
+<p style="text-indent:.5in">[<span class="GramE">input</span>] LSID Authority (default=7001.ted.computerX.broadinstitute.org):</p>
+
+<p style="text-indent:.5in">7001<span class="GramE">.ted.computerX.broadinstitute.org</span></p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide the full path to the gpinstall directory</em></strong></p>
+
+<p>This is the directory where the GenePattern will have files outside of the web application. Do not use the default value, which is the temporary directory. Enter a fully qualified path to a directory on the GenePattern server. This folder is customized during the running of this ant file and must be accessible by the web server.</p>
+
+<p style="text-indent:.5in"><span class="GramE">[input]</span> GenePattern Server root directory (default=C:\Temp\gpinstall):</p>
+
+<p style="text-indent:.5in">C:/GenePatternFiles</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Provide a SMTP mail server</em></strong></p>
+
+<p>This is the server GenePattern will use to e-mail to users; for example, on request, GenePattern sends an e-mail notification to the user when a job completes.</p>
+
+<p style="text-indent:.5in"><span class="GramE">[input]</span> SMTP Mail Server (default=autodetect at runtime):</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Review the information </em></strong></p>
+
+<p>The values you have entered will be presented to you for review before proceeding. If you accept them (&lsquo;y&rsquo;) the WAR file will be customized. If you reject them (&lsquo;n&rsquo;) the installation will be cancelled without changing any files.</p>
+
+<p><span class="GramE">echoLocalValues</span>:</p>
+
+<p>[<span class="GramE">echo</span>] =========================================</p>
+
+<p>[<span class="GramE">echo</span>] Customized values:</p>
+
+<p>[<span class="GramE">echo</span>]</p>
+
+<p>[<span class="GramE">echo</span>]</p>
+
+<p>[<span class="GramE">echo</span>] Host=ComputerX.broadinstitute.org</p>
+
+<p>[<span class="GramE">echo</span>] WebMaster= genepattern@broadinstitute.org</p>
+
+<p>[<span class="GramE">echo</span>] Webserver Port= 8080</p>
+
+<p>[<span class="GramE">echo</span>] HSQL port= 9001</p>
+
+<p>[<span class="GramE">echo</span>] Java= c:/program files/java/jre1.6.0_21</p>
+
+<p>[<span class="GramE">echo</span>] R= c:/r/r-2.5.0</p>
+
+<p>[<span class="GramE">echo</span>] Perl= c:/perl/bin</p>
+
+<p>[<span class="GramE">echo</span>] Job Purge= at 23:00 after 7 days</p>
+
+<p>[<span class="GramE">echo</span>] LSID Authority= 7001.ted.computerX.broadinstitute.org</p>
+
+<p>[<span class="GramE">echo</span>] GenePattern Server root directory= C:/GenePatternFiles</p>
+
+<p>[<span class="GramE">echo</span>] SMTP Server=imap.broadinstitute.org</p>
+
+<p>[<span class="GramE">echo</span>]</p>
+
+<p>[<span class="GramE">echo</span>] =========================================</p>
+
+<p><span class="GramE">confirmLocalValues</span>:</p>
+
+<p>[<span class="GramE">input</span>] Accept these values and continue? (<span class="GramE">y,</span>n)</p>
+
+<p>Y</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Customization performed</em></strong></p>
+
+<p><span class="GramE">unzip</span>:</p>
+
+<p>[<span class="GramE">unzip</span>] Expanding: C:\Temp\war\gp.war into C:\Temp\war\gp</p>
+
+<p><span class="GramE">customizeWar</span>:</p>
+
+<p>[<span class="GramE">copy</span>] Copying 1 file to C:\Temp\war\gpinstall\resources</p>
+
+<p>addSmtpServer:</p>
+
+<p>[<span class="GramE">copy</span>] Copying 1 file to C:\Temp\gpinstall\resources</p>
+
+<p>[<span class="GramE">war</span>] Building war: C:\Temp\gp.war.customized</p>
+
+<p>BUILD SUCCESSFUL</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Deploy GenePattern install directory</em></strong></p>
+
+<p>At this point, your temp directory will contain a directory named &lsquo;gpinstall&rsquo;. The contents of this directory must be moved to the location provided as the GenePattern Server root directory.</p>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Deploy the WAR file</em></strong></p>
+
+<p>Your temp directory will also contain a directory named &lsquo;gp&rsquo; and a WAR file called gp.customized.war which you can deploy to your web server following the conventions for your web server. Deploying GenePattern requires a few additional steps:</p>
+
+<ol>
+	<li>Unzip the WAR file into the webapps directory. GenePattern cannot be run directly from the WAR file; it must be unzipped. For example, if you are using Tomcat, unzip the WAR file into the Tomcat/webapps/gp directory:
+	<p>&gt; <span class="GramE">cd</span> Tomcat\webapps</p>
+
+	<p>&gt; <span class="GramE">mkdir</span> gp</p>
+
+	<p>&gt; <span class="GramE">cd</span> gp</p>
+
+	<p>&gt; <span class="GramE">jar xvf c:\tempdir\gp.customized.war</span></p>
+	</li>
+	<li>Copy the commons-codec-1.3.jar and commons-httpclient-3.0.1.jar from the Tomcat/webapps/gp/WEB-INF/lib/ folder to the Tomcat/webapps/gp/downloads/ folder. Both .jar files must be in both directories.</li>
+	<li>If your web server is Tomcat 6, remove the following three libraries from the Tomcat/webapps/gp/WEB-INF/lib folder: el-api.jar, xercesImpl.jar, and xml-apis.jar.</li>
+	<li>Update the files required by visualizer modules by copying the following files from the GenePattern public server to the Tomcat/webapps/gp/downloads/ folder:
+	<p>http://genepattern.broadinstitute.org/gp/downloads/runVisualizer.jar<br />
+	http://genepattern.broadinstitute.org/gp/downloads/commons-codec-1.3.jar<br />
+	http://genepattern.broadinstitute.org/gp/downloads/commons-httpclient.jar<br />
+	http://genepattern.broadinstitute.org/gp/downloads/GenePattern.zip<br />
+	http://genepattern.broadinstitute.org/gp/downloads/GenePatternMatlab.zip<br />
+	http://genepattern.broadinstitute.org/gp/downloads/GenePattern_1.0.2.tar.gz<br />
+	http://genepattern.broadinstitute.org/gp/downloads/GenePattern_1.0.2.tgz<br />
+	http://genepattern.broadinstitute.org/gp/downloads/GenePattern_1.0.2.zip</p>
+	</li>
+	<li>Edit the genepattern.properties file (e.g. C:/GenePatternFiles/resources/genepattern.properties).
+	<ol>
+		<li>Add the following command:<br />
+		<br />
+		redirect.to.fq.host=false</li>
+		<li>Find and edit the following settings using the hostname (e.g. ComputerX) and domain (e.g. broadinstitute.org) that you specified when customizing the build file:<br />
+		<br />
+		GenePatternURL=http://ComputerX.broadinstitute.org:8080//gp//<br />
+		#fullyQualifiedHostName=ComputerX<br />
+		#fqHostName=ComputerX</li>
+		<li>To correctly run modules implemented in R, edit the webappDir and run_r_path variables. Set the webappDir variable to the full path of the gp folder on your web server. Set the run_r_path variable to the value shown below.<br />
+		<br />
+		webappDir=c\:/program files/Tomcat/webapps/gp<br />
+		run_r_path=/WEB-INF/classes/</li>
+	</ol>
+	</li>
+	<li>Start the web server. If you are using Tomcat, start the Tomcat server from the working directory rather than the bin subdirectory. For example:
+	<p>&gt; <span class="GramE">cd</span> Tomcat</p>
+
+	<p>&gt; <span class="GramE"> bin\tomcat6</span></p>
+	</li>
+</ol>
+
+<p><strong style="mso-bidi-font-weight:normal"><em style="mso-bidi-font-style:
+normal">Set canonical host name (optional)</em></strong></p>
+
+<p>If you will be accessing a GenePattern server that is referenced by more than one hostname (for example, www.myhost.com:8080/gp and myhost:8080/gp), modify the $GenePatternServer$/resources/genepattern.properties file, as described in <a href="/FAQ#proxy">FAQ 3.5</a>. This enables successful login to the GenePattern server from hosts that are in different domains or subdomains, where the simple server name (eg. &quot;myhost&quot;) is not a local host name.</p>
+
+<h2>Register</h2>
+
+<p>Once the WAR file is deployed to your web server, complete the installation by connecting to the GenePattern web application at the installFrame.jsp page:</p>
+
+<p style="text-indent:.5in">http://ComputerX.broadinstitute.org:8080/gp/installFrame.jsp</p>
+
+<p>The first time the GenePattern server is launched, the GenePattern Registration page will appear in your browser. Fill out the registration form, read the license agreement, and click the <em>I Agree</em> button at the bottom of the form.</p>
+
+<h2>Install Tasks</h2>
+
+<p>When you have completed and submitted the registration form, the GenePattern Configuration page appears. This page guides you through the final steps of installation:</p>
+
+<ol>
+	<li>View the server installation report. <strong>Note:</strong> The screen indicates that the log file cannot be found because the WAR file installation does not have a server installation log.</li>
+	<li>Install modules.</li>
+	<li>Install the Desktop Client (optional). You may want to skip this step. You can easily install the Desktop Client later from the GenePattern Web Client (simply click Downloads&gt;Install Desktop Client).</li>
+	<li>Download sample datasets.</li>
+	<li>Login and begin using GenePattern.</li>
+</ol>
+
+<h2>Test the Installation</h2>
+
+<p>To test the installation, the following tests are suggested.</p>
+
+<ol>
+	<li>Login and view the home page.</li>
+	<li>Run a java task (e.g. PreprocessDataset).</li>
+	<li>Run a visualizer (e.g. HeatMapViewer).</li>
+	<li>Run a perl task (e.g. ConvertLineEndings).</li>
+	<li>Run an R task (if R is installed) (e.g. SVM).</li>
+	<li>View a pipeline.</li>
+	<li>Edit/Create a pipeline.</li>
+	<li>Run a pipeline.</li>
+</ol>
+
+<p>Once the installation has been completed and tested you are done. If you choose to move folders or locations in the future, you may do so by editing the file paths in the install directory/resources or by re-running the ant task.</p>
+
+<h2>Appendix A: Rerunning the WAR customization utility</h2>
+
+<p>The first time you run the customizeWar.xml ant file, it will create a properties file containing the values you provided. Should you need to run it subsequently you may skip the data entry portion by editing the file customizeWar.properties to your new values and providing it to and using the &ndash;propertyfile flag.</p>
+
+<p><span class="GramE">e.g.</span></p>
+
+<p style="text-indent:.25in">&gt;ant &ndash;buildfile customizeWar.xml &ndash;propertyfile customizeWar.properties</p>
+</body>
+</html>

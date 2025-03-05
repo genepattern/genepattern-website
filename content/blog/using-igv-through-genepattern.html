@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Using IGV Through GenePattern</title>
+    <meta name="slug" content="using-igv-through-genepattern" />
+    <meta name="date" content="2012-08-30 12:23:00" />
+    <meta name="authors" content="The GenePattern Team" />
+</head>
+<body>
+<h2>Overview</h2>
+<p>The Integrative Genomics Viewer (<a class="external-link" href="https://igv.org">IGV</a>) is a high-performance visualization tool for interactive exploration of large, integrated datasets. It supports a wide variety of data types including sequence alignments, microarrays, and genomic annotations. Up until recently, this tool was only available outside of <span class="external-link">GenePattern</span>, though it did accept GenePattern file formats. IGV can now be launched from a module available on the <a class="external-link" href="https://cloud.genepattern.org/gp">GenePattern Server</a> or downloaded from the GenePattern Repository.</p>
+<p>With this new development, users can pass their GenePattern result files directly to IGV through GenePattern.</p>
+<h2><a name="UsingIGVThroughGenePattern-IGVinGenePattern"></a>IGV in GenePattern</h2>
+<p>The GenePattern IGV module launches the same application that is available from the IGV website. If you are a user of both the client IGV (either launching from the IGV website or your desktop) and GenePattern, this means you are using the same version of IGV complete with your preferences, home directory, saved genomes, and other such IGV saved presets. For all users, this means you are getting the latest version of IGV each time you run IGV, regardless of whether that is from GenePattern or from the IGV client.</p>
+<p>As mentioned above, having IGV in GenePattern now allows you to pass your GenePattern data files directly to IGV in the same way you would use a result file as input file for any other module. For instance, you'll now notice that (on servers where IGV is installed) output from a run of GISTIC will have IGV as a next option in the dropdown for the result file.</p>
+<h3><a name="UsingIGVThroughGenePattern-SupportedFileFormats"></a>Supported File Formats</h3>
+<p>IGV supports many of the common GenePattern file formats such as: CBS, CN, GCT*, RES*, GISTIC, SEG, and LOH files. For more information about supported IGV file types <a class="external-link" href="https://igv.org/doc/desktop/#FileFormats/DataTracks/">click here</a>.</p>
+<p>You can also upload any other IGV-supported file type as you would any other input file; i.e., via Upload or URL.</p>
+<p><em>Note: In order to properly view GCT or RES files in IGV, some preprocessing is needed and will be discussed in detail shortly.</em></p>
+<h3><a name="UsingIGVThroughGenePattern-ConfiguringIGVinGenePattern"></a>Configuring IGV in GenePattern</h3>
+<p>When you run IGV from within GenePattern you are provided with a few optional configuration parameters which will instruct IGV how to display your data.</p>
+<p>Currently these two parameters are "genome" and "locus".</p>
+<p>The "genome" parameter allows you to select the genome which corresponds to your data file. If you choose not to specify a genome, IGV will launch with hg19 if this is the first time you've run IGV. If you've run IGV before, it will launch with the last genome you were viewing.</p>
+<p>The "locus" parameter allows you to specify a locus or range of interest for your data. For example, you could specify chr5:90,339,000-90,349,000 and IGV would launch with your data and that region of chromosome 5 displayed. If you instead wanted to look for the gene EGFR, you would simply type "EGFR" into the text box. If you choose not to specify a locus or gene and this is the first time you've run IGV, IGV will launch with chromosome 1 selected. If you've run IGV before, it will launch with the chromosome you last viewed.</p>
+<h2><a name="UsingIGVThroughGenePattern-ViewingGCTandRESfiles"></a>Viewing GCT and RES files</h2>
+<p>In order to properly view a GCT or RES file in IGV, some preprocessing is required.</p>
+<p>The default display option for a GCT or RES file is the Heatmap. For the heatmap to make sense, the data must be row-centered, scaled and possibly have a threshold applied. Currently the workflow for this is as follows.</p>
+<h3><a name="UsingIGVThroughGenePattern-1.RunPreprocessDatasetinGenePattern"></a>1. Run PreprocessDataset in GenePattern</h3>
+<p>If the data contains negative (non-log transformed) values, run it through PreprocessDataset. The default threshold there is 20.</p>
+<h3><a name="UsingIGVThroughGenePattern-3.RunIGVwithScaledandCenteredData"></a>2. Run IGV with Scaled and Centered Data</h3>
+<p>Take the output from IGVTools and provide it as input to IGV.</p>
+<h2><a name="UsingIGVThroughGenePattern-UsingIGV"></a>Using IGV</h2>
+<p>Once you have launched IGV you may configure, drag, zoom, save, etc., as you would normally use IGV. For more information on how to use IGV, please visit <a class="external-link" href="https://igv.org">IGV website</a>.</p>
+<p>For questions and comments about IGV, please <a class="external-link" href="mailto:igv-help@broadinsitute.org">send an email to the IGV team</a> at igv-help@broadinsitute.org.</p>
+<p>For questions and comments about GenePattern, please <a class="external-link" href="mailto:gp-help@broadinstitute.org">send an email to the GenePattern team</a> at gp-help@broadinstitute.org.</p>
+</body>
+</html>

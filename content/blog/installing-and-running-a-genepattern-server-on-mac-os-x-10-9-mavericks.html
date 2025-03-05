@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Workarounds to Install and Run a GenePattern Server on Mac OS X 10.9 Mavericks</title>
+    <meta name="slug" content="installing-and-running-a-genepattern-server-on-mac-os-x-10-9-mavericks" />
+    <meta name="date" content="2014-05-07 17:49:00" />
+    <meta name="authors" content="David Eby" />
+</head>
+<body>
+
+<p>In a <a href="/blog/2013/12/02/using-genepattern-with-mac-os-x-10-9-mavericks">previous blog post</a> we gave some limited instructions for using GenePattern with Mac OS X 10.9 Mavericks.  While accessing the public server via web browser is not an issue, installing and running your own GenePattern server is a different matter.  Issues with the installer, server launcher, and general responsiveness prevent us from officially supporting this platform right now.  We are actively working to address these problems and expect to have a fix in a future version of GenePattern, as soon as is feasibly possible.  This is very important to us and is on our immediate agenda.</p>
+<p>In the meanwhile, however, we have some new workaround recommendations which should improve your current experience running the GenePattern server on Mavericks.</p>
+<p>I'll start off by explaining how to launch GenePattern server for the benefit of those folks who had it installed and working on an earlier version of OS X but then upgraded to Mavericks and ran into the responsiveness issues.  We recommend the installer workaround for only advanced - and highly dedicated - users, so I'll set that aside for the moment; <a href="#Installing">those instructions follow afterward</a>.</p>
+<h3><a name="Running"></a>Running GenePattern Server</h3>
+<p>We have found that the GenePattern server is much more responsive on Mavericks when launched from a Terminal.app command line.  We have not done extensive testing but our general impression is that the GenePattern server performs at least as well as it did on previous versions of OS X when launched this way.  While doing so is not as simple as using the Start/Stop icons, it is still reasonably easy <strong>if you already have Java 6 installed</strong> (see below for <a href="#Java7">Java 7 instructions</a>).  Just open Terminal.app (found in Applications&gt;Utilities) and issue the following commands:</p>
+<p style="margin-left: 40px;"><span style="font-family:courier new,courier,monospace;">cd /Applications/GenePatternServer/Tomcat/<br/>
+nohup bin/catalina.sh run &amp;</span></p>
+<div>You will need to execute those two commands every time you want to launch the GenePattern server. The first 'cd' step is very important: Tomcat will not launch properly if you try to start it while in a different directory.  The commands above will start the server in the background and capture all logging output to a file named nohup.out in the /Applications/GenePatternServer/Tomcat/ directory.  You can refer to this file later if you need to troubleshoot any issues.  Launching the GenePattern server this way should put a new 'java' icon in your Mac tray.  To stop GenePattern server later, you can just use the usual Quit or Force Quit commands from this icon.  If you'd like to be able to stop GP from the command line instead, use:</div>
+<div style="margin-left: 40px;"><span style="font-family:courier new,courier,monospace;">cd /Applications/GenePatternServer/Tomcat/</span></div>
+<div style="margin-left: 40px;"><span style="font-family:courier new,courier,monospace;">bin/catalina.sh stop</span></div>
+<div style="margin-left: 40px;">(the 'nohup' command is not necessary)</div>
+<div> </div>
+<div>Again, the above commands will only work <strong>if you have installed Java 6 from Apple</strong>.  Remember that this may have been removed by the Mavericks upgrade; it is available <a href="http://support.apple.com/kb/DL1572?viewlocale=en_US">here</a> if you need it.  </div>
+<h3><a name="Java7"></a>Running with Java 7</h3>
+<div>If you are not able or do not wish to install Java 6 it is possible to use Java 7 instead (available <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">here</a>).  GenePattern server has not been tested extensively under Java 7 and is not yet officially supported, but so far all indications are that it works fine.  Official support is coming in a future release and is also a high priority.  You'll need to set the JAVA_HOME environment variable to point to the Java 7 location before you can launch GenePattern with Java 7 and will require use of the Terminal.app command line.  The following steps assume that you are using the 'bash' shell; modify accordingly for a different shell:</div>
+<ol>
+<li>Install Java 7</li>
+<li>Open Terminal.app and change to your home directory (using the 'cd' command) if you are not already there.  </li>
+<li>Open your .profile file with a text editor such as emacs or vi and add the following line to the file:<br/>
+<span style="font-family:courier new,courier,monospace;">export JAVA_HOME=`/usr/libexec/java_home -v 1.7`</span></li>
+<li>Save this file and quit the editor</li>
+<li>Either quit Terminal.app and restart or else load these settings from the command line using:<br/>
+<span style="font-family:courier new,courier,monospace;">source ~/.profile</span></li>
+<li>From the Command line, verify that JAVA_HOME has been properly set using:<br/>
+<span style="font-family:courier new,courier,monospace;">echo $JAVA_HOME</span><br/>
+	It should print something like:<br/>
+<span style="font-family:courier new,courier,monospace;">/Library/Java/JavaVirtualMachines/jdk1.7.0_55.jdk/Contents/Home</span></li>
+</ol>
+<p>After this, you should be able to start and stop GenePattern from the Terminal.app command line <a href="#Running">as described above</a>.</p>
+<h3><a name="Installing"></a>Installing GenePattern on Mavericks</h3>
+<p>The instructions above assumed that you already had GenePattern installed on your laptop and then went through a Mavericks upgrade.  We wanted to help those users who had already gotten stuck in that situation and are willing to employ the workaround (starting/stopping the GenePattern server from the Terminal.app's command line) in order to keep running GenePattern.  For Mavericks users who have <strong>not yet</strong> installed a local server, we recommend that you use our <a href="http://genepattern.broadinstitute.org" target="_blank">public server</a> instead.  As with Java 7, using GenePattern with Mavericks is not yet officially supported and we'd prefer not to encourage other users to reach a point where they need to follow difficult instructions for daily use.  Again, we plan to address this in a future release as soon as is feasibly possible.</p>
+<p>Having said all of that, however, it <strong>is</strong> possible to install GenePattern on Mavericks if you would really must.   Please, just review the previous instructions first and be sure that you are actually willing to take those steps.  Then browse the instructions given below to see if you're comfortable with the process.  If <strong>any</strong> of this looks too difficult or scary, remember that our <a href="http://genepattern.broadinstitute.org" target="_blank">public server</a> awaits.</p>
+<p>Still with me?  OK, then here we go...</p>
+<p>The first thing to know is that our current installer <strong>requires Java 6</strong> (available <a href="http://support.apple.com/kb/DL1572?viewlocale=en_US">here</a>).  If you are not willing or able to install Java 6, then stop here.  We have future plans to release GenePattern with a new installer that does not have the Java 6 dependency. </p>
+<p>After downloading the installer from our website, if you decompress and try to run it on Mavericks you will get a popup error claiming that the file is damaged:</p>
+<p><img alt="" src="/uploaded/content_content_damaged.jpg" style="width: 420px; height: 153px; border-width: 1px; border-style: solid;"/></p>
+<p>The file is not actually damaged; this is a Mavericks security measure.  To work around this:</p>
+<ol>
+<li>Using Terminal.app (found in Applications&gt;Utilities), navigate to the Downloads directory:<br/>
+<span style="font-family:courier new,courier,monospace;">cd ~/Downloads</span></li>
+<li>Find the GPserver.app directory and navigate to Contents/MacOS:<br/>
+<span style="font-family: 'courier new', courier, monospace;">cd GPserver.app/Contents/MacOS</span></li>
+<li>Run the installer:<br/>
+<span style="font-family:courier new,courier,monospace;">./GPserver</span><br/>
+	This will start up the installer as usual.</li>
+<li>Fill out the installer, being sure to "Allow" the app to accept incoming network connections. </li>
+</ol>
+<p><img alt="" src="/uploaded/content_content_gpserverapp.jpg" style="width: 420px; height: 195px; border-width: 1px; border-style: solid;"/></p>
+<p>At the end of the installion prcoess, the GenePattern server will be automatically started behind the scenes.  Note that this may be <strong>painfully slow</strong> as it is being started by the same mechanism as the StartGenePattern.app icons and suffers the <a href="/blog/2013/12/02/using-genepattern-with-mac-os-x-10-9-mavericks" target="_blank">same problems</a>.  I suggest that you go get a coffee, tea, or other beverage of your choice at this point while allowing this to complete.  Hopefully when you return the server will be running.  My recommendation is that you <strong>immediately shut down the server before proceeding</strong>.  You can use the StopGenePatternServer.app icon but this will also be painfully slow for the same reason.  You can instead stop it from the command line or by using the usual Quit or Force Quit commands.</p>
+<p>Restart the server using the instructions in the <a href="#Running">previous section</a>.  Now it should perform much better, starting up and changing pages far more responsively.</p>
+<p>After you have finished installing a Registration screen will appear. This may not succeed:</p>
+<p><img alt="" src="/uploaded/content_content_notregistered.jpg" style="width: 800px; height: 188px; border-width: 1px; border-style: solid;"/></p>
+<p>If that happens to you, add the following line to your &lt;GP_HOME&gt;/resources/genepattern.properties file:<br/>
+<span style="font-family:courier new,courier,monospace;"><span style="color: rgb(34, 34, 34); font-size: 13px; line-height: 17.33333396911621px;">registeredServer=true</span></span></p>
+<p>Then stop and restart the server<a href="#Running"> as before</a>.  This will skip the registration process when you load the GenePattern main page.  You will need to register a new user before logging in.</p>
+<p>From this point on, the server should function normally.</p>
+<p>Again, remember that <strong>Mavericks is not yet a supported platform for installing GenePattern </strong>and has not yet been well tested.  If you have any doubts or concerns then perhaps it would be better to wait for an official release; we are actively working on this.  If you decide to try and run into any problems, please <a href="mailto:gp-help@broadinstitute.org">let us know</a> and we will do our best to address them.</p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

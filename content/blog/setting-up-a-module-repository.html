@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Setting Up a Module Repository</title>
+    <meta name="slug" content="setting-up-a-module-repository" />
+    <meta name="date" content="2012-07-11 12:33:00" />
+    <meta name="authors" content="The GenePattern Team" />
+</head>
+<body>
+
+<p>In this article we will go through the manual process of setting up your own module repository to connect to your GenePattern server. This may be desirable if you are developing many GenePattern modules and are looking for a way to control versions in both development and pre-release stages. This mechanism also allows for a centralized distribution of modules, both during development and at release.</p>
+<p>The following steps describe the setup process:</p>
+<ol>
+<li>Download the following files:
+	<ul>
+<li><a class="external-link" href="ftp://ftp.broad.mit.edu/pub/genepattern/Module_Repository_Setup/gpModuleRepository.properties">gpModuleRepository.properties</a></li>
+<li><a class="external-link" href="ftp://ftp.broad.mit.edu/pub/genepattern/Module_Repository_Setup/gpModuleRepository.war">gpModuleRepository.war</a></li>
+</ul>
+</li>
+<li>Put the properties file somewhere and remember the path.
+	<ul>
+<li>Edit the URLs to that of the Tomcat you will run it in and the paths to where you would like the modules it serves to be stored.</li>
+<li>Create the top level directories such that:
+		<ul>
+<li>there is a directory for each of prod/dev and modules/suites/patches</li>
+<li>the cache is the place the XML file (listing the modules) is stored in the file system</li>
+<li>the prod.wi_ip_subnet and dev.wi_ip_subnet entries are changed to your local IP address subnet (ask your systems dept if you don't know how to find this)</li>
+<li>(Note: This is done to prevent people from 'outside' uploading modules. Only clients with IP addresses in this range can upload new modules to the repository.)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Take the WAR file and unzip it into a Tomcat/webapps directory (note you need to open the file, deploying it as a WAR will not work).</li>
+<li>Edit the WEB-INF/web.xml file for the webapp.
+	<ul>
+<li>Set the path to the properties file to match where you have your properties file</li>
+</ul>
+</li>
+<li>Start Tomcat.</li>
+<li>Navigate to &lt;your URL&gt;/gpModuleRepository/uploadForm.jsp.</li>
+<li>Upload a module to the 'dev' environment.</li>
+<li>Check the directory you defined in the properties to see that the modules subdirectories were created and the unzipped module file is there.</li>
+<li>Navigate to &lt;your URL&gt;/gpModuleRepository?env=dev and check that the uploaded module is there.</li>
+<li>Open a browser window to your GenePattern server and navigate to Administration/Server Settings/Repositories.</li>
+<li>Enter the URL for your new module repository and 'Save'.</li>
+<li>Navigate to <em>Modules &amp; Pipelines&gt;Install from Repository</em> and check all of the filtering checkboxes at the top of the page.</li>
+<li>Verify that GenePattern can see all the modules you expect to be in your module repository.</li>
+<li>Select a module and test an installation.</li>
+</ol>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GenePattern 3.9.1 Released</title>
+    <meta name="slug" content="genepattern-3-9-1-released" />
+    <meta name="date" content="2015-01-21 09:33:00" />
+    <meta name="authors" content="The GenePattern Team" />
+</head>
+<body>
+
+<p>GenePattern 3.9.1 is available for use on our <a href="http://genepattern.broadinstitute.org/" target="_blank">Public GenePattern Server</a>,  via <a href="http://www.broadinstitute.org/installer/latest/install.htm" target="_blank">download,</a> and as an <a href="http://www.broadinstitute.org/download/gp_create_ami" target="_blank">Amazon Machine Image (AMI)</a></p>
+<div>
+<div><a href="/doc/relnotes/3.9.1#newuserfeatures" target="_blank">New features</a> include:</div>
+<ul>
+<li>The ability to add tags and comments to jobs</li>
+<li>An improved mechanism for using GenePattern data in IGV</li>
+<li>Support for JavaScript based visualizers</li>
+</ul>
+</div>
+<div>We also made some user requested <a href="/doc/relnotes/3.9.1#fixes" target="_blank">fixes and enhancements</a>:</div>
+<ul>
+<li>Enabled the use of a GenomeSpace directory as an input to a GenePattern module</li>
+<li>Added support for file by reference for file list parameters</li>
+</ul>
+<p>Full details about 3.9.1, including <a href="http://www.broadinstitute.org/doc/requirements" target="_blank">links to hardware &amp; software requirements</a> and <a href="http://www.broadinstitute.org/doc/knownissues" target="_blank">known issues</a>, can be found in our <a href="http://www.broadinstitute.org/doc/relnotes/3.9.1" target="_blank">release notes</a>.</p>
+<div>
+<div><strong><a name="Mavericks install">Installing GenePattern on Mac OSX 10.9 (Mavericks) or 10.10 (Yosemite)</a></strong></div>
+<div> </div>
+<div>With Mac OS X 10.9 (Mavericks) Apple instituted a variety of application requirements that are incompatible with the GenePattern installer, which also apply to OS X 10.10 (Yosemite). As a consequence, those attempting to install GenePattern on Mavericks or Yosemite may encounter the following error message:</div>
+</div>
+<p><img alt="" src="/uploaded/content_content_damaged.jpg" style="width: 420px; height: 153px;"/></p>
+<div>Despite this error message the GenePattern installer is not actually damaged. The message is part of a new Apple security measure. There are two options for working around this error and proceeding with a GenePattern installation, depending on your administrative privileges.</div>
+<div> </div>
+<div>To determine if you have the appropriate admin privileges follow the instructions for <a href="#admin privs">If you have administrator privileges</a> below. If the <em>Allow apps downloaded from…</em> text remains grayed out throughout the steps, it is unlikely that you have the necessary privileges. In this case, please follow the steps beneath <a href="#no admin privs">If you do not have administrator privileges.</a></div>
+<div> </div>
+<div><strong><a name="admin privs">If you have administrator privileges</a></strong></div>
+<div> </div>
+<div>If you are an admin on your Mac computer you can temporarily disable the security settings that prevent GenePattern from being installed. To do this perform the following steps.</div>
+<ol>
+<li>Open System Preferences found in <em>Applications &gt; System Preferences</em></li>
+<li>Click on the <em>Security &amp; Privacy</em> icon</li>
+<li>Click on the <em>General</em> tab</li>
+<li>In the bottom half of the window set <em>Allow apps downloaded from</em>… to <em>Anywhere</em>. If this section is grayed out you may first have to click the lock icon in the lower left corner of the window and enter your password.</li>
+<li>Start the GenePattern installer by double-clicking the downloaded file. Once GenePattern is installed the previous security settings may be reapplied.</li>
+</ol>
+<div><a name="no admin privs"><strong>If you do not have administrator privileges</strong></a></div>
+<div> </div>
+<div>Another possibility for installing GenePattern is to start the installer from the command line. To do this perform the following steps.</div>
+<ol>
+<li>Use the Terminal application found in <em>Applications &gt; Utilities</em> to navigate to the <em>Downloads </em>directory and type <code>"cd ~/Downloads</code>"</li>
+<li>Find the <em>GPserver.app</em> directory and navigate to <em>Contents&gt;MacOS</em> and type <code>"cd GPserver.app/Contents/MacOS</code>"</li>
+<li>Run the installer with<code> "./GPserver"</code></li>
+</ol>
+<p>We are continuting to work on updates to our documentation which reflect the latest version of GenePattern. That being said, let us know if you require clarification and let us know what you think by <a href="http://www.broadinstitute.org/contact" target="_self">contacting us</a>.</p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

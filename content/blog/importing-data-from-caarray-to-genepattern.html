@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Importing Data from caArray to GenePattern</title>
+    <meta name="slug" content="importing-data-from-caarray-to-genepattern" />
+    <meta name="date" content="2012-10-30 12:36:00" />
+    <meta name="authors" content="The GenePattern Team" />
+</head>
+<body>
+
+<h2>Overview</h2>
+<p><a class="external-link" href="https://cabig.nci.nih.gov/tools/caArray">caArray</a> is an open-source, web and programmatically accessible array data management system. caArray guides the annotation and exchange of array data using a federated model of local installations whose results are shareable across the cancer Biomedical Informatics Grid (caBIG®). caArray furthers translational cancer research through acquisition, dissemination and aggregation of semantically interoperable array data to support subsequent analysis by tools and services on and off the Grid.</p>
+<p>To facilitate the importing of data from caArray repositories in GenePattern, a module named caArray2.3.0Importer is provided.</p>
+<h2><a name="ImportingDatafromcaArraytoGenePattern-caArray2.3.0Importer"></a>caArray2.3.0Importer</h2>
+<p>The CaArray2.3.0Importer imports data files from a caArray 2.x repository into GenePattern by connecting to a caArray 2.x repository and then retrieving all files of a given extension for a named experiment. The retrieved files are then collected into a single ZIP file archive which is returned as the module's output.</p>
+<p>(Note: 2.x is used here to refer to any 2.3 or higher version repository. The current version is 2.4.0 and is compatible with the caArray2.3.0Importer.)</p>
+<p>A typical use case for this module would be to retrieve all .cel files from a given experiment in caArray and then pass the resulting zip file to the ExpressionFileCreator module for processing into a GenePattern GCT or RES file format. More information about possible next steps from the importer will be given below.</p>
+<p>The following sections will discuss the details of the caArray2.3.0Importer parameters.</p>
+<p><strong>Note:</strong> This module is not compatible with earlier, now deprecated, caArray versions (i.e., 1.x).</p>
+<h3><a name="ImportingDatafromcaArraytoGenePattern-URL"></a>URL</h3>
+<p>Here you provide the URL to the caArray 2.x repository from which you wish to import data. By default GenePattern provides the<br/>
+public caArray instance hosted at the NCI (<a href="https://array.nci.nih.gov/caarray/home.action">https://array.nci.nih.gov/caarray/home.action</a>). You may, however, provide an URL to any caArray repository to which you have access.</p>
+<h3><a name="ImportingDatafromcaArraytoGenePattern-experiment"></a>experiment</h3>
+<p>The "experiment" refers to the title or public identifier of the experiment in caArray from which the data is to be imported.</p>
+<p>If you don't already have a title or public id, you should go to your repository of (ie the URL you will have or have provided for the first parameter) and browse to or search for the experiment which contains data you wish to import. (Note that the public repository hosted by NCI works best with Firefox 2.0.0 or higher)</p>
+<h3><a name="ImportingDatafromcaArraytoGenePattern-type"></a>type</h3>
+<p>This parameter refers to the type of bioassay data to be retrieved; raw or derived. The default is raw and will likely be correct for most data imported from caArray.</p>
+<h3><a name="ImportingDatafromcaArraytoGenePattern-extension"></a>extension</h3>
+<p>This is an optional parameter which will specify the data file extension to be retrieved. If specified, only data files with this extension, in the experiment, will be imported into GenePattern. If this is not specified, all files of the specified type (raw or derived) will be retrieved.</p>
+<h3><a name="ImportingDatafromcaArraytoGenePattern-zipFileName"></a>zipFileName</h3>
+<p>In this parameter you can specify an output file name to be used for the resulting .zip file. If not specified the experiment name, with any spaces replaced by underscores, will be used as the output file prefix.</p>
+<h3><a name="ImportingDatafromcaArraytoGenePattern-usernameandpassword"></a>username and password</h3>
+<p>These are the username and password for the caArray repository specified by the URL. You only need provide these if the data you are importing is private.</p>
+<h2><a name="ImportingDatafromcaArraytoGenePattern-NextSteps"></a>Next Steps</h2>
+<p>Depending on the data type imported from the caArray repository there are some common paths or workflows you may wish to follow to analyze your data. These will be discussed below.</p>
+<h3><a name="ImportingDatafromcaArraytoGenePattern-ConverttoGCTfile"></a>Convert to GCT file</h3>
+<p>If you imported raw expression data in the CEL file format from caArray, you can take the .zip output from caArray2.3.0Importer, containing those .cel files and use it as input to the <a class="external-link" href="http://genepattern.broadinstitute.org/gp/pages/index.jsf?lsid=urn:lsid:broad.mit.edu:cancer.software.genepattern.module.analysis:00041:11.15">ExpressionFileCreator module</a>. ExpressionFileCreator converts the .cel files into a matrix containing one intensity value per probe set, in the <a class="external-link" href="/file-formats-guide#GCT">GCT</a><span class="external-link"> or <a href="/file-formats-guide#RES">RES</a></span><a href="/gp_guides/file-formats/sections/res"> </a>file format. (Note that the newer CEL file formats require ExpressionFileCreator version 8 or later, which can be found on the GenePattern <a class="external-link" href="http://genepattern.broadinstitute.org">public server</a>. To install on your local server, email gp-help(at)broadinstitute.org for further instruction.)</p>
+<p>A next common step would be to provide the .gct or .res file output from ExpressionFileCreator as input to ComparativeMarkerSelection; a module that computes significance values for features. For a more indepth discussion of using ComparativeMarkerSelection for differential expression analysis please see the article <a href="/blog/2012/09/30/using-comparativemarkerselection-for-differential-expression-analysis" title="Using ComparativeMarkerSelection for Differential Expression Analysis">Using ComparativeMarkerSelection for Differential Expression Analysis</a>.</p>
+<h3><a name="ImportingDatafromcaArraytoGenePattern-ConverttoSNPfile"></a>Convert to SNP file</h3>
+<p>If you imported raw Affymetrix SNP chip CEL files from caArray, you can take the .zip output containing those .cel files and use it as input to for the <a class="external-link" href="http://genepattern.broadinstitute.org/gp/pages/index.jsf?lsid=urn:lsid:broad.mit.edu:cancer.software.genepattern.module.analysis:00086:1">SNPFileCreator</a> module. SNPFileCreator performs normalization and probe-level summarization to generate a <a class="external-link" href="/file-formats-guide#SNP">SNP</a> file for the provided set of SNP chip CEL files.</p>
+<p>A common workflow or pipeline for .snp data is to compute SNP copy number and loss of heterozygosity (LOH). A discussion of this pipeline can be found in the article <a href="/blog/2012%2F09%2F15%2Fcomputing-snp-copy-number-and-loss-of-heterozygosity" title="Computing SNP Copy Number and Loss of Heterozygosity">Computing SNP Copy Number and Loss of Heterozygosity</a>.</p>
+<h2><a name="ImportingDatafromcaArraytoGenePattern-Summary"></a>Summary</h2>
+<p>In summary GenePattern provides a quick method for importing caArray experiment data sets into GenePattern, and tools to convert the raw or derived data into common GenePattern input formats. There are some common paths to be followed once your data is in these common formats, however, you should note that these are by no means the only paths to be taken. Once in GenePattern there are many methods available for data analysis and visualization. Those represented here are, as mentioned, common paths which may serve as endpoints in and of themselves or as entry points for using the analysis tools provided by GenePattern in custom workflows as meets with your desired output.</p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

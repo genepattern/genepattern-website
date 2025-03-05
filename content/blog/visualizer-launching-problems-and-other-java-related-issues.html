@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizer launching problems and other Java related issues</title>
+    <meta name="slug" content="visualizer-launching-problems-and-other-java-related-issues" />
+    <meta name="date" content="2013-07-17 11:23:00" />
+    <meta name="authors" content="David Eby" />
+</head>
+<body>
+
+<div><a href="http://software.broadinstitute.org/blog/2017/03/16/java-applet-based-visualizers-no-longer-function-in-any-browser" style="background-color: rgb(255, 255, 255);"><strong>UPDATE MARCH 17, 2017 : Java applet visualizers no longer work in any browser. Please click here to read the blog post.</strong></a></div>
+<div>
+<hr/></div>
+<div>We have recently been getting many reports from users having trouble launching GenePattern visualizers - HeatMapViewer, HierarchicalClusteringViewer, PCAViewer and so on - especially on Mac computers.  There have also been reports of issues with running the GenePattern installer and using the File Uploader.  If you are experiencing any of these problems the following suggestions might help you.  These components use the Java platform and the problems all seem to trace to a recent set of Java updates from Oracle and Apple.  In particular, many problem reports come from users with Java 7 Update 25 on Mac OS X 10.7 and above or Java 6 Update 51 on OS X 10.6.  Issues have been reported with other combinations, but less frequently. </div>
+<div> </div>
+<div>These are the latest updates of Java available for these platforms and came out within the last several weeks, so you may or may not have already applied this change depending on the update policies of your organization and the settings on your own computer.  Java 7 update 25 may also be known as:</div>
+<ul>
+<li>Java SE 7 Update 25</li>
+<li>Java 7u25, JRE 7u25 or JDK 7u25</li>
+<li>JRE 1.7.0_25 or JDK 1.7.0_25</li>
+</ul>
+<div>Java 6 update 51 may also be known as:</div>
+<ul>
+<li>Java SE 6 Update 51</li>
+<li>Java 6u51, JRE 6u51 or JDK 6u51</li>
+<li>JRE 1.6.0_51 or JDK 1.6.0_51</li>
+<li>Java for Mac OS X 10.6 Update 16</li>
+</ul>
+<div>While it is unclear exactly what is causing the problems, simply re-installing the update has solved the problem for a number of users.  This worked even though Java had reported that it was up to date on the users' system.  We suspect that the issue is not with the Java update itself, but rather with the way that it was installed by the Java or Apple auto-update process.  To re-install, we recommend taking the following steps:</div>
+<ol>
+<li>Download the update package in question from either Oracle or Apple:
+	<ul>
+<li><a href="http://support.apple.com/kb/dl1573">For Mac OS X 10.6</a></li>
+<li><a href="http://java.com/en/download/index.jsp">For Mac OS X 10.7+ and other platforms</a></li>
+</ul>
+</li>
+<li>Uninstall any existing copy of Java 7.  Instructions are <a href="http://docs.oracle.com/javase/7/docs/webnotes/install/mac/mac-jdk.html#uninstall">here</a>.</li>
+<li>Exit all web browsers and any other programs which rely on Java.</li>
+<li>Re-install Java from the downloaded package.</li>
+<li>Restart the computer.</li>
+</ol>
+<p>If this does not solve your visualizer issues, please consult our <a href="http://www.broadinstitute.org/doc/faq">FAQ</a> for some other known issues regarding <a href="http://www.broadinstitute.org/doc/faq#visualizers">visualizers</a> and <a href="http://www.broadinstitute.org/doc/faq#launchViewer">ComparativeMarkerSelectionViewer</a>.  This <a href="http://www.broadinstitute.org/blog/2012/10/26/october-2012-java-6-update-and-genepattern-visualizer-issues">earlier blog posting</a> deals with some issues in earlier versions of Java 6 and Java 7.  Note also that we are currently in the process of updating our visualizers to be compatible with Java 7.  Most have been updated, but Multiplot in particular is still being tested.  We anticipate a Beta release shortly.</p>
+<h2>Known Issues</h2>
+<div>On the Mac platform, the Java 7 plug-in is not compatible with the Chrome web browser.  This is a general issue with Java 7 and Chrome on Mac OS X and not specific to GenePattern.  Details are <a href="http://java.com/en/download/faq/chrome.xml">here</a>.  We recommend Firefox or Safari to use visualizers on Mac OS X, though special steps are required for Safari to work.</div>
+<div> </div>
+<div>The latest updates to Java and Safari have automatically disabled Java applets on web pages.  On any page with an applet, Safari will display a message asking if you wish to allow it and walk you through the</div>
+<div>steps permitting you to re-enable applets for the site.  Unfortunately, a bug in our visualizer pages is preventing these messages from being displayed.  As a work-around, you can instead enable applets through the File Uploader component; doing so will enable all applets on the GenePattern web site.</div>
+<div> </div>
+<div>First, enable Java in the Safari preferences (Safari menu -&gt; Preferences -&gt; Security).  </div>
+<div><img alt="" src="/uploaded/content_safari_security_preferences.png" style="width: 640px; height: 230px;"/></div>
+<div> </div>
+<div> </div>
+<div>Click the Uploads tab in the top right corner, then click the context menu button next to the "uploads" folder, choosing the Upload Files menu selection.</div>
+<div><img alt="" src="/uploaded/content_uploads.png" style="width: 640px; height: 272px;"/></div>
+<div> </div>
+<div>This will launch the File Uploader component.  Safari will prompt whether you wish to Block or Allow it.  Click 'Allow'.</div>
+<div><img alt="" src="/uploaded/content_block_or_allow.png" style="width: 640px; height: 292px;"/></div>
+<div> </div>
+<div> </div>
+<div>Safari will respond with a security warning dialog.  Check the box labeled "I accept the risk and want to run this application".  Clicking "Show Options" gives you the additional option to always allow apps from this location; checking this box will allow all applets from the GenePattern web site.  Doing so should allow the visualizers to work as well.  Click "Run" to apply these changes.</div>
+<div><img alt="" src="/uploaded/content_security_warning.png" style="width: 640px; height: 423px;"/></div>
+<div> </div>
+<div>After these steps are complete, the File Uploader component should be open and enabled.  </div>
+<div><img alt="" src="/uploaded/content_file_uploader.png" style="width: 620px; height: 434px;"/></div>
+<div>Feel free to close this and try visualizers from your Job Results.  When you close the window, Safari may bring up an additonal Security Warning, again prompting you whether or not to Block this applet.  Click "Don't Block" at this point.  After this, visualizers and other components should be enabled for you on the GenePattern web site.</div>
+<div><img alt="" src="/uploaded/content_security_warning2.png" style="width: 465px; height: 236px;"/></div>
+<div> </div>
+<div> </div>
+<div> </div>
+<div> </div>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

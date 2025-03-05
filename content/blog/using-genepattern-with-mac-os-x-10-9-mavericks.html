@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Using GenePattern with Mac OS X 10.9 Mavericks</title>
+    <meta name="slug" content="using-genepattern-with-mac-os-x-10-9-mavericks" />
+    <meta name="date" content="2013-12-02 10:49:00" />
+    <meta name="authors" content="Barbara Hill Meyers" />
+</head>
+<body>
+
+<p>Since the release of Mac OS X 10.9 (Mavericks) on Oct 22, 2013,  many of you may have already upgraded or are considering doing so, given the ease of access to this upgrade. Some of you have reported problems with GenePattern on this new OS and we have observed some in our own testing and exploring. This post aims to go over what we know and any work arounds or fixes we have so far . We will continue to provide updates for any incomplete or (unknowingly) inaccurate information.</p>
+<p>There are 3 basic ways in which one may use GenePattern:</p>
+<ol>
+<li><a href="#Public Server">GenePattern Public Server </a>- genepattern.broadinstitute.org (note that for the sake of this blog the information about this method will be assumed to pertain to any remote GenePattern server - ie not installed on your computer)</li>
+<li><a href="#Previous Install">A previously installed* version of GenePattern on your computer.</a> (* previous to upgrading to Mac OS X 10.9 Mavericks on the Mac where the server is installed)</li>
+<li>A new installation of GenePattern , installed after upgrading to Mac OS X 10.9 Mavericks -<strong> Not Supported - </strong>GenePattern is not currently supported on Mavericks due to new security settings in Mavericks and performance issues. We are working to address these and will post more information here as soon as it becomes available.</li>
+</ol>
+<p>I will go through the experience of accessing GenePattern through each of the first two methods on Mavericks.</p>
+<h4><a name="Public Server">1. GenePattern Public Server</a></h4>
+<p>Your experience using the public server should be the same was it was before upgrading your local machine to Mavericks. If you also updated to Java 7 update 45 you will likely encounter the warning message discussed in our <a href="http://www.broadinstitute.org/blog/2013/11/21/genepattern-and-java-7-update-45" target="_blank">recent blog post</a>, however there should be no other differences.</p>
+<h4><a name="Previous Install">2. Previously Installed GenePattern Server</a></h4>
+<ul>
+<li>When starting up a previously installed version of GenePattern (e.g. 3.6.1) which used Java 6, you will likely be prompted to install Java 6. This is because Mavericks <em>deletes</em> Java 6 from your system. (Note that you will likely need to reinstall Flash, if you had it before upgrade, as that was deleted too. Here's a <a href="http://lifehacker.com/how-to-fix-os-x-mavericks-biggest-annoyances-1450220339" target="_blank">link to a Life Hacker article</a> with a number of other handy Mavericks fixes)</li>
+<li>If you've already installed Java 6, when starting your previously instally GenePattern server you will likely see this message, which can safely "Allow". (Note that this will likely also display when you "StopGenePatternServer"</li>
+</ul>
+<p style="margin-left: 40px;"><img alt="Mavericks Allow incoming network connections" src="/uploaded/content_allowincomingnetconnect_startgp.png" style="width: 420px; height: 195px;"/></p>
+<ul>
+<li>From there on the server and visualizers should function as before. (Taking into account the <a href="/blog/2013/11/21/genepattern-and-java-7-update-45" target="_blank">previously discussed Java 7 warning</a> if you have updated to Java 7 update 45) </li>
+<li>We have noticed some intermittent "slowness" with GenePattern servers running on Mavericks. If you experience this, please feel free to contact us. This is an issue we are working to resolve.</li>
+</ul>
+<p> </p>
+<p>If you have any questions or comments please feel free to <a href="/contact" target="_blank">contact us</a>. We are actively working on these issues and welcome any feedback you wish to share with us.</p>
+<p> </p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating a GenePattern Module</title>
+    <meta name="slug" content="creating-a-genepattern-module" />
+    <meta name="date" content="2012-12-15 11:36:00" />
+    <meta name="authors" content="The GenePattern Team" />
+</head>
+<body>
+
+<p>The following tutorial shows you how to create a new GenePattern module (in GenePattern 3.4 and up). Only the GenePattern team can create or install modules on the GenePattern public server. Therefore, to create a module, you need to have a local GenePattern server installed (see the <a class="external-link" href="/download">download and installation page</a>). You may also be interested in the video tutorial: <a href="http://www.youtube.com/watch?v=u3m7yjWbtd8">Create a module in GenePattern</a>.</p>
+<p>In this tutorial, you will create a module named log_transform. The module invokes a perl script, <em>log_transform.pl</em>, which log-transforms all positive values in a data set and sets all negative or zero values to zero. Before you begin, download the perl script and its documentation:</p>
+<ul>
+<li><a class="external-link" href="ftp://ftp.broadinstitute.org/pub/genepattern/datasets/tutorial/gp_tutorial_files/log_transform/log_transform.pl">log_transform.pl</a></li>
+<li><a class="external-link" href="ftp://ftp.broadinstitute.org/pub/genepattern/datasets/tutorial/gp_tutorial_files/log_transform/LogTransform.pdf">LogTransform.pdf</a></li>
+</ul>
+<p>In GenePattern, to create the log_transform module:</p>
+<ol>
+<li>Click <em>Modules &amp; Pipelines&gt;New Module</em>. GenePattern opens the Module Integrator window.
+
+	<ul>
+<li>Give it a Name: LogTransform</li>
+</ul>
+</li>
+<li>Enter the following information in the <em>Details</em> fields:
+	<ul>
+<li>Description: Log transform a data (gct) file.</li>
+<li>Documentation: Upload the LogTransform.pdf file provided above. This is the documentation for the module. When a GenePattern user displays your module and clicks the <em>Documentation</em> button, GenePattern displays this file.</li>
+<li>Author: Your name.</li>
+<li>Organization: Your affiliation.</li>
+<li>License: Do not add a license file. (This is to add a text file for modules that require the user to agree to an end user license agreement [EULA] before use.)</li>
+<li>Version Comment: This module is new, so enter "Initial version."  This field is used to describe what has changed since the last version of the module. </li>
+<li>Module Category: Select <em>Preprocess &amp; Utilities</em> from the drop-down menu.</li>
+<li>Privacy: Select <em>private</em>. This means that only you (or an administrator) can view and run the module. Public allows all users connected to this server to view and run the module.</li>
+<li>Quality Level: Select <em>preproduction</em>. This indicates that you have finished development, but are not yet ready for production.</li>
+<li>CPU type: Select <em>any</em>.</li>
+<li>Operating System: Select <em>Any</em>.</li>
+<li>Language: Select <em>Perl</em>.</li>
+<li>Output File Formats: Select <em>gct</em> from the list of formats.</li>
+</ul>
+</li>
+<li>Use the <em>Support Files </em>section to upload the perl program (the .pl file you downloaded before starting the tutorial):The Module Integrator <em>Details</em> and <em>Support Files</em> sections should look like this now:<br/>
+<img alt="" src="/uploaded/content_mod_int_top.jpg?1354737857" style="width: 750px; height: 412px;"/><br/>
+	You can click the blue arrows to the left of <em>Details</em> and <em>Support Files</em> to close those parts of the window and give you more room for working with your parameters.
+	<ol>
+<li>Click the <em>Add files...</em> button in the Support files field. GenePattern displays the File Upload window.</li>
+<li>Select the log_transform.pl file and click <em>Open</em>. This is the script that implements the module.</li>
+</ol>
+</li>
+<li>In the <em>Parameters</em> section, enter "2" and click <em>Add Parameter</em>.  This gives you 2 blank parameter fields to work with.</li>
+<li>Describe your two program parameters: <em> input.filename</em> and <em>output.file</em>. The parameter names and descriptions that GenePattern displays when a user runs your module are the parameter names and descriptions that you provide here. In the first parameter, enter the following information for input.filename:
+	<ul>
+<li>name: input.filename</li>
+<li>description: The dataset to be transformed (gct format).</li>
+<li>Flag: "-F "
+		<ul>
+<li>minus the quotes and pay attention to the space after the -F</li>
+</ul>
+</li>
+<li>Type of field to display: select <em>File Field</em></li>
+<li>file format: select <em>gct</em></li>
+</ul>
+</li>
+<li>In the second parameter, enter the following information for output.file:
+	<ul>
+<li>name: output.file</li>
+<li>Flag: "-o "
+		<ul>
+<li>minus the quotes and pay attention to the space after the -o</li>
+</ul>
+</li>
+<li>description: The name of the new transformed file.</li>
+<li>Type of field to display: choose Text Field</li>
+<li>Type of data to enter: choose Text (this is a name that the user enters)</li>
+</ul>
+</li>
+<li>Review your command line. It should look like this (without the quotes): "&lt;perl&gt; &lt;libdir&gt;log_transform.pl -F &lt;input.filename&gt; -o &lt;output.file&gt;"  The command line is a combination of fixed text and variables defined by GenePattern. This allows the command line to be independent of the operating environment and allows different values to be specified at different invocations of the command. This command line uses the following variables:
+	<ol>
+<li>&lt;perl&gt; represents the full path to the perl installation used by GenePattern.</li>
+<li>&lt;libdir&gt; represents the full path to the directory that contains the files for this module, including the program file.</li>
+<li>The perl script, log_transform.pl, expects two parameters, an input file and an output file name: -F &lt;input.filename&gt; -o &lt;output.file&gt;. When your program has parameters, you include them in the command line and also define them in the <em>Parameters</em> field, as described below.</li>
+</ol>
+</li>
+<li>Click <em>Save</em>. GenePattern displays a message informing you that the module has been saved.</li>
+<li>Click <em>Run</em> to confirm that it has been added to the GenePattern server correctly.</li>
+</ol>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

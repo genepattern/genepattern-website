@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GenePattern 3.9.0 Released</title>
+    <meta name="slug" content="genepattern-3-9-0-released" />
+    <meta name="date" content="2014-10-09 17:08:00" />
+    <meta name="authors" content="Barbara Hill Meyers" />
+</head>
+<body>
+
+<p><strong>GenePattern 3.9.0 has been released!</strong><br/>
+3.9.0 is available for use on our <a href="http://genepattern.broadinstitute.org/" target="_blank">Public GenePattern Server</a>,  via <a href="/download" target="_blank">download</a> and as an <a href="/administrators-guide/#setting-up-a-new-genepattern-ami" target="_blank">Amazon Machine Image (AMI)</a></p>
+<p><a href="/doc/relnotes/3.9.0#newuserfeatures" target="_blank">New features</a> include:</p>
+<ul>
+<li>A configurable disk usage quota</li>
+<li>Job queue status indicator</li>
+<li>Job status details, available on the job status page</li>
+<li>Downloading of directories from the Files tab.</li>
+</ul>
+<p>We also made some user requested <a href="/doc/relnotes/3.9.0#fixes" target="_blank">fixes and enhancements</a>:</p>
+<ul>
+<li>Installer update addresses some problems with installing GenePattern on Mavericks and update to Java 7. See <a href="#Mavericks install">below</a> for details.</li>
+<li>Corrected a problem with large file uploads to the job input form. The problem was an unintended timeout causing file uploads to fail after 5 minutes.</li>
+<li>Corrected a problem (introduced in GP 3.8.2) that caused pipelines to fail on the Broad Institute hosted GenePattern server after a server restart.</li>
+<li>Corrected a problem (introduced in GP 3.8.2) with the REST API giving an incorrect empty list of job result files for a completed job.</li>
+</ul>
+<p>Full details about 3.9.0, including <a href="/doc/requirements">hardware/software requirements</a> and <a href="/doc/knownissues" target="_blank">known issues</a> can be found in our <a href="/doc/relnotes/3.9.0" target="_blank">release notes</a>.</p>
+<p> </p>
+<p><strong><a name="Mavericks install">Installing GenePattern on Mac OSX 10.9 (Mavericks)</a></strong></p>
+<p>With Mac OSX 10.9 (Mavericks) Apple instituted a variety of application requirements that are incompatible with the GenePattern installer. As a consequence, those attempting to install GenePattern on Mavericks may encounter the following error message:</p>
+<p> </p>
+<p><img alt="" src="/uploaded/content_content_damaged.jpg" style="width: 420px; height: 153px;"/></p>
+<p>Despite this error message the GenePattern installer is not actually damaged. The message is part of a new Apple security measure. There are two options for working around this error and proceeding with a GenePattern installation, depending on your administrative privileges.</p>
+<p>To determine if you have the appropriate admin privileges follow the instructions for <a href="#admin privs">"If you have admin privileges"</a> below. If the “Allow apps downloaded from…” text remains grayed out throughout the steps, it is unlikely that you have the necessary privileges. In this case, please follow the steps beneath <a href="#no admin privs">"If you do not have admin privileges."</a></p>
+<p><strong><a name="admin privs">If you have admin privileges:</a></strong></p>
+<p>If you are an admin on your Mac computer you can temporarily disable the security settings that prevent GenePattern from being installed. To do this perform the following steps:</p>
+<ol>
+<li>Open System Preferences (usually found in Applications &gt; System Preferences)</li>
+<li>Click on the Security &amp; Privacy icon</li>
+<li>Click on the General tab</li>
+<li>In the bottom half of the window make sure “Allow apps downloaded from…” is set to “Anywhere.” If this section is grayed out you may first have to click the lock icon in the lower left corner of the window and enter your password.</li>
+<li>Start the GenePattern installer by double-clicking the downloaded file. Once GenePattern is installed the previous security settings may be reapplied.</li>
+</ol>
+<p><a name="no admin privs"><strong>If you do not have admin privileges:</strong></a></p>
+<p>Another possibility for installing GenePattern is to start the installer from the command line. To do this perform the following steps:</p>
+<ol>
+<li>Using Terminal.app (found in Applications &gt; Utilities), navigate to the Downloads directory.<br/>
+<code>cd ~/Downloads</code></li>
+<li>Find the GPserver.app directory and navigate to Contents/MacOS<br/>
+<code>cd GPserver.app/Contents/MacOS</code></li>
+<li>Run the installer:<br/>
+<code>./GPserver</code></li>
+</ol>
+<p>This will start up the installer.</p>
+<p>We are continuting to work on updates to our documentation which reflect the latest version of GenePattern. That being said, do let us know if you find anything to be out of date. We'll be happy to provide you with up-to-date information right away and update the page as soon as possible.</p>
+<p>Please <a href="/contact">let us know what you think!</a></p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

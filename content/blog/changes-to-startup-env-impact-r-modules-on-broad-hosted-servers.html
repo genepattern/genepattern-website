@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Changes to Startup Env Impact R Modules on Broad Hosted Servers</title>
+    <meta name="slug" content="changes-to-startup-env-impact-r-modules-on-broad-hosted-servers" />
+    <meta name="date" content="2014-09-18 16:52:00" />
+    <meta name="authors" content="Peter Carr" />
+</head>
+<body>
+
+<p>As a result of the software update on August 14, we modified the startup environment for the server. This was necessary because the server now requires Java 7. It was previously using Java 6. Surprisingly, this necessitated a change to the R configuration. You may notice slight changes to the behavior of your R modules. For example, the ATLANTISInputs module failed with this error message:</p>
+<p><code>/broad/software/free/Linux/redhat_5_x86_64/pkgs/r_3.0.2/lib64/R/bin/exec/R: error while loading shared libraries: libgfortran.so.3: cannot open shared object file: No such file or directory </code></p>
+<p>The workaround is to change the command line for your R modules to use the preferred command line substitution parameter. For example, for an R 3.0 module use <b>&lt;R3.0_Rscript&gt;</b>. For an R 2.15 module use <b>&lt;R2.15_Rscript&gt;</b>.</p>
+<p>Please <a href="http://www.broadinstitute.org/contact">contact us</a> for further assistance. Thanks! <span style="font-size:10px;"><em>Originally posted on gpbroad at 4pm on Monday Aug 25</em></span></p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

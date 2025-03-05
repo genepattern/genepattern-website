@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizers fixed for Java 7</title>
+    <meta name="slug" content="visualizers-fixed-for-java-7" />
+    <meta name="date" content="2014-06-17 16:50:00" />
+    <meta name="authors" content="David Eby" />
+</head>
+<body>
+
+<p><a href="http://software.broadinstitute.org/blog/2017/03/16/java-applet-based-visualizers-no-longer-function-in-any-browser" style="background-color: rgb(255, 255, 255);"><strong>UPDATE MARCH 17, 2017 : Java applet visualizers no longer work in any browser. Please click here to read the blog post.</strong></a></p>
+<hr/>
+<p><strong>Visualizers fixed for Java 7: </strong>If you have been following this blog, you will have seen the <a href="/blog/2014/05/27/java-7-update-55-blocks-visualizers-on-windows">series</a> <a href="http://www.broadinstitute.org/blog/2014/01/21/java-7-update-51-blocks-genepattern-visualizers">of</a> <a href="/blog/2013/11/21/genepattern-and-java-7-update-45">posts</a> <a href="/blog/2013/07/17/visualizer-launching-problems-and-other-java-related-issues">detailing</a> <a href="/blog/2012/10/26/october-2012-java-6-update-and-genepattern-visualizer-issues">workarounds</a> for visualizer issues caused by Java updates. The good news is that we have made some fixes behind the scenes so that these should no longer be necessary going forward.  For the time being, these fixes are only available on our public server and its internal Broad-only counterpart.  We'll be rolling them out in the next release of GenePattern, however, so those of you who have your own locally-installed copy will have access as well.</p>
+<p>Those previous blogs were, by necessity, rather heavy on the technical details.  This one will be much lighter in comparison.</p>
+<p>For most users there is not much to do to enable the fix.  Launching any visualizer on the public server will bring up two warnings, the first asking whether you trust the GenePattern website to run Java...</p>
+<p><img alt="" src="/uploaded/content_trust_website.png" style="width: 535px; height: 137px;"/></p>
+<p>...and the second asking whether you trust our visualizer launching application:</p>
+<p><img alt="" src="/uploaded/content_trust_applet.png" style="width: 517px; height: 311px;"/></p>
+<p>If you grant this access - and specifically if you check the "Do not show this again..." box in the second pop-up - then <strong>all visualizers</strong> on the server will work for you without asking you any further.  That is all that is required for most users.</p>
+<p>Note that the pop-ups shown above are from Safari on Mac OS X 10.9 Mavericks and may differ slightly on other systems, though they should be very similar.  The first warning pop-up is especially subtle on Firefox; look closely at the top of your browser window for a black bar.</p>
+<h2>Special note for Safari users on Mavericks</h2>
+<p>Though the above steps should be enough on all other systems that we've seen, there are a few more details for Safari users on Mavericks.  </p>
+<p>By default, Safari on Mavericks will not allow visualizers (or any other Java applets) to access the file system and do certain other activities unless the user sets their preferences to allow it.  This means, for example, that by default you can't save a heat map image in HeatMapViewer or load a list of genes in Multiplot Studio.  The visualizers will launch and mostly work but some functionality will be disabled.</p>
+<p>To change this, choose <b>Safari &gt; Preferences</b> in the menu bar, then choose the <strong>Security</strong> tab:</p>
+<p><img alt="" src="/uploaded/content_safari_prefs.png" style="width: 668px; height: 226px;"/></p>
+<p>Click the <strong>Manage Website Settings...</strong> button to bring up the following screen:</p>
+<p><img alt="" src="/uploaded/content_allow_unsafe.png" style="width: 706px; height: 500px;"/></p>
+<p>Choose the selector next to the address of the public server (or whichever GenePattern server you are using) and select "Run in Unsafe Mode".  This will bring up one more pop-up asking whether you trust the website; if you agree to that, then the visualizers will be able to access the file system as before.</p>
+<h2>Notes for users of older versions of GenePattern</h2>
+<p>The fixes mentioned here will be included in the next release of GenePattern, version 3.8.2.  For users on older versions of GenePattern, some or all of the workarounds from our previous blogs still apply.  Just to recap:</p>
+<ul>
+<li>It may be necessary to <a href="/blog/2014/01/21/java-7-update-51-blocks-genepattern-visualizers">add a Site Security Exception</a> to allow visualizers to launch.</li>
+<li>It may be necessary to <a href="/blog/2013/11/21/genepattern-and-java-7-update-45">re-authorize the visualizer each time</a> it is launched.</li>
+<li>We have seen the <a href="/blog/2013/07/17/visualizer-launching-problems-and-other-java-related-issues">Java auto-update mechanism cause problems</a> where a clean Java install works fine.  This is less of an issue with recent updates.</li>
+</ul>
+<p>Again, these workarounds only apply to users on older versions of GenePattern.  Public server users and those who update to the new version when it's available should not need to apply these.</p>
+<p>Note that we have also released updated versions of HeatMapViewer, HierachicalClusteringViewer, CLSFileCreator and ComparativeMarkerSelectionViewer to improve the ease of use for users of these visualizers on older versions of GenePattern.</p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

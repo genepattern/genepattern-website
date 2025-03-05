@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Using ComparativeMarkerSelection for Differential Expression Analysis</title>
+    <meta name="slug" content="using-comparativemarkerselection-for-differential-expression-analysis" />
+    <meta name="date" content="2012-09-30 12:32:00" />
+    <meta name="authors" content="The GenePattern Team" />
+</head>
+<body>
+
+<h2>Overview</h2>
+<p>In GenePattern, you use the ComparativeMarkerSelection module to identify the genes (if any) that are differentially expressed between two phenotype classes. Typically, this is a three-step process:</p>
+<ol>
+<li>Run the PreprocessDataset module to preprocess the expression data.<br/>
+	PreprocessDataset removes platform noise and genes that have little variation. It takes an expression data file and generates a new, modified expression data file.</li>
+<li>Run the ComparativeMarkerSelection module to compute differential gene expression.<br/>
+	For each gene, ComparativeMarkerSelection first uses a test statistic to calculate the difference in gene expression between the samples in the first class and the samples in the second class and then estimates the significance (p-value) of the test statistic score. Because testing tens of thousands of genes simultaneously increases the possibility of mistakenly identifying a non-marker gene as a marker gene, ComparativeMarkerSelection corrects for multiple hypothesis testing by computing both the false discovery rate (FDR) and family-wise error rate (FWER). ComparativeMarkerSelection takes an expression data file and generates a result (ODF) file.</li>
+<li>Run the ComparativeMarkerSelectionViewer module to view the results.<br/>
+	For each gene, ComparativeMarkerSelectionViewer displays the test statistic score, its p-value, two FDR statistics, and three FWER statistics.</li>
+</ol>
+<h2><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-Basicinstructions"></a>Basic instructions</h2>
+<p>The GenePattern Differential Expression Analysis protocol provides example files and step-by-step instructions for running ComparativeMarkerSelection and its companion modules. If you are unfamiliar with differential expression analysis or ComparativeMarkerSelection, start here:</p>
+<ol>
+<li>Login to the <a class="external-link" href="http://genepattern.broadinstitute.org/gp/">public GenePattern server at Broad Institute</a>.<br/>
+	If you do not have a GenePattern account, you can register on the login page.</li>
+<li>Notice that the GenePattern protocols are listed in the center of the GenePattern home page.</li>
+<li>Click <a class="external-link" href="http://genepattern.broadinstitute.org/gp/pages/protocols/DiffExp.html">Differential Expression Analysis</a> to display the protocol's step-by-step instructions.</li>
+</ol>
+<h2><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-Detailsandconsiderations"></a>Details and considerations</h2>
+<p>The information provided in this section supplements the information provided in the <a class="external-link" href="http://genepattern.broadinstitute.org/gp/pages/protocols/DiffExp.html">Differential Expression Analysis protocol</a> and the <a class="external-link" href="http://www.broadinstitute.org/webservices/gpModuleRepository/download/prod/module/?file=/ComparativeMarkerSelection/broad.mit.edu:cancer.software.genepattern.module.analysis/00044/5/ComparativeMarkerSelection.pdf">ComparativeMarkerSelection documentation</a>. It assumes that you have walked through the Differential Expression Analysis protocol as described in the Basic Instructions above.</p>
+<h3><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-Expressiondata"></a>Expression data</h3>
+<p>ComparativeMarkerSelection requires gene expression data in the GCT or RES file format.</p>
+<ul>
+<li>If the expression data contains duplicate identifiers, ComparativeMarkerSelection generates the error message: "An error occurred while running the algorithm." The UniquifyLabels module provides one way of handling duplicate identifiers.</li>
+<li>If the expression data contains fewer than three samples per class, ComparativeMarkerSelection appears to complete successfully but test statistic scores are not shown in the results.</li>
+<li>If the expression data contains missing values, ComparativeMarkerSelection completes successfully but does not compute test statistic scores for rows that contain missing values.</li>
+<li>By default, ComparativeMarkerSelection expects non-log-transformed data. Some calculations, such as Fold Change, will produce incorrect results when log transformed data is provided and not indicated.  To indicate that your data are log transformed, be sure to set the <em>log transformed data</em> parameter to "yes".</li>
+</ul>
+<p><strong>Phenotype classes</strong></p>
+<p>ComparativeMarkerSelection analyzes two phenotype classes at a time. If the expression data set includes samples from more than two classes, use the <em>phenotype test</em> parameter to analyze each class against all others (one-versus-all) or all class pairs (all pairs).</p>
+<h3><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-Confoundingphenotypeclasses"></a>Confounding phenotype classes</h3>
+<p>If you are studying two variables and your data set contains a third variable that might distort the association between the variables of interest, you can use a confounding variable class file to correct for the affect of the third variable. For example, the data set in Lu, Getz, et. al. (2005) contains tumor and normal samples from different tissue types. When studying the association between the tumor and normal samples, the authors use a confounding variable class file to correct for the effect of the different tissue types.</p>
+<p>The phenotype class file identifies the tumor and normal samples:</p>
+<pre>
+<code>75 2 1
+# Normal Tumor
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1</code>​</pre>
+<p>The confounding variable class file identifies the tissue type of each sample:</p>
+<div>
+<div>
+<div>
+<div id="highlighter_799573"> </div>
+</div>
+</div>
+</div>
+<pre>
+<code>75 6 1
+# colon kidney prostate uterus human-lung breast
+1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4
+5 5 5 5 5 5 5 5 5</code>​</pre>
+<p>Given these two class files, when performing permutations, ComparativeMarkerSelection shuffles the tumor/normal labels only among samples with the same tissue type.</p>
+<h3><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-Permutations"></a>Permutations</h3>
+<p>ComparativeMarkerSelection uses a permutation test to estimate the significance (<em>p</em>-value) of the test statistic score. If the data set includes at least 10 samples per class, use the default value of 1000 permutations to ensure sufficiently accurate <em>p</em>-values.</p>
+<p>If the data set includes fewer than 10 samples in any class, permuting the samples cannot give an accurate <em>p</em>-value. Specify a value of 0 permutations to use asymptotic <em>p</em>-values instead. In this case, ComparativeMarkerSelection computes <em>p</em>-values assuming the test statistic scores follow Student's t-distribution (rather than using the <em>test statistic</em> to create an empirical distribution of the scores).</p>
+<p>ComparativeMarkerSelection also provides two additional options:</p>
+<ul>
+<li>All possible permutations. When the <em>complete</em> parameter is set to yes, ComparativeMarkerSelection ignores the <em>number of permutations</em> parameter and computes the <em>p</em>-value based on all possible sample permutations. Use this option only with small data sets, where the number of all possible permutations is less than 1000.</li>
+<li>Balanced permutations. When the <em>balanced</em> parameter is set to yes, ComparativeMarkerSelection requires an equal and even number of samples in each class (e.g., 10 samples in each class, not 11 in each class or 10 in one class and 12 in the other).</li>
+</ul>
+<h3><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-Logtransformeddata"></a>Log transformed data</h3>
+<p>By default, ComparativeMarkerSelection expects non-log-transformed data. Some calculations, such as Fold Change, will produce incorrect results when log transformed data is provided and not indicated.  To indicate that your data are log transformed, be sure to set the _log transformed data _parameter to "yes".</p>
+<h3><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-Testdirection"></a>Test direction</h3>
+<p>By default, ComparativeMarkerSelection performs a two-sided test; that is, the test statistic score is calculated assuming that the differentially expressed gene can be up-regulated in either phenotype class. Optionally, use the <em>test direction</em> parameter to specify a one-sided test, where the differentially expressed gene must be up-regulated for class 0 or for class 1.</p>
+<h3><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-Teststatistic"></a>Test statistic</h3>
+<p>ComparativeMarkerSelection provides several methods of calculating differential expression. By default, the module uses the t-test statistic. Optionally, you can choose to use the signal-to-noise ratio (SNR) or paired T-test statistic instead.</p>
+<h4><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-TTest(default)"></a>T-Test (default)</h4>
+<p>The T-Test computes the standardized mean difference between the two classes.</p>
+<ul>
+<li>ComparativeMarkerSelection calculates the difference between the mean expression of class 1 and class 2.</li>
+<li>It then divides the difference by the variability of expression, which is calculated by the square root of the sum of the standard deviation for each class divided by the number of samples in each class</li>
+</ul>
+<p>ComparativeMarkerSelection also provides variations on the T-Test:</p>
+<ul>
+<li>T-Test (median) computes the median (rather than mean) difference between the classes.</li>
+<li>T-Test (min std) computes the mean difference but enforces a minimum standard deviation.</li>
+<li>T-Test (median, min std) computes the median difference and enforces a minimum standard deviation.</li>
+</ul>
+<h4><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-Signaltonoiseratio(SNR)"></a>Signal-to-noise ratio (SNR)</h4>
+<p>Signal-to-noise ratio is computed by dividing the difference of class means by the sum of their standard deviations.</p>
+<p>ComparativeMarkerSelection also provides variations on the signal-to-noise ratio:</p>
+<ul>
+<li>SNR (median) calculates the difference of class medians (rather than means).</li>
+<li>SNR (min std) uses class means but enforces a minimum standard deviation.</li>
+<li>SNR (median, min std) uses class medians and enforces a minimum standard deviation.</li>
+</ul>
+<h4><a name="UsingComparativeMarkerSelectionforDifferentialExpressionAnalysis-PairedTTest"></a>Paired T-Test</h4>
+<p>The Paired T-Test can be used to analyze paired samples; for example, samples taken from patients before and after treatment. This test is used when the cross-class differences (e.g. the difference before and after treatment) are expected to be smaller than the within-class differences (e.g., the difference between two patients). For example if you are measuring weight gain in a population of people, the weights may be distributed from 90 lbs. to say 300 lbs. and the weight gain/loss (the paired variable) may be on the order of 0-30 lbs. So the cross-class difference ("before" and "after") is less than the within-class difference (person 1 and person 2).</p>
+<p>Where the standard T-Test takes the mean of the difference between classes, the Paired T-Test takes the mean of the differences between pairs (for more information, refer to the <a class="external-link" href="http://en.wikipedia.org/wiki/Student%27s_t-test#Dependent_t-test_for_paired_samples">Wikipedia article on the paired T-Test</a>.)</p>
+<ul>
+<li>For each set of paired samples, ComparativeMarkerSelection calculates the cross-class difference for each feature and then the mean and standard deviation of the differences for that pair.</li>
+<li>It calculates the difference between the mean of the differences and the mean of the classes.</li>
+<li>Then divides that difference by the variability of expression, which is calculated as the standard deviation of the differences divided by the square root of the number of samples in each class.</li>
+</ul>
+<p>For the Paired T-Test, paired samples in the expression data file must be arranged by class, where the first samples in each class are paired, the second samples are paired, and so on. For example, sample pairs A1/B1, A2/B2 and A3/B3 would be ordered in an expression data file as A1, A2, A3, B1, B2, B3. Note that your data must contain the same number of samples in each class in order to use this statistic.</p>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>

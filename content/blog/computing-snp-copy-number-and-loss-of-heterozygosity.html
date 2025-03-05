@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Computing SNP Copy Number and Loss of Heterozygosity</title>
+    <meta name="slug" content="computing-snp-copy-number-and-loss-of-heterozygosity" />
+    <meta name="date" content="2012-09-15 12:29:00" />
+    <meta name="authors" content="The GenePattern Team" />
+</head>
+<body>
+<h2>Overview</h2>
+<p>In cancer genomics, copy number change is one of the hallmarks of the genetic instability common to most human cancers and loss of heterozygosity (LOH) of tumor suppressor genes is a crucial step in the development of sporadic and hereditary cancer (Monti, 2005). Using modules available in GenePattern, you can compute SNP copy number and LOH based on Affymetrix SNP chip data for paired target/normal samples and then view them in the Integrative Genomics Viewer (IGV). The following modules are used for this computation, with IGV at the end for viewing the results:</p>
+<ul>
+<li>SNPFileCreator</li>
+<li>XChromosomeCorrect</li>
+<li>CopyNumberDivideByNormals</li>
+<li>LOHPaired</li>
+<li>IGV</li>
+</ul>
+<h2><a name="ComputingSNPCopyNumberandLossofHeterozygosity-SNPFileCreator"></a>SNPFileCreator</h2>
+<p>SNPFileCreator converts the .CEL files from an Affymetrix array into a GenePattern .SNP file. Raw data for the probes in each SNP probe set are converted to a single intensity value per SNP using one of four modeling algorithms: Average Difference, PM/MM Difference Model (dChip, the default), Median Probe, or Trimmed Mean. Note that processing times for this module can average upwards of 30 minutes, depending on the speed of the server, the size of the dataset, and available memory. At least 2GB of memory are needed to run most SNPFileCreator jobs.</p>
+<h2><a name="ComputingSNPCopyNumberandLossofHeterozygosity-SNPFileCreatorInputs,ParametersandConsiderations"></a>SNPFileCreator Inputs, Parameters, and Considerations</h2>
+<ul>
+<li>CEL files from the Affymetrix 500k Array Chip Set (250K Sty, 250K NSP) or 100K Array Chip Set (50K Xba, 50K Hind) in a ZIP archive.</li>
+<li>Optionally, for each CEL file, a TXT file containing the genotype calls for the SNP array. These files are contained in the ZIP archive with the CEL files.</li>
+<li>Each chip set uses two unique high density arrays to genotype over 500,000 and 100,000 SNPs in one experiment, respectively. The module converts the CEL files for one array into a .SNP file. To create a .SNP file for a chip set, use the MergeRows module to combine the .SNP files for the two arrays.</li>
+<li>SNPFileCreator uses the Human Genome of March 2004 (hg17) to include Chromosome and Physical Location columns in the .SNP file. By default, it sorts the SNPs by chromosome and physical location. (SNPFileCreator Version 2 - currently in beta - has been updated to use hg18)</li>
+<li>SNPFileCreator creates a .SNP file in one of two formats: Non Allele-Specific (default) or Allele-Specific. For each sample, the Non Allele-Specific format contains an intensity value and a genotype call; the Allele-Specific format contains an intensity value for allele A, intensity value for allele B, and genotype call. All GenePattern modules accept the Non Allele-Specific format; many do not yet accept the Allele-Specific format.</li>
+</ul>
+<p>For more information about SNPFileCreator please see the <a class="external-link" href="http://www.broadinstitute.org/webservices/gpModuleRepository/download/prod/module/?file=/SNPFileCreator/broad.mit.edu:cancer.software.genepattern.module.analysis/00086/1/SNPFileCreator.pdf">SNPFileCreator Documentation</a></p>
+<h2><a name="ComputingSNPCopyNumberandLossofHeterozygosity-XChromosomeCorrect"></a>XChromosomeCorrect</h2>
+<p>For gender-specific samples, run the XChromosomeCorrect module on the output of SNPFileCreator to correct intensity values for SNPs on the X chromosome. For each sample from a male donor, the module doubles the intensity value for SNPs on the X chromosome.</p>
+<h2><a name="ComputingSNPCopyNumberandLossofHeterozygosity-XChromosomeCorrectInputs,ParametersandConsiderations"></a>XChromosomeCorrect Inputs, Parameters and Considerations</h2>
+<p>The sample information file describes the SNP array and must be tab-delimited, include a column labeled Gender that contains a value of M or F for each sample and include target/normal paired samples for copy number and LOH determination. (More information on file formats can be found <a class="external-link" href="/file-formats-guide">here</a>)</p>
+<p>For more information about XChromosomeCorrect please see the <a href="https://cloud.genepattern.org/gp/module/doc/urn:lsid:broad.mit.edu:cancer.software.genepattern.module.analysis:00093:3.1">XChromosomeCorrect Documentation</a></p>
+<h2><a name="ComputingSNPCopyNumberandLossofHeterozygosity-CopyNumberDivideByNormals"></a>CopyNumberDivideByNormals</h2>
+<p>CopyNumberDivideByNormals computes the raw copy number of each target SNP by dividing its intensity value by the mean intensity value of all normal SNPs. This calculation is referred to as copy number normalization or normalization with respect to normals.</p>
+<h2><a name="ComputingSNPCopyNumberandLossofHeterozygosity-CopyNumberDivideByNormalsInputs,ParametersandConsiderations"></a>CopyNumberDivideByNormals Inputs, Parameters, and Considerations</h2>
+<ul>
+<li>The input file is a .SNP file output from either SNPFileCreator or XChromosomeCorrect (if there were gender-specific samples). The file must contain both normal and target samples so that CopyNumberDivideByNormals can determine the raw copy number of a target SNP with respect to normals.</li>
+<li>CopyNumberDivideByNormals creates one of two files:
+	<ul>
+<li>.CN (default) does not include genotype calls.</li>
+<li>.XCN includes genotype calls.</li>
+</ul>
+</li>
+</ul>
+<p>For more information about CopyNumberDivideByNormals please see the <a class="external-link" href="https://cloud.genepattern.org/gp/module/doc/urn:lsid:broad.mit.edu:cancer.software.genepattern.module.analysis:00085:3">CopyNumberDivideByNormals Documentation</a></p>
+<h2><a name="ComputingSNPCopyNumberandLossofHeterozygosity-LOHPaired"></a>LOHPaired</h2>
+<p>The LOHPaired module detects loss of heterozygosity (LOH). It takes as input a GenePattern .SNP<br/>
+file that contains paired normal-target samples with genotype calls. (LOHPaired accepts only nonallele-<br/>
+specific .SNP files; .SNP files that contain one intensity value per probe.) It returns as output a<br/>
+GenePattern .LOH file that contains, for each probe, the LOH calls for each array pair.</p>
+<p>LOH call values are as follows.</p>
+<table class="table table-striped">
+<tbody>
+<tr>
+<th class="confluenceTh">Call</th>
+<th class="confluenceTh">Value</th>
+</tr>
+<tr>
+<td class="confluenceTd">L</td>
+<td class="confluenceTd">LOH: AB in normal and A or B in tumor</td>
+</tr>
+<tr>
+<td class="confluenceTd">R</td>
+<td class="confluenceTd">Retention: AB in both normal and tumor or No Call in normal and AB in tumor</td>
+</tr>
+<tr>
+<td class="confluenceTd">C</td>
+<td class="confluenceTd">Conflict: A or B in normal and AB in tumor</td>
+</tr>
+<tr>
+<td class="confluenceTd">N</td>
+<td class="confluenceTd">Non-informative call: A or B in normal<br/>
+			No call: No Call in normal or tumor</td>
+</tr>
+</tbody>
+</table>
+<h2><a name="ComputingSNPCopyNumberandLossofHeterozygosity-LOHPairedInput,ParametersandConsiderations"></a>LOHPaired Input, Parameters, and Considerations</h2>
+<ul>
+<li>LOHPaired takes as input a GenePattern .snp file that contains paired normal-target samples and genotype calls. Use the output from SNPFileCreator (or XChromosomeCorrect) as described above.<br/>
+	Note: LOHPaired accepts only non-allele-specific .SNP files (.SNP files that contain one intensity value per probe).</li>
+<li>A sample info file is also required.This is a tab-delimited file where:
+	<ul>
+<li>the first row contains labels identifying the content of each column</li>
+<li>Each remaining row describes one sample.</li>
+</ul>
+</li>
+<li>LOH detection requires columns with the following label, all other columns<br/>
+	are ignored:
+	<ul>
+<li>Paired: indicates the normal/target pairs. For the normal array, Paired<br/>
+		is Yes; for the target sample, Paired is the array name of the normal<br/>
+		sample.</li>
+<li>Array: contains the array name.</li>
+<li>It is probably easiest to modify the file previously used in XChromosomeCorrect.</li>
+</ul>
+</li>
+</ul>
+<h2><a name="ComputingSNPCopyNumberandLossofHeterozygosity-IGV"></a>IGV</h2>
+<p>The Integrative Genomics Viewer (IGV) is a high-performance visualization tool for interactive exploration of large, integrated datasets. It supports a wide variety of data types and provides easy access to genomes and datasets hosted by the Broad Institute.</p>
+<h3><a name="ComputingSNPCopyNumberandLossofHeterozygosity-AddingatracklinetoviewLOHdata"></a>Adding a track line to view LOH data</h3>
+<ul>
+<li>An LOH file (.LOH) is a copy number file that contains "loss of heterozygosity" values. The format is identical to the .CN format, but the numbers have the following meanings:
+	<ul>
+<li>-1: Conflict (homozygous in the normal and heterozygous in the tumor)</li>
+<li>0: Retained</li>
+<li>1: Loss of heterozygosity</li>
+</ul>
+</li>
+<li>Numbers that fall between these values represent the probability of LOH. IGV treats the values as a continuum and colors them according to the heatmap scale set for the LOH track.</li>
+<li>In order to modify IGV's default display settings for the LOH data (.LOH file, output from LOHPaired, see above), a track line must be included in the file.</li>
+<li>When IGV loads a data file, it uses the file extension to determine the file format, the file format to determine the data type, and the data type to determine the default display options. Adding a track line to a data file modifies IGV's default display options.</li>
+<li>IGV track lines are based on WIG track lines. See the UCSC site for the track line syntax. The table below describes the track line specifiers that IGV supports. IGV includes a few options that are not part of the UCSC specification.</li>
+</ul>
+<table class="table table-striped">
+<tbody>
+<tr>
+<th class="confluenceTh">Specifier</th>
+<th class="confluenceTh">Value</th>
+<th class="confluenceTh">Description</th>
+</tr>
+<tr>
+<td class="confluenceTd">name</td>
+<td class="confluenceTd">track label</td>
+<td class="confluenceTd">Track name (ignored when used in the IGV file format)</td>
+</tr>
+<tr>
+<td class="confluenceTd">description</td>
+<td class="confluenceTd">center label</td>
+<td class="confluenceTd">Currently ignored</td>
+</tr>
+<tr>
+<td class="confluenceTd">visibility</td>
+<td class="confluenceTd">full | dense | hide</td>
+<td class="confluenceTd">Currently ignored</td>
+</tr>
+<tr>
+<td class="confluenceTd">color</td>
+<td class="confluenceTd">RRR,GGG,BBB</td>
+<td class="confluenceTd">Color for positive values in all tracks</td>
+</tr>
+<tr>
+<td class="confluenceTd">altColor</td>
+<td class="confluenceTd">RRR,GGG,BBB</td>
+<td class="confluenceTd">Color for negative values in all tracks</td>
+</tr>
+<tr>
+<td class="confluenceTd">priority</td>
+<td class="confluenceTd">N</td>
+<td class="confluenceTd">Currently ignored</td>
+</tr>
+<tr>
+<td class="confluenceTd">autoScale</td>
+<td class="confluenceTd">on | off</td>
+<td class="confluenceTd">Currently ignored; all tracks autoscale unless an explicit data range is defined (e.g., by including the viewlimits specifier).</td>
+</tr>
+<tr>
+<td class="confluenceTd">gridDefault</td>
+<td class="confluenceTd">on | off</td>
+<td class="confluenceTd">Currently ignored</td>
+</tr>
+<tr>
+<td class="confluenceTd">maxHeightPixels</td>
+<td class="confluenceTd">max:default:min</td>
+<td class="confluenceTd">Default and min are supported; max is currently ignored</td>
+</tr>
+<tr>
+<td class="confluenceTd">graphType</td>
+<td class="confluenceTd">bar | points | heatmap</td>
+<td class="confluenceTd">Scatter plot | heatmap. <strong>IGV only:</strong> The heatmap value is an IGV addition to the WIG specification.</td>
+</tr>
+<tr>
+<td class="confluenceTd">midRange</td>
+<td class="confluenceTd">x:y</td>
+<td class="confluenceTd">Defines the neutral range for a three-color heatmap. Values in this range are rendered with the midColor value, which is white by default. Example: midRange=20:80 <strong>IGV only:</strong> This specifier is an IGV addition to the WIG specification.</td>
+</tr>
+<tr>
+<td class="confluenceTd">midColor</td>
+<td class="confluenceTd">RRR,GGG,BBB</td>
+<td class="confluenceTd">Color to use in the "mid range" of a heatmap. Example: midColor=0.0.150 <strong>IGV only:</strong> This specifier is an IGV addition to the WIG specification.</td>
+</tr>
+<tr>
+<td class="confluenceTd">viewLimits</td>
+<td class="confluenceTd">lower:upper</td>
+<td class="confluenceTd">Defines the data range</td>
+</tr>
+<tr>
+<td class="confluenceTd">yLineMark</td>
+<td class="confluenceTd">real-value</td>
+<td class="confluenceTd">Currently ignored</td>
+</tr>
+<tr>
+<td class="confluenceTd">yLineOnOff</td>
+<td class="confluenceTd">on | off</td>
+<td class="confluenceTd">Currently ignored</td>
+</tr>
+<tr>
+<td class="confluenceTd">windowingFunction</td>
+<td class="confluenceTd">maximum | minimum | mean</td>
+<td class="confluenceTd">Function that summarizes the values in a window of data represented by one pixel</td>
+</tr>
+<tr>
+<td class="confluenceTd">smoothingWindow</td>
+<td class="confluenceTd">off | [MATKC:2-16]</td>
+<td class="confluenceTd">Currently ignored</td>
+</tr>
+<tr>
+<td class="confluenceTd">coords</td>
+<td class="confluenceTd">0 | 1</td>
+<td class="confluenceTd">Indicate whether the file uses 0 or 1 based coordinates.The UCSC specification for WIG files uses 1 based coordinates and for BED files uses 0 based coordinates. If data looks off by one, check for a possible 0 vs 1 based coordinate issue. <strong>IGV only:</strong> This specifier is an IGV addition to the WIG specification.</td>
+</tr>
+</tbody>
+</table>
+<h3><a name="ComputingSNPCopyNumberandLossofHeterozygosity-LaunchingIGVandViewingyourdata"></a>Launching IGV and Viewing your data</h3>
+<p>To launch IGV and view your Copy Number and/or LOH data:</p>
+<ul>
+<li>Go to the IGV downloads page: <a href="https://igv.org/doc/desktop/#DownloadPage/">https://igv.org/doc/desktop/#DownloadPage/</a>, register or login as directed, then launch IGV.</li>
+<li>Once IGV is launched, go to the File menu and choose to either upload your data from a local directory or from a URL.</li>
+<li>By default, IGV displays the chromosome and genome that you were viewing when you last exited IGV. If you've never used it before the whole genome view for hg18 will be displayed.</li>
+<li>To change to a different genome, click the genome drop-down list in the toolbar and select the genome on which your data was processed</li>
+<li>To change the chromosome, click the chromosome drop-down box to select another chromosome or click on the chromosome number in the top panel.</li>
+</ul>
+<p>For more information on navigating or displaying data in IGV please see the <a class="external-link" href="http://www.broadinstitute.org/igv/UserGuide">IGV User Guide</a>.</p>
+</body>
+</html>

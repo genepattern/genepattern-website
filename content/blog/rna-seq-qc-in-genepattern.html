@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RNA-seq QC in GenePattern</title>
+    <meta name="slug" content="rna-seq-qc-in-genepattern" />
+    <meta name="date" content="2013-03-05 11:28:00" />
+    <meta name="authors" content="The GenePattern Team" />
+</head>
+<body>
+
+<h2>Overview</h2>
+<p>After aligning and/or assembling your RNA-seq data, it is important to take a closer look at the content of those result files before continuing with further analysis; in part, because the results of that investigation may, in fact, point you toward how you should best analyze your data.</p>
+<p>Specifically in GenePattern, modules are provided to calculate such Quality Control (QC) metrics as: Depth of Coverage, Continuity of Coverage, Duplication Rate, Expression Rates, Strand Specificity, and GC content, among others.</p>
+<p>Having these sorts of metrics can help to prevent or better understand common RNA-seq errors stemming from such sources as: read length, quality of data, sample prep, or number of reads in the data.</p>
+<h2><a name="RNA-seqQCinGenePattern-ModulesinGP"></a>Modules in GP</h2>
+<ul>
+<li>Picard.AddOrReplaceReadGroups</li>
+<li>SortSam</li>
+<li>Picard.CreateSequenceDictionary</li>
+<li>Picard.ReorderSam</li>
+<li>Picard.MarkDuplicates</li>
+<li>SAMtools.FastaIndex</li>
+<li>RNAseqMetrics</li>
+</ul>
+<p>The following decision diagram illustrates a suggested workflow. This workflow is discussed in further detail in subsequent sections.</p>
+<p><a href="/uploaded/content_decision_tree_rnaseqmetrics.jpg"><img alt="" src="/uploaded/content_decision_tree_rnaseqmetrics.png" style="border-width: 1px; border-style: solid; width: 152px; height: 200px;"/></a></p>
+<h2><a name="RNA-seqQCinGenePattern-Input"></a>Input</h2>
+<p>The input to the suggested RNA-seq QC workflow in GenePattern is an aligned, coordinate sorted BAM file with Read Group information (such as platform or sample) in the header. (SAM files can be converted to BAM format using the SortSam module.)</p>
+<p>If your aligned BAM file does not contain Read Group Information you should run your data through AddOrReplaceReadGroups, as discussed next.</p>
+<p>If the aligned BAM file is not coordinate sorted, run the data through SortSam, making sure the sort order is set to "coordinate" as discussed below.</p>
+<p>More information about the SAM/BAM format can be found at the <a class="external-link" href="http://samtools.sourceforge.net/">SAMtools website</a>.</p>
+<p>Note that if your data was aligned with TopHat, you will likely want to run your BAM file through the <a class="external-link" href="http://broadinstitute.github.io/picard/">Picard</a> tool <a class="external-link" href="http://broadinstitute.github.io/picard/command-line-overview.html#MergeBamAlignment">MergeBamAlignment</a> (soon to be available in GenePattern) to handle the fact that TopHat removes unaligned reads. This can throw off the total number of reads and any other metrics using that value in the RNAseqMetrics module. </p>
+<h2><a name="RNA-seqQCinGenePattern-1)Picard.AddOrReplaceReadGroups"></a>1) Picard.AddOrReplaceReadGroups</h2>
+<p>Input for Picard.AddOrReplaceReadGroups is a BAM file which has been aligned.</p>
+<p>The module will either add new (if none previously existed) or replace read groups as defined in the parameters. All reads in the file will be assigned to the specified read group.</p>
+<p>Read Group information is required by Picard.MarkDuplicates and the RNAseqMetrics module. Specifically the RNAseqMetrics module requires a Read Group ID in the BAM header.</p>
+<p>Full documentation for Picard.AddOrReplaceReadGroups, with parameter descriptions, is available <a class="external-link" href="http://www.broadinstitute.org/webservices/gpModuleRepository/download/prod/module/?file=/Picard.AddOrReplaceReadGroups/broad.mit.edu:cancer.software.genepattern.module.analysis/00266/2/Picard.AddOrReplaceReadGroups.pdf">here</a>.</p>
+<h2><a name="RNA-seqQCinGenePattern-2)SortSam"></a>2) SortSam</h2>
+<p>SortSam takes as input a BAM file and outputs a sorted and indexed file. In this step of the workflow, the input BAM should come from Picard.AddOrReplaceReadGroups in step 1.</p>
+<p>Note that the module will only generate an index if the output file time is "BAM" and the sort order is "coordinate".</p>
+<p>Full documentation for SortSam can be found <a class="external-link" href="vgp/modules/docs/Picard.SortSam/">here</a>.</p>
+<h2><a name="RNA-seqQCinGenePattern-3)SAMtools.FastaIndex"></a>3) SAMtools.FastaIndex</h2>
+<p>SAMtools.FastaIndex takes a reference FASTA (.fa) file and creates a .fai index file for it, which will be used by both Picard.ReorderSam, in step 5, and RNAseqMetrics, in step 8, to quickly locate and retrieve information from the reference sequence.</p>
+<p>Full documentation for SAMtools.FastaIndex can be found <a class="external-link" href="/modules/docs/SAMtools.FastaIndex">here</a>.</p>
+<h2><a name="RNA-seqQCinGenePattern-4)Picard.CreateSequenceDictionary"></a>4) Picard.CreateSequenceDictionary</h2>
+<p>Next Picard.CreateSequenceDictionary takes a reference FASTA (.fa) and creates a SAM file containing a sequence dictionary (.dict extension). Sequence dictionaries contain the sequence name, length and genome assembly identifier and other information about sequences. The .dict file is required for both Picard.ReorderSam, in step 5, and RNAseqMetrics, in step 8.</p>
+<p>The output FASTA file (.fa) from SAMtools.FastaIndex (step 3), can be passed as input to this module.</p>
+<p>Full documentation for Picard.CreateSequenceDictionary can be found <a class="external-link" href="http://www.broadinstitute.org/webservices/gpModuleRepository/download/prod/module/?file=/Picard.CreateSequenceDictionary/broad.mit.edu:cancer.software.genepattern.module.analysis/00244/1/CreateSequenceDictionary.pdf">here</a>.</p>
+<h2><a name="RNA-seqQCinGenePattern-5)Picard.ReorderSam"></a>5) Picard.ReorderSam</h2>
+<p>Now that the the .fai and .dict files have been created for the reference FASTA file (steps 3 and 4), Picard.ReorderSam can be run to order the reads in the BAM file according the contigs of a reference FASTA file.</p>
+<p>Picard.ReorderSam takes bam/bai pair (for instance, as output by SortSam earlier in this workflow) a.dict from Picard.CreateSequenceDictionary (step 4), and the .fa and .fai files from SAMtools.FastaIndex (step 3) and reorders the BAM file in accordance with the contigs in the reference FASTA file provided. The order is determined by exact name matching of contigs. Reads mapped to contigs absent in the reference file are dropped.</p>
+<p>The resulting BAM file can next be sent to Picard.MarkDuplicates. </p>
+<p>Full documentation for Picard.ReorderSam can be found <a class="external-link" href="http://www.broadinstitute.org/webservices/gpModuleRepository/download/prod/module/?file=/Picard.ReorderSam/broad.mit.edu:cancer.software.genepattern.module.analysis/00264/1/Picard.ReorderSam.pdf">here</a>.</p>
+<h2><a name="RNA-seqQCinGenePattern-6)Picard.MarkDuplicates"></a>6) Picard.MarkDuplicates</h2>
+<p>Next, Picard.MarkDuplicates takes the coordinate sorted BAM file output by Picard.ReorderSam, in step , (with read group information, added by Picard.AddOrReplaceGroups in step 1).</p>
+<p>This is an optional module that will mark duplicate reads in the BAM file and optionally remove them. To see metrics for Duplication rates in the results from RNAseqMetrics, run this module and do not remove the duplicate reads.</p>
+<p>Full documentation for Picard.MarkDuplicates can be found <a class="external-link" href="http://www.broadinstitute.org/webservices/gpModuleRepository/download/prod/module/?file=/Picard.MarkDuplicates/broad.mit.edu:cancer.software.genepattern.module.analysis/00267/2/Picard.MarkDuplicates.pdf">here</a>.</p>
+<h2><a name="RNA-seqQCinGenePattern-7)&amp;nbsp;SortSam"></a>7)  SortSam</h2>
+<p>The last step before running RNAseqMetrics is to index the BAM file which resulted from the workflow above. To do this, run SortSam, selecting BAM as the output format.</p>
+<h2><a name="RNA-seqQCinGenePattern-8)&amp;nbsp;RNAseqMetrics"></a>8)  RNAseqMetrics</h2>
+<p>RNAseqMetrics is the last step in the GenePattern RNA-seq QC workflow. The module calculates standard RNA-seq related metrics, such as depth of coverage, ribosomal RNA contamination, continuity of coverage, and GC bias. It takes the following as input:</p>
+<ul>
+<li>A coordinate sorted BAM file, and its associated index*, containing a Read Group ID, which has been reordered by contig and optionally has duplicate genes marked. (output by SortSam in step 7)</li>
+<li>A reference FASTA (.fa)*</li>
+<li>The reference FASTA file index (.fai)* (output by SAMtools.FastaIndex in step 3)</li>
+<li>The reference FASTA file dictionary (.dict)* (output by Picard.CreateSequenceDictionary in step 4) </li>
+</ul>
+<p style="margin-left: 80px;">*Note that in most cases these will all need to be specified separately.</p>
+<ul>
+<li>A text formatted sample information file is optional and can be used to label the samples in the output files.</li>
+<li>A gtf annotation file is also required. hg18 and hg19 are provided in a drop down list, other genomes must be provided by the user.</li>
+</ul>
+<p>Please read the RNAseqMetrics module documentation for complete information regarding optional input files, parameter settings and the various metrics which will or won't be output based on those settings.</p>
+<p>*If using the output from SortSam the BAM and BAI are located in the same folder and only the BAM file need be passed as an input parameter.</p>
+<h3><a name="RNA-seqQCinGenePattern-Output"></a>Output</h3>
+<p>The output of the RNAseqMetrics module (and thus this workflow) is a ZIP archive containing an HTML report of metrics stating the total number of reads, depth of coverage at the 3’ and 5’ end, etc. The report also links to a GCT file containing the calculated RPKM values for each transcript in each sample.</p>
+<p>Other metrics calculated include:</p>
+<ul>
+<li>total read number</li>
+<li>number of unique reads</li>
+<li>number of duplicate reads (this metric is only calculated if duplicates were marked in the input BAM file(s))</li>
+<li>duplication rate (number of duplicates/total reads) (this metric is only calculated if duplicates were marked in the input BAM file(s))</li>
+<li>number of reads mapped/aligned</li>
+<li>mapping rate (mapped reads/total reads)</li>
+<li>number of unique reads mapped</li>
+<li>mapped unique rate (mapped unique reads/mapped reads)</li>
+<li>reads that are mapped to rRNA regions</li>
+<li>rRNA rate (reads mapped to rRNA regions/mapped reads)</li>
+<li>unique reads mapped to non-rRNA regions</li>
+<li>unique non-rRNA rate (unique reads mapped to non-rRNA regions/mapped reads)</li>
+<li>intragenic rate (reads mapped to intragenic regions/mapped unique reads)</li>
+<li>exonic rate (reads mapped to exonic regions/mapped unique reads)</li>
+<li>coding rate (reads mapped to coding regions/mapped unique reads)</li>
+<li>intron or UTR rate (reads mapped to intronic or UTR regions/mapped unique reads)</li>
+<li>intergenic rate (reads mapped to intergenic regions/mapped unique reads)</li>
+<li>strand specificity (this metric is only calculated for paired-end BAM files)</li>
+<li>coverage metrics (particularly for the top four expressed transcripts)</li>
+<li>RPKM: this metric quantifies transcript levels in reads per kilobase of exon model per million mapped reads (RPKM). The RPKM measure of read density reflects the molar concentration of a transcript in the starting sample by normalizing for RNA length and for the total read number in the measurement. This facilitates transparent comparison of transcript levels both within and between samples.</li>
+<li>exon reads, exon length, intron reads, intron length, and related numbers for each transcript</li>
+</ul>
+<p>Full documentation for the module and its output files can be found here: (give public link when ready)</p>
+<div class="well">
+<p><strong><span class="glyphicon glyphicon-warning-sign text-warning"> </span>Note</strong><br/>
+This workflow, and specifically the RNAseqMetrics module, has been optimized for Eukaryotic RNA-seq data. Modules which comprise methods optimized for Prokaryotic data are currently not available.</p>
+</div>
+<p><a class="btn btn-warning" href="/blog"><span class="glyphicon glyphicon-arrow-left"></span> Back to Blog</a></p>
+</body>
+</html>
