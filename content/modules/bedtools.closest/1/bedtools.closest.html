@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BEDTools.closest (v1) BETA</title>
+    <meta name="slug" content="modules/docs/BEDTools.closest/1" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<div class="bs-callout bs-callout-danger">
+<h4>This module is currently in beta release.  The module and/or documentation may be incomplete.</h4>
+</div>
+<p style="font-size: 1.2em; margin-top: 20px;">Searches for closest overlapping features in A and B.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Chet Birger, Broad Institute</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>gp-help@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	BEDTools.closest searches for overlapping features in A and B. In the event that no feature in B overlaps the current feature in A, BEDTools.closest will report the <em>closest</em> (that is, least genomic distance from the start or end of A) feature in B. Note that BEDTools.closest will report an overlapping feature as the closest—that is, it does not restrict to closest <em>non-overlapping</em> feature.</p>
+<h2>
+	References</h2>
+<p>
+<a href="http://bedtools.readthedocs.org/en/latest/content/tools/closest.html" style="color: rgb(102, 153, 255);">BEDTools closest online documentation</a></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				input file A <span style="color:red;">*</span></td>
+<td>
+				Input BED/GFF/VCF file A. (-a)</td>
+</tr>
+<tr>
+<td>
+				input file B <span style="color:red;">*</span></td>
+<td>
+				Input BED/GFF/VCF file B. (-b)</td>
+</tr>
+<tr>
+<td>
+				force strandedness </td>
+<td>
+				Force strandedness; find the closest feature in B that overlaps A on the same strand. (-s)</td>
+</tr>
+<tr>
+<td>
+				report distance </td>
+<td>
+				Report distance as extra column. (-d)</td>
+</tr>
+<tr>
+<td>
+				ties <span style="color:red;">*</span></td>
+<td>
+				How ties for closest feature should be handled. Occurs when two features in B have exactly same overlap with a feature in A.</td>
+</tr>
+<tr>
+<td>
+				output filename <span style="color:red;">*</span></td>
+<td>
+				Output filename.</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		input file A<br/>
+		The first of two BED-, GFF- or VCF-formatted files containing annotation track data.</li>
+<li>
+		input file B<br/>
+		The second of two BED-, GFF- or VCF-formated files containing annotation track data.</li>
+</ol>
+<p style="margin-left: 40px;">
+	 </p>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		output filename<br/>
+		A tab-delimeted txt file listing, for each feature in A, the closest feature in B.</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					ChIP-Seq</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					C++</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</body>
+</html>

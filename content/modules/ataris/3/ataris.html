@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ATARiS (v3)</title>
+    <meta name="slug" content="modules/docs/ATARiS/3" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Analytic Technique for Assessment of RNAi by Similarity</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Aviad Tsherniak, Broad Institute, aviad@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>Aviad Tsherniak (Broad Institute),  <a href="mailto:aviad@broadinstitute.org">aviad@broadinstitute.org</a></p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Introduction</h2>
+<div>This module implements the ATARiS method as described in [1]. It is designed to analyze phenotypic readouts from multiple-sample RNAi screens in which each gene is targeted by multiple RNAi reagents. Reagents designed to target the same gene often induce different degrees of on-target and off-target gene suppression, resulting in inconsistent phenotypes. This renders interpretation and downstream analysis of the gene-level phenotype challenging.</div>
+<h2>Algorithm</h2>
+<div>ATARiS generates two types of results:</div>
+<div>1. Gene solutions</div>
+<div>For each gene, ATARiS tries to identify subsets of its RNAi reagents that produce a significantly similar phenotypic pattern across the screened samples. If such a subset is found, the data from these reagents are summarized into a gene solution profile. The solution consists of one phenotype value for each sample, representing the phenotypic outcome of suppressing the target gene in that sample relative to the outcome in other screened samples. Genes for which no such subset can be found will have no gene solutions associated with them. For some genes, more than one solution may exist (e.g., two pairs of reagents, each producing effects similar between the reagents but not between the pairs). In these cases, all gene solutions will be reported.</div>
+<div>The resulting file, containing the gene solutions for all screened genes, can be used in downstream analyses using standard genomic tools (e.g. tools designed for gene expression analysis).</div>
+<div>2. Reagent consistency scores For each reagent, ATARiS computes a consistency score that represents the confidence that its observed phenotypic effects are the result of on-target gene suppression.</div>
+<h2>References</h2>
+<p>1. D.D. Shao, A. Tsherniak et al., “ATARiS: Computational quantification of gene suppression phenotypes from multi-sample RNAi screens”, Genome Research, 2012</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gct file <span style="color:red;">*</span></td>
+<td>input GCT file. Unique reagent identifier in first column, gene symbol in second.</td>
+</tr>
+<tr>
+<td>identifier <span style="color:red;">*</span></td>
+<td>text string to identify the current run</td>
+</tr>
+<tr>
+<td>random seed <span style="color:red;">*</span></td>
+<td>seed for random number generator</td>
+</tr>
+<tr>
+<td>null significance <span style="color:red;">*</span></td>
+<td>gene solution significance level (1 - null percentile) Default: 0.15</td>
+</tr>
+<tr>
+<td>min A value <span style="color:red;">*</span></td>
+<td>minimum effect magnitude for RNAi reagent (relative to reagent with maximal effect) Default: 0.3</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li>
+<div>gct.file</div>
+<div>This file contains the phenotypic readouts for all RNAi reagents and samples screened. A GCT file is a tab-delimited text file originally used for gene expression data. It can be easily created using Excel or similar programs. See http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gct for more details.</div>
+<div>Each data row of the input GCT file contains readouts of phenotype produced by one RNAi reagent. The first column of the file contains unique reagent IDs. The second column contains gene symbols/IDs (in any format) representing the genes targeted by each reagent. Each additional column holds the data for one screened sample with the column header being the (unique) sample name/ID. Note that the distributions of values for all samples are assumed to be similar (e.g., after sample-wise Z-score transformation).</div>
+<div>Output Files</div>
+</li>
+</ol>
+<h2>Output Files</h2>
+<ol>
+<li>
+<div>&lt;identifier&gt;.Gs.gct</div>
+<div>A tab-delimited table in GCT file format containing the identified gene solutions in rows. The first column is a unique gene solution identifier. The second column is the gene symbol/ID of the targeted gene. Each following column contains the phenotype values for the corresponding input sample.</div>
+</li>
+<li>
+<div>&lt;identifier&gt;.hp.table.txt</div>
+<div>A tab-delimited table. Each row contains information for one screened RNAi reagent. The field ‘isUsed’ signifies whether the data of the reagent was used to generate a gene solution. ‘sol.number’ identifies the solution of the targeted gene that used data from this reagent. ‘sol.name’ is a unique identifier for the solution generated using the reagent data. ‘sol.id’ is a binary string with each digit representing one reagent targeting the gene, according to their order of appearance in this file. A ‘1’ means that the reagent was used to generate the current gene solution and a ‘0’ means it was not. The ‘cscore’, ‘pval’ and ‘qval’ columns hold the consistency score and its corresponding p-value and q-value for each reagent.</div>
+</li>
+<li>
+<div>
+<div>&lt;identifier&gt;.gene.table.txt</div>
+<div>A tab-delimited table detailing for each targeted gene the number of gene solutions identified for it and the total number of RNAi reagents specified in the input file as targeting it.</div>
+</div>
+</li>
+<li>
+<div>&lt;identifier&gt;.results.summary.txt</div>
+<div>A general summary of the analysis. Contains, among others, the overall number of gene solutions found and the overall number of reagents used.</div>
+</li>
+</ol>
+<h2>Example Data</h2>
+<div>To reproduce the results of running ATARiS on Achilles’ Heel dataset (Dec. 2012) as published in [1], run this module using the input file <a href="ftp://ftp.broadinstitute.org/pub/genepattern/example_files/ATARiS/Achilles_102lines.gct" target="_blank">Achilles_102lines.gct</a>, using the following settings:</div>
+<ul>
+<li>random.seed – 12345</li>
+<li>null.significance – 0.15</li>
+<li>min.A.value – 0.3</li>
+</ul>
+<h2>Requirements</h2>
+<p><span style="color: rgb(34, 34, 34);">ATARiS can only be used on the GenePattern public server. Please contact the authors listed above if you have an interest in installing ATARiS locally.</span></p>
+<h2>Platform Dependencies</h2>
+<div>Module type: RNAi analysis</div>
+<div>CPU type: Any</div>
+<div>OS: Any</div>
+<div>Language: R v2.14</div>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>2016-06-07</td>
+<td>Bug-fix: added missing package installer declaration file.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2015-12-02</td>
+<td>Updated to use R-2.15 and the new package installer mechanism.</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

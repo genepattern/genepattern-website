@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AgilentExpressionFileCreator (v0.8) BETA</title>
+    <meta name="slug" content="modules/docs/AgilentExpressionFileCreator/0.8" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<div class="bs-callout bs-callout-danger">
+<h4>This module is currently in beta release.  The module and/or documentation may be incomplete.</h4>
+</div>
+<p style="font-size: 1.2em; margin-top: 20px;">Convert Agilent Microarray TXT files, or microRNA GeneView files to a GCT.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Warren Kaplan (w.kaplan@garvan.org.au), Kevin Ying (k.ying@garvan.org.au), Mark Cowley (m.cowley@garvan.org.au)</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>gp-help@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Summary</h2>
+<div>
+	This module converts Agilent microarray TXT files, or microRNA GeneView files to a GCT file [1]. </div>
+<div>
+	 </div>
+<div>
+	The vast majority of Agilent 1-colour and 2-colour data is reported in a TXT file format, 1 file per array (usually multiple arrays per glass slide). These files are created by the Agilent Feature Extraction program, which reports a HUGE number of columns (each is described in detail in [2]). If you’re curious, you can open any of these TXT files in Excel and have a look at all the different columns &amp; read [2] for how these columns are derived. </div>
+<div>
+	 </div>
+<div>
+	This module facilitates a number of the most common analysis workflows using Agilent data, and automatically chooses the most appropriate column of data to put in your GCT file. We list these choices below, but in general, ‘most appropriate’ means the most refined/normalized/smoothed/processed columns available, which Agilent recommends. There is always the option of choosing your own column(s) of data, using the custom mode (see below). </div>
+<div>
+	 </div>
+<div>
+	This module has been extensively tested with gene expression TXT files, but should even work for other types of Agilent microarray files (like CpG arrays), especially if they have a gProcessedSignal (1-colour mode) or LogRatio (2-colour mode) column; again, there’s always the custom mode (see below). </div>
+<div>
+	 </div>
+<div>
+<h2>
+		References<strong style="font-size: 12px;"><span class="Apple-tab-span" style="white-space:pre"> </span></strong></h2>
+<ol>
+<li>
+			GCT file format
+			<ol>
+<li>
+					http://www.broadinstitute.org/tutorial/gp_fileformats.html#gct </li>
+</ol>
+</li>
+<li>
+			Agilent Feature Extraction Reference Guides (Tables 21 &amp; 22 describes all the columns in the Agilent TXT files)
+			<ol>
+<li>
+					http://www.genomics.agilent.com/GenericA.aspx?PageType=Product&amp;SubPageType=ProductLiterature&amp;PageID=1381 </li>
+</ol>
+</li>
+</ol>
+<h2>
+		General<span class="Apple-tab-span" style="white-space:pre"> </span>Guidelines<span class="Apple-tab-span" style="white-space:pre"> </span></h2>
+<h3>
+		1-colour<span class="Apple-tab-span" style="white-space:pre"> </span>arrays<span class="Apple-tab-span" style="white-space:pre"> </span>with<span class="Apple-tab-span" style="white-space:pre"> </span>TXT<span class="Apple-tab-span" style="white-space:pre"> </span>files<span class="Apple-tab-span" style="white-space:pre"> </span></h3>
+<div>
+		For 1-colour arrays where you have Agilent TXT files, the analysis is straightforward. Note this works for regular gene expression arrays, and microRNA arrays (if you have GeneView microRNA files, see the next section).</div>
+<div>
+		. We select the gProcessedSignal. </div>
+<div>
+<em> [gProcessedSignal is] the signal left after all the FE processing steps have been completed. In the case of one color, ProcesssedSignal contains the Multiplicatively Detrended BackgroundSubtracted Signal if the detrending is selected and helps. If the detrending does not help, this column will contain the BackgroundSubtractedSignal. (Agilent Feature Extraction v10.7) </em></div>
+<div>
+<em><img alt="" src="/uploaded/content_screen_shot_2014-01-28_at_2_40_04_pm.png" style="width: 500px; height: 239px;"/></em></div>
+<div>
+		 </div>
+</div>
+<p class="p1">
+	This gives you a GCT file with 1 column per sample, 1 row per probe, with columns/samples named by the array name. Thus the data is a table of normalized log base-2 expression levels.</p>
+<p class="p1">
+	 </p>
+<h3 class="p1">
+	1-colour arrays with GeneView files</h3>
+<p class="p2">
+	These files are only available for microRNA arrays. Here’s how to setup the parameters:</p>
+<p class="p3">
+<em>[gTotalGeneSignal is the] signal is the sum of the total probe signals in the green channel per gene. For miRNA analyses. (Agilent Feature Extraction v10.7)</em></p>
+<p class="p3">
+<img alt="" src="/uploaded/content_screen_shot_2014-01-28_at_2_50_36_pm.png" style="width: 500px; height: 264px;"/></p>
+<p class="p1">
+	This gives you a GCT file with 1 column per sample, 1 row per probe, with columns/samples named by the array name. Thus the data is a table of normalized log base-2 expression levels.</p>
+<p class="p1">
+	 </p>
+<h3 class="p1">
+	2-colour arrays with Agilent TXT files – log ratios</h3>
+<p class="p2">
+	The simplest way to analyse Agilent 2 colour arrays is to extract the LogRatio column.</p>
+<p class="p3">
+<em>[LogRatio is the] per feature, log of (rProcessedSignal/gProcessedSignal) . (Agilent Feature Extraction v10.7) </em></p>
+<p class="p3">
+	The ratio of red/green, rather than green/red is historical.</p>
+<p class="p2">
+<img alt="" src="/uploaded/content_screen_shot_2014-01-28_at_2_54_21_pm.png" style="width: 500px; height: 258px;"/></p>
+<p class="p2">
+	 </p>
+<h3 class="p1">
+	2-colour arrays with Agilent TXT files – green channel only</h3>
+<p class="p2">
+	You can extract only the green channel, ie pretend the red channel didn’t exist. See 1- colour arrays with TXT files</p>
+<p class="p2">
+	 </p>
+<h3 class="p1">
+	2-colour arrays with Agilent TXT files – single channels</h3>
+<p class="p2">
+	You can extract both the red and green channels, ie get 2 columns per sample. You can then perform 2-colour analysis, with little support from the module authors. </p>
+<p class="p2">
+<img alt="" src="/uploaded/content_screen_shot_2014-01-28_at_2_58_18_pm.png" style="width: 500px; height: 260px;"/></p>
+<p class="p2">
+	 </p>
+<h3 class="p1">
+	custom analysis options </h3>
+<p class="p1">
+	Finally, you can choose which columns you want to use. If you’re unsure which columns are available in your txt files, run the tool once, with a deliberate error in the custom columns parameter, then see the stderr.log, which lists the column names.</p>
+<div>
+	Once you have selected your custom column(s), (you can have more than 1), setup the </div>
+<div>
+	analysis like this: </div>
+<div>
+<img alt="" src="/uploaded/content_screen_shot_2014-01-28_at_3_01_27_pm.png" style="width: 500px; height: 248px;"/></div>
+<div>
+	Note there’s no spaces allowed, and you separate multiple columns using a semicolon. </div>
+<h4>
+	 </h4>
+<h3>
+	When would you want to use custom?</h3>
+<div>
+<ul>
+<li class="p1">
+			Maybe you’re interested in using the gMedianSignal or rMedianSignals</li>
+<li class="p1">
+			Maybe you want to see the detection P-value for each probe, via gIsDetected (see note below)</li>
+<li class="p1">
+			if you have non-gene-expression Agilent data, like CpG island data &amp; you want to extract a certain column.</li>
+</ul>
+<h3 class="p2">
+		Important note regarding custom + log transformation</h3>
+<p class="p1">
+		We apply the same log transformation setting to all columns in the GCT file. This means values &lt; 1.0 get thresholded to 1.0, then log transformed. This is probably not what you want for columns like:</p>
+<ul>
+<li class="p1">
+			LogRatioError (which are &gt; 0, and can be small)</li>
+<li class="p1">
+			PValueLogRatio (which are by definition &gt;0 and &lt;1)</li>
+<li class="p1">
+			gIsFound or gIsDetectedAboveBackground (which are 0 or 1, but after log transformation all become ‘0’)</li>
+</ul>
+</div>
+<div>
+<h2 class="p1">
+		Warning/Error Messages</h2>
+<p class="p2">
+		“Could not find column names: ___”</p>
+<p class="p2">
+		“Header was: _____”</p>
+<p class="p2">
+		This may happen if the specified custom column is spelled differently to the one in the file. Alternatively a column name in the file may not exist or be spelt differently to what the module expects, check above to see how the module expects these to be spelled.</p>
+</div>
+<p>
+	 </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th style="width: 100px;">
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				Agilent file <span style="color:red;">*</span></td>
+<td>
+				One or more Agilent TXT or microRNA Geneview files. Files must be of the same type.</td>
+</tr>
+<tr>
+<td>
+				analysis type <span style="color:red;">*</span></td>
+<td>
+<p class="p1">
+					Which analysis type would you like to perform?</p>
+<p class="p1">
+					1-colour (signal=gProcessedSignal) DEFAULT</p>
+<ul>
+<li class="p1">
+						extract the gProcessedSignal column</li>
+</ul>
+<p class="p1">
+					1-colour miRNA GeneView (signal=gTotalGeneSignal)</p>
+<ul>
+<li class="p1">
+						extract the gTotalGeneSignal column</li>
+</ul>
+<p class="p1">
+					2-colour (signal=LogRatio)</p>
+<ul>
+<li class="p1">
+						extract the LogRatio column. Note this is log-base-10 in the TXT file. We convert this to natural scale like the rest of the data columns, and and allow you control over
+						<p class="p1">
+							output data via the log transform option below.</p>
+</li>
+</ul>
+<p class="p1">
+					2-colour (signal=gProcessedSignal,rProcessedSignal)</p>
+<ul>
+<li class="p1">
+						extract both the gProcessedSignal and rProcessedSignal columns. Useful for doing single-channel analysis</li>
+<li class="p1">
+						columns in gct file are named: array name + “_gProcessedSignal” or “_rProcessedSignal”</li>
+</ul>
+<p class="p1">
+					custom</p>
+<ul>
+<li class="p1">
+						choose your own custom column(s) of data. Must be used in conjunction with the custom columns option below.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>
+				custom columns </td>
+<td>
+<p class="p1">
+					Add custom columns to the GCT by specifying the column name(s) separated by a semicolon (;).</p>
+<p class="p1">
+					Note, the probe ID’s are always the ProbeName for TXT files, or SystematicName for GeneView files.</p>
+<p class="p1">
+					If there are &gt;1 custom columns, then the GCT sample names will be the array name + “_” + column name; otherwise the sample names are just the array name.</p>
+</td>
+</tr>
+<tr>
+<td>
+				log transform </td>
+<td>
+<p class="p1">
+					Which log-scale should the data in GCT file be on?</p>
+<ul>
+<li class="p1">
+						log-base-2 DEFAULT</li>
+<li class="p1">
+						log-base-10</li>
+<li class="p1">
+						unlogged</li>
+</ul>
+<p class="p1">
+					Note, most of the time, you want log-base-2 for 1-colour, 2-colour and GeneView-based analyses. Use unlogged and log10 only if you know what you’re doing.</p>
+<p class="p1">
+					Since you can’t log transform anything &lt;= 0, If you select log2 or log10, and have values &lt; 1.0, then we threshold all values at 1.0. These values will then become 0.0 in the log-transformed GCT file.</p>
+</td>
+</tr>
+<tr>
+<td>
+				output file <span style="color:red;">*</span></td>
+<td>
+<div>
+					The file name of the GCT created. </div>
+<div>
+					Default: &lt;Agilent.file_basename&gt;.gct</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+<span style="font-size:18px;">Input Files</span><span class="Apple-tab-span" style="font-size: 12px; white-space: pre;"> </span></h2>
+<ol>
+<li>
+		Agilent file - One or more file containing at least 1 Agilent TXT file, or at least 1 Agilent GeneView file. You can’t mix &amp; match these file types. All files should be from the same array type, and thus should have the same number of probes, and probe ID names, though the order of these probes doesn’t have to be identical. </li>
+</ol>
+<div>
+	 </div>
+<h2>
+<span style="font-size:18px;">Output Files</span></h2>
+<ol>
+<li>
+		&lt;output.file&gt;.gct<br/>
+<div>
+			The gct file. There are 1-3 columns per sample, depending on your selection of TXT </div>
+<div>
+			columns and log ratio column. See the General Guidelines section above. These columns are named </div>
+<div>
+			x_filename, where ‘x’ is either gProcessedSignal, rProcessedSignal, log2Ratio, </div>
+<div>
+			log10Ratio, gTotalGeneSignal. eg gProcessedSignal_ </div>
+<div>
+			251911810936_S01_miRNA-v1_95_May07_1_1</div>
+</li>
+</ol>
+<div>
+<div>
+<h2>
+			Example Data</h2>
+</div>
+</div>
+<p class="p2">
+<a href="ftp://gpftp.broadinstitute.org/example_data/modules/AgilentToGCT/garvan_data/1-colour-4x44K.zip">1-colour gene expression</a></p>
+<p class="p3">
+<a href="ftp://gpftp.broadinstitute.org/example_data/modules/AgilentToGCT/garvan_data/2-colour-4x44k.zip">2-colour gene expression</a></p>
+<p class="p3">
+<a href="ftp://gpftp.broadinstitute.org/example_data/modules/AgilentToGCT/garvan_data/miRNA_GeneView_3sample.zip">miRNA GeneView</a></p>
+<p class="p3">
+<a href="ftp://gpftp.broadinstitute.org/example_data/modules/AgilentToGCT/garvan_data/1-colour-miRNA.zip">miRNA TXT file</a></p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Data Format Conversion</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					Python</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.8</td>
+<td>2014-01-27</td>
+<td>modified to take a file list as input</td>
+</tr>
+<tr>
+<td>0.7</td>
+<td>2014-01-27</td>
+<td>added plugin to check for Python 2.6</td>
+</tr>
+<tr>
+<td>0.6</td>
+<td>2014-01-24</td>
+<td>updated to Mark Cowley's python code</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>2013-12-04</td>
+<td>Added html doc</td>
+</tr>
+<tr>
+<td>0.4</td>
+<td>2013-11-18</td>
+<td>Modified to take a file list</td>
+</tr>
+<tr>
+<td>0.3</td>
+<td>2013-11-08</td>
+<td>Added R 2.15 installer plugin</td>
+</tr>
+<tr>
+<td>0.2</td>
+<td>2013-11-06</td>
+<td>This is the version that works only with single channel data</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

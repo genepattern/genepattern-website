@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NormLines (v54)</title>
+    <meta name="slug" content="modules/docs/NormLines/54" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Normalizes RNAi hairpin scores across cell lines using ZMAD, PMAD, rank or quantile- ignores NaNs</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir, Pablo Tamayo, Aviad Tsherniak;The Broad Institute</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>bweir@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	This module takes the data and puts the cell line data ranges on the same scale. For each cell line, either quantile normalize to the mean distribution of all cell lines, or subtract the median (ZMAD) or peak/mode (PMAD) and divide by the MAD. </p>
+<h2>
+	References</h2>
+<p>
+	Cheung et al. PNAS 2011 Jul 26;108(30):12372-7. </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				gct file<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				Input GCT file after shRNA scoring</td>
+</tr>
+<tr>
+<td>
+				method<span style="color:#ff0000;">*</span></td>
+<td>
+				Method of normalization. Allowed values: quantile, PMAD, ZMAD. Default value = quantile</td>
+</tr>
+<tr>
+<td>
+				plot filename<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				Output filename for plot showing before and after normalization</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		Input shRNA data file
+		<ul>
+<li>
+				 Input data file of cell lines (columns) and shRNAs (rows) in gct file format.</li>
+</ul>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		Output data file               [method]_[InputshRNA data filename].gct
+		<ul>
+<li>
+				 A normalized (quantile, PMAD, or ZMAD) data file of cell lines (columns) and shRNAs (rows) in a gct file format.</li>
+</ul>
+</li>
+<li>
+		plotfile          plot filename
+		<ul>
+<li>
+				A density plot showing the shRNA distribution before and after normalization for each cell line. </li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.15</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>54</td>
+<td>2014-04-11</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

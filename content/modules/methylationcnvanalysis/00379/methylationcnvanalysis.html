@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MethylationCNVAnalysis (v00379) BETA</title>
+    <meta name="slug" content="modules/docs/MethylationCNVAnalysis/00379" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<div class="bs-callout bs-callout-danger">
+<h4>This module is currently in beta release.  The module and/or documentation may be incomplete.</h4>
+</div>
+<p style="font-size: 1.2em; margin-top: 20px;">THIS PAGE IS OBSOLETE: please check https://github.com/genepattern/methylation_cnv_analysis_module/blob/master/README.md for more up-to-date documentation.
+
+Genome-wide copy number estimation and segmentation from Illumina 450k or EPIC Methylation arrays</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Clarence Mah, Owen Chapman</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p><a href="https://groups.google.com/forum/?utm_medium=email&amp;utm_source=footer#!forum/genepattern-help">https://groups.google.com/forum/?utm_medium=email&amp;utm_source=footer#!forum/genepattern-help</a></p>
+<p>ochapman@ucsd.edu</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Summary</h2>
+<p>The Illumina Methylation Array assay family queries methylation levels at 450,000 (450k) or 850,000 (EPIC) locations across the human genome. This module estimates copy number variation (CNV) of one or more tumor samples by comparing methylation levels at these locations to a reference set of "normal" methylation profiles.</p>
+<h4>Requires:</h4>
+<ul>
+<li>Tumor methylation profiles: [sample]_Grn.idat and [sample]_Red.idat</li>
+<li>A set of control methylation profiles in the same format.</li>
+</ul>
+<h2>References</h2>
+<p>Mah CK, Mesirov JP, Chavez L. An accessible GenePattern notebook for the copy number variation analysis of Illumina Infinium DNA methylation arrays. <i>F1000Res</i>. 2018;7:ISCB Comm J-1897. Published 2018 Dec 5. doi:10.12688/f1000research.16338.1</p>
+<p>Aryee MJ, Jaffe AE, Corrada-Bravo H, et al. Minfi: a flexible and comprehensive Bioconductor package for the analysis of Infinium DNA methylation microarrays. <i>Bioinformatics</i>. 2014;30(10):1363–1369. doi:10.1093/bioinformatics/btu049</p>
+<p>Hovestadt V, Zapatka M. <em>conumee: Enhanced copy-number variation analysis using Illumina DNA methylation arrays</em>. R package version 1.9.0, <a href="http://bioconductor.org/packages/conumee/">http://bioconductor.org/packages/conumee/</a>.</p>
+<div class="bioc_citation" id="bioc_citation">
+<p>Seshan VE, Olshen A (2019). <em>DNAcopy: DNA copy number data analysis</em>. R package version 1.58.0.</p>
+<p> </p>
+</div>
+<h4 style='font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(51, 51, 51);'>Functionality yet to be implemented:</h4>
+<p>2019 EPIC array versions.</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table height="407" id="module_params_table" width="1816">
+<thead>
+<tr>
+<th style="width: 109px;">Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>query sample data <span style="color:red;">*</span></td>
+<td>
+<p>A ZIP or GZ file containing your sample(s) methylation microarray data in the Illumina Demo Dataset folder structure.</p>
+<p>This folder should contain matched green and red channel files for each query sample, formatted as [sample]_Grn.idat and [sample]_Red.idat ; then compressed into .tar.gz or .zip.</p>
+</td>
+</tr>
+<tr>
+<td>control sample names</td>
+<td>
+<p>Specify a list of control sample names separated by commas if the control sample data is included in the "sample data" file. Otherwise write "none" if control samples data is separate.</p>
+</td>
+</tr>
+<tr>
+<td>control sample data <span style="color:red;">*</span></td>
+<td>
+<p>A ZIP or GZ file containing your sample(s) methylation microarray data in the Illumina Demo Dataset folder structure.</p>
+<p>This folder should contain matched green and red channel files for each query sample, formatted as [sample]_Grn.idat and [sample]_Red.idat ; then compressed into .tar.gz or .zip.</p>
+<p>An example control set, consisting of ~300 central nervous brain tumors, may be found at <a href="ftp://gpftp.broadinstitute.org/methylation/brain_controls.tar.gz">ftp://gpftp.broadinstitute.org/methylation/brain_controls.tar.gz</a></p>
+<p>Appropriate control sets may also be obtained from the ENCODE database.</p>
+</td>
+</tr>
+<tr>
+<td>genes to highlight</td>
+<td>
+<p>A file with a list of genes (HUGO gene symbols) to highlight in output plots. Format as one gene symbol per line. An example file of common cancer genes may be found at <a href="ftp://gpftp.broadinstitute.org/methylation/common_cancer_genes.txt">ftp://gpftp.broadinstitute.org/methylation/common_cancer_genes.txt</a></p>
+</td>
+</tr>
+<tr>
+<td>ignore regions</td>
+<td>.Bed file: regions which should be excluded from CN analysis (hg19). A standard file of highly repetitive regions may be found at <a href="ftp://gpftp.broadinstitute.org/methylation/ignore_regions.bed">ftp://gpftp.broadinstitute.org/methylation/ignore_regions.bed</a></td>
+</tr>
+<tr>
+<td>sex chromosomes <span style="color:red;">*</span></td>
+<td>Include CN estimates of X &amp; Y chromosomes.</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Output Files</h2>
+<table height="407" id="module_params_table" width="1816">
+<thead>
+<tr>
+<th style="width: 109px;">Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[sample].cnv.seg</td>
+<td>
+<p>Tab-separated segmentation file of copy number segments and their estimated log2 fold change from controls, output by DNACopy.</p>
+<p>Format: <span style="font-family:courier new,courier,monospace;">ID    chrom    loc.start    loc.end    num.mark    bstat    pval    seg.mean    seg.median</span></p>
+</td>
+</tr>
+<tr>
+<td>[sample].cnvPlots.pdf</td>
+<td>
+<p>Copy number plots output by <em>conumee</em>. Contains genome-wide copy number estimations, as well as plots at each gene of interest.</p>
+</td>
+</tr>
+<tr>
+<td>[sample].detail.cnv.seg</td>
+<td>
+<p>Tab-separated file of copy number estimates at each gene of interest.</p>
+<p>Format: <span style="font-family:courier new,courier,monospace;">chr    start    end    name    sample    probes.Var1    probes.Freq    value</span></p>
+</td>
+</tr>
+<tr>
+<td>qcPlots.pdf</td>
+<td>
+<p>QC plots output by <em>conumee</em>. Check to ensure that your controls were appropriate.</p>
+</td>
+</tr>
+<tr>
+<td>ignore regions</td>
+<td>.Bed file: regions which should be excluded from CN analysis (hg19). A standard file of highly repetitive regions may be found at <a href="ftp://gpftp.broadinstitute.org/methylation/ignore_regions.bed">ftp://gpftp.broadinstitute.org/methylation/ignore_regions.bed</a></td>
+</tr>
+<tr>
+<td>sex chromosomes <span style="color:red;">*</span></td>
+<td>Include CN estimates of X &amp; Y chromosomes.</td>
+</tr>
+</tbody>
+</table>
+<h2>License</h2>
+<p>MethylationCNVAnalysis is distributed under a modified BSD license available at <a href="https://raw.githubusercontent.com/genepattern/HierarchicalClustering/develop/LICENSE">https://raw.githubusercontent.com/genepattern/methylation_cnv_analysis_module/master/LICENSE</a></p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R v3.4.1</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2019-09-22</td>
+<td>Documentation added</td>
+</tr>
+<tr>
+<td>0</td>
+<td>2018-07-19</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ComparativeMarkerSelectionViewer (v7)</title>
+    <meta name="slug" content="modules/docs/ComparativeMarkerSelectionViewer/7" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Views the results from ComparativeMarkerSelection</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Joshua Gould</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<p>The ComparativeMarkerSelectionViewer provides tools for reviewing and working with ComparativeMarkerSelection results. These tools include plots, a data table, expression profiles and heatmaps, filters, annotations, and creating dataset and feature list files. (A feature list is a text file with one feature per line.)</p>
+<p>ComparativeMarkerSelectionViewer is an interactive tool. For non-interactive access to annotations, heatmaps, and creation of datasets and features lists, see the HeatMapImage, and ExtractComparativeMarkerSelection modules.</p>
+<h2>Plots</h2>
+<p>Plots are displayed in the upper portion of the viewer. Use the Window menu to select the plot to display:</p>
+<ul>
+<li><strong>Upregulated Features</strong> (initially displayed) plots the descending test statistic values versus features sorted by rank. This plot is useful for visualizing the number of features that have a positive and negative test statistic value in each class.</li>
+<li><strong>Comparison plots (such as FDR(BH) vs Q Value)</strong> provide a pair-wise comparison of different significance measures. These plots are useful to assess the relative stringency of the selected hypothesis rejection criteria. To display the comparison plots, click <em>Window&gt;FDR(BH) vs Q Value</em>. To compare different significance measures: use the drop-down lists below the plot to select the measures to display on the X and Y axes and click <em>Change Axes</em>. The viewer updates the plot and the <em>Window</em> menu to reflect the new comparison.</li>
+<li><strong>λ vs. π<sub>0</sub></strong> plots the estimated π<sub>0</sub> versus the tuning parameter λ. Use this plot to see how well the spline fits the data; that is, the quality of the π<sub>0</sub> estimate (1).</li>
+<li><strong>Histograms</strong> show the null distributions for each measure of significance.</li>
+<li><strong>General Information</strong> lists the parameters used to generate the ComparativeMarkerSelection results.</li>
+</ul>
+<p>Use the following menu items to work with any plot:</p>
+<table border="1" cellpadding="5" style="border-collapse:collapse;">
+<tbody>
+<tr>
+<td>View&gt;Zoom In<br/>
+			View&gt;Zoom Out</td>
+<td>Zoom in and out on the plot. (Alternatively, use your mouse to click-and-drag over the area to zoom in on.)</td>
+</tr>
+<tr>
+<td>View&gt;Reset</td>
+<td>Return to the default zoom level.</td>
+</tr>
+<tr>
+<td>View&gt;Display Options</td>
+<td>Change the title, labels, and other visual attributes.</td>
+</tr>
+<tr>
+<td>File&gt;Save Image</td>
+<td>Save the plot to an image file.</td>
+</tr>
+<tr>
+<td>File&gt;Print</td>
+<td>Print the plot (formats the plot to fit the page).</td>
+</tr>
+</tbody>
+</table>
+<h2>Data Table</h2>
+<p>The table in the lower portion of the viewer lists the ComparativeMarkerSelection results. For a description of each column, see the ComparativeMarkerSelection documentation. By default, the features in the table are ordered by score. To reorder the features, click the title of the key column; for example, to order features by rank, click <em>Rank</em>.  </p>
+<p>To choose which columns are shown in the table, click the Column Chooser icon in the top-right corner of the table, just above the vertical scrollbar:<br/>
+<img alt="" src="/uploaded/content_icon.png" style="width: 32px; height: 63px;"/></p>
+<p>Using <em>File&gt;Export Current Table as CSV</em>, you can export the table for use in external programs such as Excel.  This will result in a comma-spearated values (CSV) file with the contents of the table, leaving out any items excluded due to filters or columns hidden through the Column Chooser.</p>
+<h2>Expression Profiles and Heatmaps</h2>
+<p>The expression profile for a feature plots expression value per sample. A heatmap shows the same information, but color codes the expression values from red for the highest expression values through blue for lowest expression values. </p>
+<p>To display an expression profile or heatmap:</p>
+<ol>
+<li>Select one or more features from the data table.</li>
+<li>Click <em>View&gt;Profile</em> or <em>View&gt;Heatmap</em>. Alternatively, right-click the data table and select <em>Profile</em> or <em>Heatmap</em> from the context menu.</li>
+</ol>
+<p>If no features are selected, all features are displayed. Ordering all features by score and displaying them in a heatmap can be very informative. Displaying all features in a profile can be time consuming and is less useful.</p>
+<p><strong>Note</strong>: If the <em>Profile</em> and <em>Heatmap</em> commands are unavailable, your dataset is not open. To open your dataset, specify the <em>dataset filename</em> parameter when you launch the ComparativeMarkerSelectionViewer or, from the viewer, select <em>File&gt;Open Dataset</em>.</p>
+<h2>Filters</h2>
+<p>Use filters to display only features that you are interested in:</p>
+<ol>
+<li>Select <em>Edit&gt;Filter Features&gt;Custom Filter</em>. The Filter Features window appears.</li>
+<li>In the Filter Features window, set your filtering criteria and click OK. The viewer shows only those features that meet your criteria.</li>
+<li>To redisplay all features, select <em>Edit&gt;Filter Features&gt;Show All</em>.</li>
+</ol>
+<h2>Creating Datasets/Feature Lists</h2>
+<p>You can use the viewer to create a new dataset or feature list from the ComparativeMarkerSelection results:</p>
+<ol>
+<li>Select <em>File&gt;Save Derived Dataset</em> or <em>File&gt;Save Feature List</em>. A window appears.</li>
+<li>Choose the features to include in the dataset/feature list:
+	<ul>
+<li><strong>Use current features</strong> – the features currently displayed in the viewer (use filters to display the features that you want in the new dataset/feature list).</li>
+<li><strong>Use all features</strong> – all features (ignore any filters).</li>
+<li><strong>Use selected features</strong> – the features currently selected in the data table.</li>
+</ul>
+</li>
+<li>Choose a location and name for the new dataset/feature list.</li>
+<li>Click <em>Create</em> to save the new data set/feature.</li>
+</ol>
+<p><strong>Note</strong>: If the <em>Save Derived Dataset</em> command is unavailable, your dataset is not open. To open your dataset, specify the <em>dataset filename</em> parameter when you launch the ComparativeMarkerSelectionViewer or, from the viewer, select <em>File&gt;Open Dataset</em>.</p>
+<h2>Annotations</h2>
+<p>The ComparativeMarkerSelectionViewer provides two annotation methods:</p>
+<ul>
+<li>Feature annotations use color to annotate features in the data table</li>
+<li><s>GeneCruiser annotations retrieve information about Affymetrix probe ids and add it to the data table </s> <br/>
+<strong><a href="/blog/2016/03/15/genecruiser-is-now-deprecated">Support for GeneCruiser ended in March 2016</a></strong><br/>
+	 </li>
+</ul>
+<p>To use feature annotations:</p>
+<ol>
+<li>Create a feature list file (one way of doing this is described above).</li>
+<li>Select <em>File&gt;Open Feature List(s)</em> to open your feature list file.  In the Feature column of the data table, a color bar appears next to each feature in the feature list.</li>
+<li>Select <em>Edit&gt;Feature Annotations</em> to edit the color or close the feature list:<br/>
+<img alt="" src="/uploaded/content_featannotdialog.png" style="width: 592px; height: 300px;"/></li>
+<li>In the Feature Annotations window, select your feature list from the drop-down list. The color assigned to that feature list appears in the box to the right.
+	<ul>
+<li>To change the color, click the box and select a new color.</li>
+<li>To close the feature list and remove the color bars from the table, click <em>Delete</em>.</li>
+</ul>
+</li>
+</ol>
+<p><s>To use GeneCruiser annotations:</s></p>
+<ol>
+<li><s>Select <em>GeneCruiser&gt;Gene Information</em>.</s></li>
+<li><s>Select the features that you want to retrieve annotations for in the table.</s></li>
+<li><s>Choose which fields to retrieve from GeneCruiser in the GeneCruiser dialog.</s></li>
+<li><s>The annotations appear in additional columns in the table.</s></li>
+</ol>
+<h2>References</h2>
+<p>Gould et al. <strong>Comparative Gene Marker Selection suite</strong>. Bioinformatics Advance Access published on May 18, 2006, DOI 10.1093/bioinformatics/btl196.</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="width: 200px;">comparative marker selection filename <span style="color:red;">*</span></td>
+<td style="width: 200px;">The output from ComparativeMarkerSelection</td>
+</tr>
+<tr>
+<td>dataset filename </td>
+<td>The dataset file used as input to ComparativeMarkerSelection</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li><strong>comparative marker selection filename</strong><br/>
+	The output file from ComparativeMarkerSelection in ODF format.</li>
+<li><strong>dataset filename</strong><br/>
+	The dataset file used as input to ComparativeMarkerSelection in <a href="/cancer/software/genepattern/file-formats-guide#GCT">GCT</a> or <a href="/cancer/software/genepattern/file-formats-guide#RES">RES</a> format.</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Visualizer</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					Java</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>2015-03-17</td>
+<td>Fix for SecurityException when saving datasets</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2014-07-28</td>
+<td>Added filter by multiple criteria, hide table columns, export table. Fixed for use with Java 7. Many other improvements and bug fixes.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2013-09-20</td>
+<td>Added filter by rank, filter by multiple criteria, hide table columns, export table.  Fixed for use with Java 7.  Many other improvements and bug fixes.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2006-07-29</td>
+<td>Updated GeneCruiser library</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2006-03-09</td>
+<td>Updated to work with latest ComparativeMarkerSelection module</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2005-06-13</td>
+<td>Added maxT p-value and removed rank p-value</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

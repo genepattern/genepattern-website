@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HeatMapViewer (v11)</title>
+    <meta name="slug" content="modules/docs/HeatMapViewer/11" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">A configurable heat map viewer that provides users with several options for manipulating and visualizing array-based data</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Joshua Gould, The Broad Institute</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Summary</h2>
+<p>The HeatMapViewer displays values in a heat map format where by default the largest values are displayed as the reddest (hot), the smallest values are displayed as the bluest (cool), and intermediate values are a lighter color of either blue or red. This is a very convenient way to display three-dimensional data (samples, features, and values).</p>
+<h2>Display Options</h2>
+<p>There are a number of options controlling the appearance of the heat map that can be set by selecting <em>View&gt;View Options</em>: </p>
+<ul>
+<li>You can choose between radio buttons for <em>Relative</em> and <em>Global</em> color schemes. When the relative choice is selected, the heat map converts values to colors using the mean, minimum, and maximum values in each row. When the global choice is selected the heat map converts values to colors using the mean, minimum, and maximum values in the entire dataset. To display the color legend, select <em>View&gt;Color Scheme Legend</em>.</li>
+<li>You can choose between the radio buttons <em>Use Color Gradient</em> and <em>Use Discrete Colors</em>. The heat map uses linear color gradient to convert values to colors when the <em>Use Color Gradient</em> button is selected, while a discrete color map is used if the <em>Use Discrete Colors</em> button is selected. A color map can optionally be loaded by clicking on <em>Load Color Map</em>. This color map is a file containing three colors with one color per line. The first color is the color for the minimum values and the last color is the color for the maximum values. The colors can be specified as either a decimal, octal, hexadecimal integer, or r:g:b triplet (e.g. #9900FF, 0:0:0, 171).</li>
+<li>The <em>Show Grid</em> checkbox controls whether a grid is drawn around each element.</li>
+<li>The <em>Show Profile</em> checkbox controls whether the profile is shown in the table for each feature.</li>
+<li>The row size and column size sliders control the size of each element in the heat map. When the <em>Maintain Square Aspect </em>checkbox is selected, the row and column sizes are kept in synch.</li>
+<li>You can choose to hide (show) feature descriptions, feature names and sample names by deselecting (selecting) the corresponding checkbox.</li>
+<li>The <em>Feature Label Width</em> slider controls the size of feature labels. Similarly, the <em>Sample Label Height</em> slider controls the size of sample labels. These controls do not appear unless you have features and/or samples loaded. To load features, select <em>File&gt;Label Features</em>. To load samples, select <em>File&gt;Label Samples</em>. </li>
+</ul>
+<h2>Saving Images</h2>
+<p>Users can save the heat map image to a file by selecting <em>File&gt;Save Image</em>. Supported formats are bmp, eps, jpeg, png, and tiff.</p>
+<h2>Saving Datasets</h2>
+<p>You can use the viewer to create a new dataset.</p>
+<ol>
+<li>Select <em>File&gt;Save Dataset</em>. A window appears.</li>
+<li>Choose the features and samples to include in the dataset by selecting the features and sample names in the viewer.</li>
+<li>Choose a location and name for the new dataset.</li>
+<li>Click <em>Save</em> to save the new dataset. </li>
+</ol>
+<h2>Feature Labels</h2>
+<p>Feature labels use color to annotate features in the heat map.<br/>
+To use feature labels:</p>
+<ol>
+<li>Create a grp, gmx, or gmt file. A complete description of these formats is available on the <a href="/file-formats-guide">GenePattern website</a>.</li>
+<li>Select <em>File&gt;Label Features</em> to open your feature set file. You have the option to restrict the view to features in your feature set. To return to the full view, select <em>View&gt;Reset Dataset</em>. A color bar appears next to each feature in the feature set in the table.</li>
+<li>Select <em>Edit&gt;Feature Labels</em> to edit the color or close the feature set.</li>
+<li>In the Feature Labels window, select your feature set from the drop-down list. The color assigned to that feature list appears in the box to the right.
+	<ul>
+<li>To change the color, click the box and select a new color.</li>
+<li>To delete the feature set and remove the color bars from the table, click <em>Delete</em>.</li>
+</ul>
+</li>
+</ol>
+<p>The feature annotations legend can be saved to a file by selecting <em>File&gt;Save Feature Labels Legend</em>.</p>
+<h2>Sample Labels</h2>
+<p>Sample labels use color to annotate samples in the heat map.<br/>
+To use sample labels:</p>
+<ol>
+<li>Create a cls file or sample info file. A complete description of these formats is available on the <a href="http://www.broadinstitute.org/gp_guides/file-formats">GenePattern website</a></li>
+<li>Select <em>File&gt;Label Samples</em> to open your cls or sample info file. A color bar appears below each sample name.</li>
+<li>Select <em>Edit&gt;Sample Labels</em> to edit the color or close the sample info file.</li>
+<li>In the Sample Labels window, select your sample class from the drop-down list. The color assigned to that sample class appears in the box to the right.
+	<ul>
+<li>To change the color, click the box and select a new color.</li>
+<li>To delete the sample class and remove the color bars from the table, click <em>Delete</em>.</li>
+</ul>
+</li>
+</ol>
+<p>The sample annotations legend can be saved to a file by selecting <em>File&gt;Save Sample Labels Legend</em>.</p>
+<h2>Loading Descriptions - Support for GeneCruiser ended in March 2016</h2>
+<p><a href="/blog/2016/03/15/genecruiser-is-now-deprecated" target="_blank">Please see the GenePattern blog for more information.</a></p>
+<p><s>GeneCruiser retrieves information about Affymetrix probe identifiers and adds the information to the feature table.<br/>
+To use GeneCruiser annotations:</s></p>
+<ol>
+<li><s>Select <em>File&gt;GeneCruiser</em>.</s></li>
+<li><s>Select the features that you want to retrieve annotations for in the table.</s></li>
+<li><s>Choose which fields to retrieve from GeneCruiser in the GeneCruiser dialog.</s></li>
+<li><s>The annotations appear in additional columns in the table.</s></li>
+</ol>
+<p><s>You can also load descriptions from a csv (comma separated values) file. To load descriptions from a csv file, select <em>File&gt;Load Descriptions From Csv File</em>.</s></p>
+<h2>Finding Features</h2>
+<p>To find a feature in the heat map, select <em>Edit&gt;Find</em>. You can choose whether to match the case of the text you’re searching for by selecting the <em>Match</em> case checkbox at the bottom of the find dialog. You can also choose whether to include the description column in your search by selecting the <em>Include Descriptions In Search</em> checkbox.</p>
+<h2>Profile Plot</h2>
+<p>The expression profile for a feature plots expression value per sample.<br/>
+To display an expression profile:</p>
+<ol>
+<li>Select one or more features and optionally select one or more samples.</li>
+<li>Click <em>View&gt;Profile</em>. Alternatively, right-click and select <em>Profile</em> from the context menu or click the profile plot column in the feature table.</li>
+</ol>
+<h2>Centroid Plot</h2>
+<p>The centroid plot shows the mean expression value for each sample. The error bars represent the standard deviation.<br/>
+To display a centroid plot:</p>
+<ol>
+<li>Select two or more features and optionally select one or more samples.</li>
+<li>Click <em>View&gt;Centroid Plot</em>. Alternatively, right-click and select <em>Centroid Plot</em> from the context menu.</li>
+</ol>
+<h2>Histogram</h2>
+<p>The histogram plot shows the distributions of expression values. The vertical axis represents number of occurrences. The horizontal axis represents the binned expression values.<br/>
+To display a histogram:</p>
+<ol>
+<li>Select one or more features and optionally select one or more samples.</li>
+<li>Click <em>View&gt;Histogram</em>. Alternatively, right-click and select <em>Histogram</em> from the context menu.</li>
+</ol>
+<h2>Nearest Neighbors</h2>
+<p>The nearest neighbors item shows other features whose expression values follow similar trends to the selected feature. There are four choices for the distance metric: Cosine, Euclidean, Manhattan, and Pearson.<br/>
+To display the nearest neighbors:</p>
+<ol>
+<li>Select one feature.</li>
+<li>Click <em>View&gt;Nearest Neighbors</em>. Alternatively, right-click and select <em>Nearest Neighbors</em> from the context menu.</li>
+</ol>
+<h2>Scatter Plot</h2>
+<p>The scatter plot lets you compare expression values in two samples.<br/>
+To display a scatter plot:</p>
+<ol>
+<li>Select two samples.</li>
+<li>Optionally select one or more features.</li>
+<li>Click <em>View&gt;Scatter Plot</em>. Alternatively, right-click and select <em>Scatter Plot </em>from the context menu.</li>
+</ol>
+<h2>Sorting Features</h2>
+<p>The sort features item lets you order features in the heat map by differential expression based on either T-Test or Signal To Noise calculations. To sort features:</p>
+<ol>
+<li>Label features as described in the <em>Label Features</em> section (if you have not already done so).</li>
+<li>Select <em>View&gt;Sort Features</em>.</li>
+<li>Select the feature label to use for sorting, the test statistic to use, and whether to sort in ascending or descending order.</li>
+<li>To return to the original order, select <em>View&gt;Reset Dataset</em>.</li>
+</ol>
+<h2>Sorting Samples</h2>
+<p>The sort samples item lets you order samples in the heat map by class. To sort samples:</p>
+<ol>
+<li>Label samples as described in the <em>Label Samples</em> section (if you have not already done so).</li>
+<li>Select <em>View&gt;Sort Samples</em>.</li>
+<li>Select the sample label to use for sorting.</li>
+<li>To return to the original order, select <em>View&gt;Reset Dataset</em>.</li>
+</ol>
+<h2>Keyboard Shortcuts</h2>
+<p>You can use your keyboard to quickly accomplish many tasks. To find the shortcuts for common commands, look in the menus or select <em>Help&gt;Keyboard Shortcuts</em> to see a list of available shortcuts.</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dataset <span style="color:red;">*</span></td>
+<td>The dataset to display - .gct, .res, .odf</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Visualizer</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					Java</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11</td>
+<td>2013-06-21</td>
+<td>Fixes Java 7 launching issues.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2010-08-04</td>
+<td>Fixed bug with incorrect scores listed for features in the Nearest Neighbors table</td>
+</tr>
+<tr>
+<td>9</td>
+<td>2010-03-18</td>
+<td>Fixed bug in calculating standard deviation for centroid plot.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2007-09-05</td>
+<td>Fixed bug in color scheme legend dialog. Added gene neighbors analysis. </td>
+</tr>
+<tr>
+<td>6</td>
+<td>2007-08-13</td>
+<td>Additional additional plots, keyboard shortcuts, and ability to label samples from sample info file.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2006-10-05</td>
+<td>Plot selected samples only in profile plot</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2006-09-25</td>
+<td>Added eps output file format</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2006-08-08</td>
+<td>Save row names with image</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2005-06-07</td>
+<td>Annotated for GP 1.4.</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2004-12-22</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

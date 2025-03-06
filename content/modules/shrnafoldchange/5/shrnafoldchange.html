@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>shRNAfoldChange (v5)</title>
+    <meta name="slug" content="modules/docs/shRNAfoldChange/5" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Calculate the fold change of all shRNAs for each sample in a gct file, based on the appropriate DNA reference value (present in a gct file of the same dimension).</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir;Broad Institute </p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>bweir@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	shRNAfoldChange is a GenePattern module that calculates the fold change values of all shRNAs for each sample in a GCT file. The fold change is calculated by subtracting the starting DNA reference matrix in the user-uploaded DNA reference file from the shRNA value matrix in the user-uploaded DNA reference file from the shRNA value matrix in the user-uploaded gct file (both matrices should have the same dimensions). The module outputs a GCT file containing the fold change of each sample, for each shRNA in the dataset. </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				gct file<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				Data file containing shRNA data</td>
+</tr>
+<tr>
+<td>
+				DNA reference file<span style="color:#ff0000;">*</span></td>
+<td>
+				A GCT file containing the values of the DNA pool reference per sample/shRNA (same dimensions as input GCT file). </td>
+</tr>
+<tr>
+<td>
+				prefix<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				User defined prefix of output file names.</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		gct file
+		<ul>
+<li>
+				Data file containing shRNA data, with cell lines as columns and shRNAs as rows.</li>
+</ul>
+</li>
+<li>
+		DNA reference file
+		<ul>
+<li>
+				A GCT file containing the values of the DNA pool reference per sample/shRNA (same dimensions as input GCT file).</li>
+</ul>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		Data file with fold change values      <em>[prefix]</em>_FC.rnai.gct
+		<ul>
+<li>
+				A GCT file containing the fold change values of each sample in the user-inputted dataset. </li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.15</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>2014-04-11</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ComparativeMarkerSelection (v10)</title>
+    <meta name="slug" content="modules/docs/ComparativeMarkerSelection/10" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Identify differentially expressed genes that can discriminate between distinct classes of samples.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Joshua Gould, Gad Getz, Stefano Monti</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Introduction</h2>
+<p>When analyzing genome-wide transcription profiles derived from microarray or RNA-seq experiments, the first step is often to identify differentially expressed genes that can discriminate<span style="font-size:12px;"> between distinct classes of samples (usually defined by a phenotype, such as tumor or normal).  <span style="font-size:14px;">This process is commonly referred to as marker (or feature) selection.  Marker genes are identified by calculating, for each profiled gene, a test statistic (e.g., <em>t-</em>test) which asseses correlation of the gene's expression profile with a class template.  If the value of the test statistic for a specific gene, and thus the degree of differential expression presented by that gene, is significantly greater than what one would expect to see under the null hypothesis (gene is not differentially expressed between classes), that gene is identified as a statistically significant marker gene.  </span></span></p>
+<p><span style="font-size:14px;">The ComparativeMarkerSelection module takes as input a dataset of expression profiles from samples belonging to two classes and, implementing the statistical tests described above, identifies marker genes which discriminate between the classes.</span></p>
+<p><span style="font-size:14px;"><span style="line-height: 18px;">The ComparativeMarkerSelection module includes several approaches to determine the features that are most closely correlated with a class template and the significance of that correlation.  The module computes s</span><span style="line-height: 18px;">ignificance values for features using several metrics, including FDR(BH), Q-Value, maxT, FWER, Feature-Specific P-Value, and Bonferroni. </span><span style="line-height: 18px;">The results from the ComparativeMarkerSelection algorithm can be viewed with the ComparativeMarkerSelectionViewer.</span>   ExtractComparativeMarkerResults creates a derived dataset and feature list file from the results of ComparativeMarkerSelection.</span></p>
+<p>By default ComparativeMarkerSelection expects the data in the input file to <b>not </b>be log transformed. Some of the calculations such as the fold change are not accurate when log transformed data is provided and not indicated. To indicate that your data is log transformed, be sure to set the “log transformed data” parameter to “yes”. Also, ComparativeMarkerSelection requires <b>at least three </b>samples per class to run successfully.</p>
+<h2>Algorithm</h2>
+<p>The analytic module takes as input a dataset of expression profiles from samples belonging to two phenotypes. If a dataset contains more than two phenotypes, then there is the option to perform all pairwise comparisons or all one-versus-all comparisons. A test statistic (e.g. <em>t</em>-test) is chosen to assess the differential expression between the two classes of samples. Note that technical and biological replicates are handled the same way as independent samples. The significance (nominal P-value) of marker genes is computed using a permutation test, which is a commonly used method for assessing the significance of marker genes; see (4) for details.</p>
+<p><span style="font-size:14px;">Selecting class markers is a particular instance of the general multiple hypothesis testing problem. Since several thousand hypotheses are usually tested at once (one per gene), the nominal P-values have to be corrected to account for the increased number of potential false positives. For example, if we test 20,000 genes for differential expression, a nominal P-value threshold of 0.01 would only ensure that the expected number of false positives is &lt;200 (0.01 x 20,000).  ComparativeMarkerSelection includes several methods of correcting for multiple hypothesis testing, <span style="line-height: 18px;">including FDR(BH), Q-Value, maxT, FWER, Feature-Specific P-Value, and Bonferroni;</span>  (4) describes</span> their applicability.</p>
+<h2>References</h2>
+<ol>
+<li class="p2">Benjamini Y, Hochberg Y. Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing<i>. Journal of the Royal Statistical Society. Series B (Methodological</i>). 1995;57(1):289-300. </li>
+<li class="p2">Golub T, Slonim D, et al. Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression. <i>Science. </i>1999;286:531-537. </li>
+<li class="p2">Good P. <i>Permutation Tests: A Practical Guide for Testing Hypotheses</i>, 2<span class="s1">nd </span>Ed. New York: Springer-Verlag. 2000. </li>
+<li class="p2">Gould J, Getz G, Monti S, Reich M, Mesirov JP. Comparative gene marker selection suite. <i>Bioinformatics. </i>2006;22;1924-1925, doi:10.1093/bioinformatics/btl196. </li>
+<li class="p2">Lu J, Getz G, Miska E, et al. MicroRNA Expression Profiles Classify Human Cancers. <i>Nature. </i>2005;435:834-838. </li>
+<li class="p2">Storey JD, Tibshirani R. Statistical significance for genomewide studies. <i>PNAS. </i>2003;100(16):9440-9445. </li>
+<li class="p3">Westfall PH, Young SS. Resampling-Based Multiple Testing: Examples and Methods for p-Value Adjustment, in <i>Wiley Series in Probability and Statistics</i>. New York: Wiley, 1993. </li>
+</ol>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table class="table table-striped" id="module_params_table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>input file <span style="color:red;">*</span></td>
+<td>
+<p>The input file.  <a href="/cancer/software/genepattern/file-formats-guide#GCT" style="color: rgb(102, 153, 255); font-size: 12px; line-height: 18px;">GCT</a>,<span style="font-size: 12px; line-height: 18px; color: rgb(34, 34, 34);"> </span><a href="/cancer/software/genepattern/file-formats-guide#RES" style="color: rgb(102, 153, 255); font-size: 12px; line-height: 18px;">RES</a><span style="font-size: 12px; line-height: 18px;"> </span></p>
+<p><span style="font-size:14px;"><span style="line-height: 18px;">Note the following constraints:</span></span></p>
+<ul>
+<li><span style="font-size:14px;">If the expression data contains duplicate identifiers, ComparativeMarkerSelection generates the error message: "An error occurred while running the algorithm." The UniquifyLabels module provides one way of handling duplicate identifiers.</span></li>
+<li><span style="font-size:14px;"><span style="line-height: 18px;">If the expression data contains fewer than three samples per class, ComparativeMarkerSelection appears to complete successfully but test statistic scores are not shown in the results. </span></span></li>
+<li><span style="font-size:14px;"><span style="line-height: 18px;">If the expression data contains missing values, ComparativeMarkerSelection completes successfully but does not compute test statistic scores for rows that contain missing values.  </span></span></li>
+</ul>
+<span style="font-size:14px;"><span style="line-height: 18px;">If your data is log transformed, you will need to set the "log transformed data" parameter above to "yes".</span>Note that if your data is log transformed, you will need to set the "log transformed data" parameter below to "yes".</span></td>
+</tr>
+<tr>
+<td>cls file <span style="color:red;">*</span></td>
+<td>
+<p>The class file. <a href="/cancer/software/genepattern/file-formats-guide#CLS" style="color: rgb(102, 153, 255); font-size: 12px; line-height: 18px;">CLS</a></p>
+<p><span style="font-size:14px;"><span style="line-height: 18px;">ComparativeMarkerSelection analyzes two phenotype classes at a time. If the expression data set includes samples from more than two classes, use th</span></span><span style="line-height: 18px;">e </span><i style="font-size: 12px; line-height: 18px;"><span style="font-size:14px;">phenotype test</span> </i><span style="line-height: 18px;">parameter to analyze each class against all others (one-versus-all) or all class pairs (all pairs). </span></p>
+</td>
+</tr>
+<tr>
+<td>confounding variable cls file </td>
+<td>The class file containing the confounding variable.  <a href="/cancer/software/genepattern/file-formats-guide#CLS" style="color: rgb(102, 153, 255); font-size: 12px; line-height: 18px;">CLS</a>
+<p class="p1">I<span style="font-size:14px;">f you are studying two variables and your data set contains a third variable that might distort the association between the variables of interest, you can use a confounding variable class file to correct for the affect of the third variable. For example, the data set in Lu, Getz, et. al. (2005) contains tumor and normal samples from different tissue types. When studying the association between the tumor and normal samples, the authors use a confounding variable class file to correct for the effect of the different tissue types.</span> </p>
+<p class="p1">The phenotype class file identifies the tumor and normal samples: </p>
+<p class="p2">75 2 1<br/>
+			# Normal Tumor<br/>
+			0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 </p>
+<p class="p1">The confounding variable class file identifies the tissue type of each sample: </p>
+<p class="p2">75 6 1<br/>
+			# colon kidney prostate uterus human-lung breast<br/>
+			0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 5 </p>
+<p class="p1">Given these two class files, when performing permutations, ComparativeMarkerSelection shuffles the tumor/normal labels only among samples with the same tissue type. </p>
+</td>
+</tr>
+<tr>
+<td>test direction <span style="color:red;">*</span></td>
+<td>The test to perform. <span style="font-size:14px;"> <span style="line-height: 18px;">By default, ComparativeMarkerSelection performs a two-sided test; that is, the test statistic score is calculated assuming that the differentially expressed gene can be up-regulated in either phenotype class. Optionally, use the <em>test direction</em></span><i style="font-size: 12px; line-height: 18px;"> </i><span style="line-height: 18px;">parameter to specify a one-sided test, where the differentially expressed gene must be up-regulated for class 0 or for class 1. </span></span></td>
+</tr>
+<tr>
+<td>test statistic <span style="color:red;">*</span></td>
+<td>
+<p>The statistic to use:</p>
+<table border="1" style="border-collapse: collapse;">
+<tbody>
+<tr>
+<td>t-test</td>
+<td>
+<p class="p1">This is the standardized mean difference between the two classes.  It is the difference between the mean expression of class 1 and class 2 divided by the variability of expression, which is the square root of the sum of the standard deviation for each class divided by the number of samples in each class.</p>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"> <mrow> <mfrac> <mrow> <msub> <mi>μ</mi> <mi>A</mi> </msub> <mo>−</mo><msub> <mi>μ</mi> <mi>B</mi> </msub> </mrow> <mrow> <msqrt> <mrow> <mfrac> <mrow> <msub> <mi>σ</mi> <mi>A</mi> </msub> </mrow> <mrow> <msub> <mi>n</mi> <mi>A</mi> </msub> </mrow> </mfrac> <mo>+</mo><mfrac> <mrow> <msub> <mi>σ</mi> <mi>B</mi> </msub> </mrow> <mrow> <msub> <mi>n</mi> <mi>B</mi> </msub> </mrow> </mfrac> </mrow> </msqrt> </mrow> </mfrac> </mrow> </math>
+<div>where </div>
+<div>μ is the average </div>
+<div>σ is the standard deviation </div>
+<div>n is the number of samples </div>
+<div> </div>
+</td>
+</tr>
+<tr>
+<td>t-test (median)</td>
+<td>Same as t-test, but uses median rather than average.</td>
+</tr>
+<tr>
+<td>t-test (min std)</td>
+<td>Same as t-test, but enforces a minium value for sigma (minimal standard deviation).</td>
+</tr>
+<tr>
+<td>t-test (median, min std)</td>
+<td>Same as t-test, but uses median rather than average and enforces a minimum value for sigma (minimal standard deviation).</td>
+</tr>
+<tr>
+<td>SNR</td>
+<td>
+<p>The signal-to-noise ratio is computed by dividing the difference of class means by the sum of their standard deviation.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"> <mrow> <mfrac> <mrow> <msub> <mi>μ</mi> <mi>A</mi> </msub> <mo>−</mo><msub> <mi>μ</mi> <mi>B</mi> </msub> </mrow> <mrow> <msub> <mi>σ</mi> <mi>A</mi> </msub> <mo>+</mo><msub> <mi>σ</mi> <mi>B</mi> </msub> </mrow> </mfrac> </mrow> </math></p>
+<div>where μ is the average and σ is the standard deviation </div>
+</td>
+</tr>
+<tr>
+<td>SNR (median)</td>
+<td>Same as SNR, but uses the median rather than average.</td>
+</tr>
+<tr>
+<td>SNR (min std)</td>
+<td>Same as SNR, but enforces a minimum value for sigma (minimal standard deviation).</td>
+</tr>
+<tr>
+<td>SNR (median, min std)</td>
+<td>Same as SNR, but uses median rather than average and enforces a minimum value for sigma (minimal standard deviation).</td>
+</tr>
+<tr>
+<td>Paired t-test</td>
+<td>
+<table cellpadding="0" cellspacing="0" class="t1">
+<tbody>
+<tr>
+<td class="td1" valign="top">
+<p class="p1">The Paired T-Test can be used to analyze paired samples; for example, samples taken from patients before and after treatment. This test is used when the cross-class differences (e.g. the difference before and after treatment) are expected to be smaller than the within-class differences (e.g. the difference between two patients). For example if you are measuring weight gain in a population of people, the weights may be distributed from 90 lbs. to say 300 lbs. and the weight gain/loss (the paired variable) may be on the order of 0-30 lbs. So the cross-class difference ("before" and "after") is less than the within-class difference (person 1 and person 2). </p>
+<p class="p1">The standard T-Test takes the mean of the difference between classes, the Paired T-Test takes the mean of the differences between pairs: </p>
+<p class="p1"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"> <mrow> <mfrac> <mrow> <msub> <mover accent="true"> <mi>X</mi> <mo>¯</mo> </mover> <mi>D</mi> </msub> <mo>−</mo><msub> <mi>μ</mi> <mn>0</mn> </msub> </mrow> <mrow> <mrow><mrow> <msub> <mi>s</mi> <mi>D</mi> </msub> </mrow><mo>/</mo><mrow> <msqrt> <mi>N</mi> </msqrt> </mrow></mrow> </mrow> </mfrac> </mrow> </math></p>
+<p class="p1">where the differences between all pairs are calculated and <i>X</i><sub><span class="s1"><i>D </i></span></sub>is the average of the differences and <em>S<sub>D</sub></em> the standard deviation.  μ<sub>0</sub> is the mean difference between paired samples under the null hypothesis, typically 0.</p>
+<p class="p1"><b>Note</b>: For the Paired T-Test, paired samples in the expression data file must be arranged by class, where the first samples in each class are paired, the second samples are paired, and so on. For example, sample pairs A1/B1, A2/B2 and A3/B3 would be ordered in an expression data file as A1, A2, A3, B1, B2, B3. Note that your data must contain the same number of samples in each class in order to use this statistic. </p>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+			 
+
+			<p> </p>
+</td>
+</tr>
+<tr>
+<td>min std </td>
+<td>
+<p>The minimum standard deviation if test statistic includes min std option. <span style="line-height: 18px;"> If σ is less than </span><i style="font-size: 12px; line-height: 18px;"><span style="font-size:14px;">min std</span></i><span style="line-height: 18px;">, σ is set to<span style="font-size:14px;"> </span></span><i style="font-size: 12px; line-height: 18px;"><span style="font-size:14px;">min std</span> . </i></p>
+</td>
+</tr>
+<tr>
+<td>number of permutations <span style="color:red;">*</span></td>
+<td>The number of permutations to perform (use 0 to calculate asymptotic p-values using the standard independent two-sample t-test).  <span style="font-size:14px;"><span style="line-height: 18px;">ComparativeMarkerSelection uses a permutation test to estimate the significance (p-value) of the test statistic score. The number of permutations you specify depends on the number of hypotheses being tested and the significance level that you want to achieve (3). If the data set includes at least 10 samples per class, use the default value of 10000 permutations to ensure sufficiently accurate p-values. </span></span>
+<p class="p1">If the data set includes fewer than 10 samples in any class, permuting the samples cannot give an accurate p-value. Specify a value of 0 permutations to use asymptotic p-values instead. In this case, ComparativeMarkerSelection computes p-values assuming the test statistic scores follow Student's t-distribution (rather than using the <i>test statistic </i>to create an empirical distribution of the scores). Asymptotic p-values are calculated using the p-value obtained from the standard independent two-sample t-test. </p>
+</td>
+</tr>
+<tr>
+<td>log transformed data <span style="color:red;">*</span></td>
+<td>Whether the input data has been log transformed. <span style="font-size:14px;"> <span style="line-height: 18px;">By default ComparativeMarkerSelection expects the data in the input file to </span><b style="font-size: 12px; line-height: 18px;">not </b><span style="line-height: 18px;">be log transformed. Some of the calculations such as the fold are not accurate when log transformed data is provided and not indicated. To indicate that your data is log transformed, set this parameter to “yes”. </span></span></td>
+</tr>
+<tr>
+<td>complete <span style="color:red;">*</span></td>
+<td>Whether to perform all possible permutations. <span style="font-size:14px;"> <span style="line-height: 18px;">When the <em>complete</em> </span><span style="line-height: 18px;">parameter is set to yes, ComparativeMarkerSelection ignores the</span></span><span style="line-height: 18px;"> </span><i style="font-size: 12px; line-height: 18px;"><span style="font-size:14px;">number</span> <span style="font-size:14px;">of permutations</span></i><span style="font-size:14px;"><i style="font-size: 12px; line-height: 18px;"> </i><span style="line-height: 18px;">parameter and computes the p-value based on all possible sample permutations. Use this option only with small data sets, where the number of all possible permutations is less than 1000. </span></span></td>
+</tr>
+<tr>
+<td>balanced <span style="color:red;">*</span></td>
+<td><span style="font-size:14px;">Whether to perform balanced permutations.  <span style="line-height: 18px;">When the <em>balanced</em> </span><span style="line-height: 18px;">parameter is set to yes, ComparativeMarkerSelection requires an equal and even number of samples in each class (e.g. 10 samples in each class, not 11 in each class or 10 in one class and 12 in the other). </span></span></td>
+</tr>
+<tr>
+<td>random seed <span style="color:red;">*</span></td>
+<td>The seed of the random number generator used to produce permutations</td>
+</tr>
+<tr>
+<td>smooth p values <span style="color:red;">*</span></td>
+<td>
+<p class="p1">Whether to smooth p-values by using the Laplace’s Rule of Succession. By default, <i>smooth p values </i>is set to yes, which means p-values are always less than 1.0 and greater than 0.0. </p>
+</td>
+</tr>
+<tr>
+<td>phenotype test </td>
+<td>Tests to perform when cls file has more than two classes: one-versus-all, all pairs. (Note: The p-values obtained from the one-versus-all comparison are not fully corrected for multiple hypothesis testing.)</td>
+</tr>
+<tr>
+<td>output filename <span style="color:red;">*</span></td>
+<td>The name of the output file.</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li><em>input file:</em> <a href="/cancer/software/genepattern/file-formats-guide#GCT" style="font-size: 12px; line-height: 18px; color: rgb(102, 153, 255);">GCT</a>-<span style="color: rgb(34, 34, 34); font-size: 12px; line-height: 18px;"> or </span><a href="/cancer/software/genepattern/file-formats-guide#RES" style="font-size: 12px; line-height: 18px; color: rgb(102, 153, 255);">RES</a>-formatted file containing the expression dataset.</li>
+<li><em style="font-size: 12px; line-height: 18px;"><span style="font-size:14px;">cls</span> <span style="font-size:14px;">file</span></em><span style="line-height: 18px;">:</span><span style="font-size:14px;"><span style="line-height: 18px;">  </span><a href="/cancer/software/genepattern/file-formats-guide#CLS" style="font-size: 12px; line-height: 18px; color: rgb(102, 153, 255);">CLS</a><span style="line-height: 18px;">-formatted class file</span><span style="line-height: 18px; color: rgb(34, 34, 34);">.  <span style="color: rgb(0, 0, 0); line-height: 18px;"> </span></span></span></li>
+<li><em>confounding variable cls file</em>: <span style="font-size:14px;"><a href="/cancer/software/genepattern/file-formats-guide#CLS" style="color: rgb(102, 153, 255); font-size: 12px; line-height: 18px;">CLS</a><span style="line-height: 18px;">-formatted file</span></span><span style="font-size: 12px; line-height: 18px; color: rgb(34, 34, 34);"><span style="font-size:14px;"> containing the confounding variable</span>. </span></li>
+</ol>
+<h2>Output Files</h2>
+<ol>
+<li><span style="font-size: 12px; line-height: 18px;"><span style="font-size:14px;"><i>output filename</i></span>:<span style="font-size:14px;">  <a href="/cancer/software/genepattern/file-formats-guide#ODF">ODF</a></span></span><span style="font-size:14px;"><span style="line-height: 18px;">-formatted file<font color="#222222"> containing the following columns:</font></span></span></li>
+</ol>
+<ul>
+<li class="p3" style="margin-left: 40px;"><b><i>Rank: </i></b>The rank of the feature within the dataset based on the value of the test statistic. If a two-sided p-value is computed, the rank is with respect to the absolute value of the statistic. </li>
+<li class="p3" style="margin-left: 40px;"><b><i>Feature: </i></b>The feature name. </li>
+<li class="p3" style="margin-left: 40px;"><b><i>Description: </i></b>The description of the feature. </li>
+<li class="p3" style="margin-left: 40px;"><b><i>Score: </i></b>The value of the test statistic. </li>
+<li class="p3" style="margin-left: 40px;"><b><i>Feature P: </i></b>The feature-specific p-value based on permutation testing. </li>
+<li class="p3" style="margin-left: 40px;"><b><i>Feature P Low: </i></b>The estimated lower bound for the feature p-value. </li>
+<li class="p3" style="margin-left: 40px;"><b>Feature P High<i>: </i></b>The estimated upper bound for the feature p-value. </li>
+<li class="p3" style="margin-left: 40px;"><b><i>FDR (BH): </i></b>An estimate of the false discovery rate by the Benjamini and Hochberg procedure (1). The FDR is the expected proportion of erroneous rejections among all rejections. </li>
+<li class="p3" style="margin-left: 40px;"><b><i>Q Value: </i></b>An estimate of the FDR using the procedure developed by Storey and Tibshirani (6). </li>
+<li class="p3" style="margin-left: 40px;"><b><i>Bonferroni: </i></b>The value of the Bonferroni correction applied to the feature specific p-value. </li>
+<li class="p3" style="margin-left: 40px;"><b>maxT<i>: </i></b>The adjusted <i>p</i>-values for the maxT multiple testing procedure described in Westfall (7), which provides strong control of the FWER. </li>
+<li class="p3" style="margin-left: 40px;"><b><i>FWER </i>(Family Wise Error Rate)<i>: </i></b>The probability of at least one null hypothesis/feature having a score better than or equal to the observed one. This measure is not feature-specific. </li>
+<li class="p3" style="margin-left: 40px;"><b>Fold Change</b>: The class zero mean divided by the class one mean. </li>
+<li class="p3" style="margin-left: 40px;"><b>Class Zero Mean: </b>The class zero mean. </li>
+<li class="p3" style="margin-left: 40px;"><b>Class Zero Standard Deviation: </b>The class zero standard deviation. </li>
+<li class="p3" style="margin-left: 40px;"><b>Class One Mean</b>: The class one mean. </li>
+<li class="p3" style="margin-left: 40px;"><b>Class One Standard Deviation: </b>The class one standard deviation. </li>
+<li class="p2" style="margin-left: 40px;"><b>k</b>: If performing a two-sided test or a one-sided test for markers of class zero, the number of permuted scores greater than or equal to the observed score. If testing for <span style="font-size: 12px; line-height: 18px;">markers of class one, then the number of permuted scores less than or equal to the observed score. <span style="font-size: 12px; line-height: 18px; color: rgb(34, 34, 34);"><span style="color: rgb(0, 0, 0); font-size: 12px; line-height: 18px;"> </span></span></span></li>
+</ul>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Gene List Selection</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					Java, R</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>2013-12-04</td>
+<td>Updated to html doc</td>
+</tr>
+<tr>
+<td>9</td>
+<td>2012-03-26</td>
+<td>Changed default number of permutations to 10000</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2011-08-30</td>
+<td>added parameter to specify whether data is log transformed</td>
+</tr>
+<tr>
+<td>7</td>
+<td>2010-05-28</td>
+<td>Made improvements to error messages</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2009-12-30</td>
+<td>Fixed bug with using res file with paired t-test </td>
+</tr>
+<tr>
+<td>5</td>
+<td>2008-10-24</td>
+<td>Added Paired T-Test</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2008-02-19</td>
+<td>Added Paired T-Test</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2006-03-03</td>
+<td>Added additional metrics</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2005-06-08</td>
+<td>Added restricted permutations option and maxT p-value</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

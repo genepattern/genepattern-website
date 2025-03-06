@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RemoveCopyNumberOutliers (v3)</title>
+    <meta name="slug" content="modules/docs/RemoveCopyNumberOutliers/3" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Reads rows of a CN file and removes outliers on a sample-by-sample basis using improvised method.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Nicolas Stransky</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Summary</h2>
+<p>This module removes outliers from copynumber data. If a point is an outlier (in both additive and multiplicative space) relative to the 5 points before and after it, it will be replaced by default with an NA. This mostly impacts probes that correspond to very low copynumber.</p>
+<p>A point is considered an outlier if ALL of the following apply:</p>
+<ul>
+<li>value != NA</li>
+<li>abs (value - median_of_last_5_points) &gt; 0.3</li>
+<li>abs (value - median_of_next_5_points) &gt; 0.3</li>
+<li>abs (ln(value) - ln(median_of_last_5_points)) &gt; 4</li>
+<li>abs (ln(value) - ln(median_of_next_5_points)) &gt; 4</li>
+</ul>
+<p>If within 5 of the end of the chromosome, the 5 points the median is taken of is padded with copies of the value.</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>input file <span style="color:red;">*</span></td>
+<td>A CN file (.cn, .RData, or .txt)</td>
+</tr>
+<tr>
+<td>num probes <span style="color:red;">*</span></td>
+<td>The number of trailing and leading probes to use to compute the median</td>
+</tr>
+<tr>
+<td>outlier probe replacement <span style="color:red;">*</span></td>
+<td>The replacement value for the outlier probe</td>
+</tr>
+<tr>
+<td>multiplicative threshold <span style="color:red;">*</span></td>
+<td>Multiplicative threshold</td>
+</tr>
+<tr>
+<td>additive threshold <span style="color:red;">*</span></td>
+<td>Additive threshold</td>
+</tr>
+<tr>
+<td>output prefix <span style="color:red;">*</span></td>
+<td>A prefix for the output file</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li>&lt;input.file&gt;<br/>
+	A copy number file in .cn, .RData, or .txt format.</li>
+</ol>
+<h2>Output Files</h2>
+<p> </p>
+<ol>
+<li style="margin-left: 0.25in;">&lt;output prefix&gt;.no_outliers.cn - A CN file with outliers removed</li>
+<li style="margin-left: 0.25in;">&lt;output prefix&gt;.no_outliers.RData - An RData file with outliers removed for quick loading into R</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					SNP Analysis</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.15.3</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>2015-12-02</td>
+<td>Updated to use R-2.15 and the new package installer mechanism, and to add HTML documentation.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2015-07-10</td>
+<td>Changed command line from &lt;R2.14_HOME&gt;/bin/Rscript to &lt;R2.14_Rscript&gt;</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2012-11-04</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

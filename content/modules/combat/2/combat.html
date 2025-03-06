@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ComBat (v2)</title>
+    <meta name="slug" content="modules/docs/ComBat/2" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Performs batch correction on a dataset containing multiple batches </p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>W. Evan Johnson (Boston University), Marc-Danie Nazaire (Broad Institute)</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><ul>
+<li>
+		The <a href="https://groups.google.com/forum/?fromgroups#!forum/combat-user-forum" target="_blank">ComBat discussion &amp; help forum</a>
+<ul>
+<li>
+				For faster response, email W. Evan Johnson at <a href="mailto:bioconductor@r-project.org?subject=ComBat">bioconductor@r-project.org</a>, add "ComBat" to subject line, and cc "wevanjohnson@gmail.com"</li>
+<li>
+				Alternatively, tweet <a href="https://twitter.com/wejlab" target="_blank">@wejlab</a> on <a href="https://twitter.com/login" target="_blank">Twitter</a></li>
+</ul>
+</li>
+<li>
+		For GenePattern site questions, contact <a href="mailto:gp-help@broadinstitute.org?subject=ComBat">gp-help@broadinstitute.org</a></li>
+</ul>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong>2.0</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	ComBat runs the <em><span><span>Combatting</span> batch effects when <u>com</u>bining <u>bat</u>ches of microarray data</span></em> R script and uses an Empirical Bayes method to adjust for potential batch effects. Practical considerations limit the number of samples run at a given time, and replicate samples are generated in ways that introduce non-biological differences, or systematic "batch effects". For example, batch effects occur when adding replicates from different labs, array types, or platforms. In some cases, different lots of amplification reagent or the time of day of the assay have been demonstrated to cause batch effects. ComBat's Empirical Bayesian approach assumes phenomena resulting in batch effects affect many genes in similar ways and adjusts for these systematic batch biases common across genes.<span><span>  </span></span></p>
+<h2>
+	Algorithm</h2>
+<ul>
+<li>
+		ComBat differs from previous methods in its ability to adjust data whose batch sizes are small, &lt;10 samples versus &gt;25.</li>
+<li>
+		Offers two methods of estimation, and one will give a truer adjustment for a given dataset.
+		<ul>
+<li>
+				The <em>parametric </em>method computes a prior probability distribution--prior plots--used in adjustment.
+				<ul>
+<li>
+						In the plots, if the black (kernal density estimate of batch effects) and red (parametric estimate of batch effects) lines do not overlap, then the non-parametric method should be used.</li>
+</ul>
+</li>
+<li>
+				The <em>non-parametric</em> method makes no prior assumptions and thus takes significantly longer to run.</li>
+</ul>
+</li>
+</ul>
+<p>
+<em>Additional considerations.</em> Use on data that is already preprocessed and normalized gene-wise such that genes have similar overall mean and variance. Also, include covariates in analysis when possible. Finally, note missing or unbalanced proportion of treatments/controls from a batch risks removal of biological signal.</p>
+<h2>
+	References</h2>
+<p>
+	Johnson WE, Rabinovic A, and Li C. <a href="http://biostatistics.oxfordjournals.org/content/8/1/118.abstract" target="_blank">Adjusting batch effects in microarray expression data using Empirical Bayes methods</a>.<em> Biostatistics</em>. 2007;8(1):118-127. doi:10.1093/biostatistics/kxj037.</p>
+<p>
+	Luo J, Schumacher M, Scherer A, et al. <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2920074/" target="_blank">A comparison of batch effect removal methods for enhancement of prediction performance using MAQC-II microarray gene expression data</a>. <em>Pharmacogenomics J</em>. 2010;10(4):278-91. doi:10.1038/tpj.2010.57.</p>
+<p>
+	Chen C, Grennan K, Badner J, et al. <a href="http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0017238" target="_blank">Removing batch effects in analysis of expression microarray data: An evaluation of six batch adjustment methods</a>. <i>PLoS One</i>. 2011;6(2):e17238. doi:10.1371/journal.pone.0017238.</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats" target="_blank">input file</a> <span style="color:red;">*</span></td>
+<td>
+<ul>
+<li>
+<a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gct" target="_blank">GCT</a> or <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/res" target="_blank">RES</a> format file. (Additional <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/creating-input-files#_Creating_Input_Files_GCT" target="_blank">quick guide</a> to file conversion)</li>
+<li>
+						ComBat requires unique row identifiers. GenePattern module <a href="http://genepattern.broadinstitute.org/gp/pages/index.jsf?lsid=urn:lsid:broad.mit.edu:cancer.software.genepattern.module.analysis:00067:1" target="_blank">UniquifyLabels</a> renames duplicate row names.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>
+<a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/sample-information-file" target="_blank">sample info file</a> <span style="color:red;">*</span></td>
+<td>
+<p>
+<a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/txt" target="_blank">TXT</a> plain text file matching batch and covariate information to sample identifier. First three column labels in first row must be exactly "Array", "Sample", and "Batch" without spaces.</p>
+<ul>
+<li>
+						Row headings (sample identifiers) from data file are inputted under "Array".</li>
+<li>
+						"Sample" column rows can be blank or use labels. </li>
+<li>
+						Indicate batches under “Batch” with a minimum two samples per batch. Batch labels can be alphanumerical, e.g. label four batches (1, 2, 6, 8) or (lab, collaborator-1, collaborator-2, 3).</li>
+<li>
+						Indicate covariates in columns four and greater, or leave blank.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>
+				covariate columns <span style="color:red;">*</span></td>
+<td>
+				Subset of covariate columns to use in analysis. This is either set to <em>all</em>, <em>none</em>, or a list specifying one or more covariate columns from the sample info file, i.e. (4, 5, 7).</td>
+</tr>
+<tr>
+<td>
+				absent calls filter </td>
+<td>
+				Filter to apply to RES file genes with absent calls in 1-(absent calls filter) of the samples. Use values between 0 and 1, or leave blank. For example, (0.8) removes a feature if at least 20% of samples have absent calls.</td>
+</tr>
+<tr>
+<td>
+				create prior plots </td>
+<td>
+				Whether to generate prior probability distribution plots. Select "yes" for <em>parametric </em>or "no" for <em>non-parametric</em> method.</td>
+</tr>
+<tr>
+<td>
+				prior method </td>
+<td>
+				Empirical Bayes priors distribution estimation method to use, either <em>parametric</em> or <em>non-parametric</em>.</td>
+</tr>
+<tr>
+<td>
+				output files <span style="color:red;">*</span></td>
+<td>
+<ul>
+<li>
+						Batch adjusted output file &lt;output file&gt;.&lt;res, gct&gt; in same format as input.</li>
+<li>
+						For parametric method, additional prior plot file &lt;output file&gt;.plot.&lt;jpg, pdf&gt; in JPEG format if supported or as PDF.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+<h2>
+	Input Files</h2>
+<p>
+<em>Sample info file</em></p>
+<ul>
+<li>
+		Algorithm is sensitive to extra spaces in certain cases which result in errors. Use <em>Find</em>&gt;<em>Replace</em> function in TextEdit or Excel to remove spaces.</li>
+<li>
+		Alternatively, follow steps outlined in <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/sample-information-file#_Create_Sample_Info" target="_blank">Creating a Sample Information File</a> to copy exactly sample identifiers from Excel data. Label first three cells of Row 1: “Array”, “Sample”, and “Batch”. Indicate batches and covariates, and save as tab delimited text (.txt).</li>
+</ul>
+<h2>
+	Example Data</h2>
+<ul>
+<li>
+<span class="attach_gct">Input file--<a href="ftp://gpftp.broadinstitute.org/example_data/modules/ComBat/b1_b2_data.gct" target="_blank">b1_b2_data.gct</a></span>; sample info file--<a href="ftp://gpftp.broadinstitute.org/example_data/modules/ComBat/b1_b2_sampleinfofile.txt" target="_blank"><span class="attach_txt">b1_b2_sampleinfofile.txt</span></a></li>
+<li>
+		Click image below for a summary of results from example data.</li>
+</ul>
+<p style="margin-left: 40px;">
+<a href="ftp://gpftp.broadinstitute.org/example_data/modules/ComBat/ComBat-Results.png" target="_self"><img alt="" src="/cancer/software/genepattern/uploaded/content_combat-results.png" style="width: 300px; height: 222px;"/></a></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Preprocess &amp; Utilities</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R (v. 2.5.0)</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.0</td>
+<td>2014-03-26</td>
+<td>Updated to run on any OS</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>2008-08-18</td>
+<td>Windows only version</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Picard.SortSam (v4)</title>
+    <meta name="slug" content="modules/docs/Picard.SortSam/4" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Sorts a SAM or BAM file in a specified order, indexes BAM files, and interconverts SAM and BAM files. </p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Picard team (SAMTools), Marc-Danie Nazaire (Broad Institute)</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><div class="page" title="Page 1">
+<div class="layoutArea">
+<div class="column">
+<ul>
+<li>
+<div><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">Please use the <a href="http://sourceforge.net/mail/?group_id=246254" target="_blank">SAMTools mailing Lists</a> for Picard-related correspondence as the Picard team does not have its own mailing lists.</span></span></div>
+</li>
+</ul>
+<div class="page" title="Page 1">
+<div class="layoutArea">
+<div class="column">
+<ul>
+<li>
+<div><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">For GenePattern site questions, contact <a href="mailto:gp-help@broadinstitute.org?subject=ComBat">gp-help@broadinstitute.org.</a></span></span></div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p> </p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong>4</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2><span style="font-family:arial,helvetica,sans-serif;">Introduction</span></h2>
+<div class="page" title="Page 1">
+<div class="layoutArea">
+<div class="column">
+<p><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">The Picard.SortSam module sorts SAM or BAM files, indexes BAM files, and interconverts SAM and BAM files. The module implements the SortSam function from <a href="http://broadinstitute.github.io/picard/" target="_blank">Picard</a> (Github). </span></span></p>
+<div class="page" title="Page 1">
+<div class="layoutArea">
+<div class="column">
+<p><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">BAM format is the binary equivalent of the Sequence Alignment Map (SAM) format and a BAM file can be up to four times smaller than its SAM equivalent. For detailed information on these formats, see the September 2014 article titled <a href="http://samtools.github.io/hts-specs/SAMv1.pdf" target="_blank"><em>Sequence Alignment/Map Format Specification</em></a> by the SAM/BAM Format Specification Working Group.</span></span></p>
+</div>
+</div>
+</div>
+<ul>
+<li>
+<div><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">This module will only generate an index file when the output format is <strong>BAM</strong>, and the sort order is <strong>coordinate</strong>. </span></span></div>
+<ul>
+<li>
+<div><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">The index file will have a BAI extension.</span></span></div>
+</li>
+</ul>
+</li>
+<li>
+<div><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">The module does not generate index files for SAM output files. </span></span></div>
+<ul>
+<li>
+<div><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">To index SAM files for use with the Integrative Genomics Viewer (IGV), refer to the <a href="http://www.broadinstitute.org/software/igv/igvtools" target="_blank">igvtools</a> section of IGV documentation.</span></span></div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<h2><span style="font-family:arial,helvetica,sans-serif;">References</span></h2>
+<p><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">Li H.*, Handsaker B.*, Wysoker A., Fennell T., Ruan J., Homer N., Marth G., Abecasis G., Durbin R. and 1000 Genome Project Data Processing Subgroup (2009) The Sequence alignment/map (SAM) format and SAMtools. Bioinformatics, 25, 2078-9. [PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/19505943">19505943</a>]</span></span></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2><span style="font-family:arial,helvetica,sans-serif;">Parameters</span></h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th><span style="font-family:arial,helvetica,sans-serif;">Name</span></th>
+<th><span style="font-family:arial,helvetica,sans-serif;">Description</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span style="font-family:arial,helvetica,sans-serif;">input file <span style="color: red;">*</span></span></td>
+<td><span style="font-family:arial,helvetica,sans-serif;">Input file in SAM or BAM format</span></td>
+</tr>
+<tr>
+<td><span style="font-family:arial,helvetica,sans-serif;">sort order <span style="color: red;">*</span></span></td>
+<td>
+<div class="page" title="Page 1">
+<div class="section">
+<div class="layoutArea">
+<div class="column">
+<p><span style="font-size:14px;"><span style="font-family:arial,helvetica,sans-serif;">Specifies the sort order by the following options: </span></span></p>
+<ul>
+<li><span style="font-size:14px;"><span style="font-family:arial,helvetica,sans-serif;">coordinate: the file sorts by chromosome and start position </span></span></li>
+<li><span style="font-size:14px;"><span style="font-family:arial,helvetica,sans-serif;">queryname: the file sorts by the read IDs </span></span></li>
+<li><span style="font-size:14px;"><span style="font-family:arial,helvetica,sans-serif;">unsorted: this option is only supported when the Group Order in the SAM/BAM header is "none" </span></span></li>
+</ul>
+<p><span style="font-size:14px;"><span style="font-family:arial,helvetica,sans-serif;">Default: coordinate </span></span></p>
+</div>
+</div>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td><span style="font-family:arial,helvetica,sans-serif;">output format <span style="color: red;">*</span></span></td>
+<td><span style="font-family:arial,helvetica,sans-serif;">Whether the file output format should be SAM or BAM. Default: BAM</span></td>
+</tr>
+<tr>
+<td><span style="font-family:arial,helvetica,sans-serif;">output prefix <span style="color: red;">*</span></span></td>
+<td><span style="font-family:arial,helvetica,sans-serif;">The prefix to use for the output file name.</span></td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-family:arial,helvetica,sans-serif;"><span style="color: red;">*</span> - required</span></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2><span style="font-family:arial,helvetica,sans-serif;">Input Files</span></h2>
+<ol>
+<li>
+<p><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">BAM or SAM format file </span></span></p>
+</li>
+</ol>
+<h2><span style="font-family:arial,helvetica,sans-serif;">Output Files</span></h2>
+<div class="page" title="Page 2">
+<div class="layoutArea">
+<div class="column">
+<ol>
+<li style='font-size: 11pt; font-family: "Arial";'><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">&lt;output.prefix&gt;.sorted.&lt;output.format&gt; </span></span></li>
+</ol>
+<p style='font-size: 11pt; font-family: "Arial"; margin-left: 40px;'><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">This is the sorted SAM or BAM file. </span></span></p>
+<ol start="2">
+<li style='font-size: 11pt; font-family: "Arial";'><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">&lt;output.filename&gt;.bai</span></span></li>
+</ol>
+<p style='font-size: 11pt; font-family: "Arial"; margin-left: 40px;'><span style="font-size:14px;"><span style="font-family: arial,helvetica,sans-serif;">This file contains the index for the coordinate sorted BAM output file. </span></span></p>
+</div>
+</div>
+</div>
+<p> </p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Preprocess &amp; Utilities</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					Java (minimum version 1.6)</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>2013-05-07</td>
+<td>Renamed from SortSam to Picard.SortSam</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2011-04-01</td>
+<td>Added output format parameter</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2011-02-28</td>
+<td>Added 1 sec to index file timestamp, and added notes to doc</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2011-02-15</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>2014-09-26</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

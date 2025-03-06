@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FP_matching (v38)</title>
+    <meta name="slug" content="modules/docs/FP_matching/38" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Matches Fluidigm fingerprint report to reference set of CCLE SNP6.0 array data. Takes old Fluidigm software report or new PED style report (saved as .csv). Also backwards compatible with Sequenom reports (Combine 100k and AffySNP6.0 reports together into one file first)</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir, adapted from Nico Stransky;The Broad Institute</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>
+	bweir@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	References</h2>
+<p>
+	Contact author </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<span style="color: red;">*</span> format</td>
+<td>
+				New PED style report OR Old Fluidigm software format OR Sequenom style report (expects combined 100k and SNP6.0 file) Default: new Fluidigm</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		platereport<br/>
+		A fingerprinting plate report file saved as a .csv file.  This can be in 3 formats:
+		<ol>
+<li>
+				new Fluidigm - A PED file from Fluidigm results, saved as a .csv file</li>
+<li>
+				old Fluidigm - A file from the Fluidigm software, saved as a .csv file</li>
+<li>
+				Sequenom - A file from the Sequenom software (100k and SNP6.0 panels combined), saved as a .csv file</li>
+</ol>
+</li>
+<li>
+		platemapping<br/>
+		A fingerprint plate mapping file, <strong>necessary</strong> for the 'Sequenom' style report or the 'old Fluidigm' style report.<strong> Optional</strong> for the 'new Fluidigm' report.  An example file is provided - this file must have the columns:<br/>
+<table border="0" cellpadding="0" cellspacing="0" width="384">
+<colgroup>
+<col span="6" width="64"/>
+</colgroup>
+<tbody>
+<tr height="19">
+<td height="19" style="height:14.4pt;width:48pt" width="64">
+						Well</td>
+<td style="width:48pt" width="64">
+						Sample.ID</td>
+<td style="width:48pt" width="64">
+						Sample.ID_2</td>
+<td style="width:48pt" width="64">
+						Collaborator.Sample.ID</td>
+<td style="width:48pt" width="64">
+						Collaborator.Participant.ID</td>
+<td style="width:48pt" width="64">
+						Collaborator.Sample.ID_2</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		[AssayType]_Genotype.csv<br/>
+		List of calls for each Cell line/SNP locus pair in both numeric and alphabetic format, along with orientation of the SNP.</li>
+<li>
+		Master_Genotype_[AssayType]_panel.csv<br/>
+		Matrix of calls for each Cell line/SNP locus pair in alphabetic format.</li>
+<li>
+		SNP6to[AssayType]_all_results.csv<br/>
+		 List of cell line fingerprinted, # of SNPs used to match, identiity to and name of each cell line run with SNP6.0 array.</li>
+<li>
+		SNP6to[AssayType]_matches.csv<br/>
+		 List of cell line fingerprinted, # of SNPs used to match, identiity to and name of each cell line run with SNP6.0 array that matches &gt; 80%.</li>
+<li>
+		SNP6to[AssayType]_topmatches_persample.csv<br/>
+		 List of cell line fingerprinted, # of SNPs used to match, identiity to and name of each cell line run with SNP6.0 array that matches the most.</li>
+</ol>
+<p>
+	=&gt; 'AssayType' is determined by the input plate report file (either Sequnom or Fluidigm).</p>
+<h2>
+	Example Data</h2>
+<p>
+	Example data using the new Fludigm report can be found at the following link: <a href="ftp://gpftp.broadinstitute.org/example_data/modules/Achilles/FPmatchingExampleData_NewFluidigmParameter.zip">ftp://gpftp.broadinstitute.org/example_data/modules/Achilles/FPmatchingExampleData_NewFluidigmParameter.zip</a></p>
+<p>
+	The input parameters are:</p>
+<ul>
+<li>
+		platereport -- Achilles_FPFluidigm_PlateReport_ped.csv</li>
+<li>
+		format -- 'new Fluidigm'</li>
+</ul>
+<p>
+	Example data using the Sequenom report can be found at the following link: <a href="ftp://gpftp.broadinstitute.org/example_data/modules/Achilles/FPmatchingExampleData_SequenomParameter.zip">ftp://gpftp.broadinstitute.org/example_data/modules/Achilles/FPmatchingExampleData_SequenomParameter.zip</a></p>
+<p>
+	The input parameters are:</p>
+<ul>
+<li>
+		platereport -- Achilles_FPSequenom_PlateReport_P1.csv</li>
+<li>
+		platemapping -- Achilles_FPSequenom_Platemapping_1.csv</li>
+<li>
+		format -- 'Sequenom'</li>
+</ul>
+<h2>
+	Requirements</h2>
+<p>
+	R-2.14</p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.14</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>36</td>
+<td>2014-07-28</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

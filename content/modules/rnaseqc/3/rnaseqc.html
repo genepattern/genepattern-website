@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RNASeQC (v3) BETA</title>
+    <meta name="slug" content="modules/docs/RNASeQC/3" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<div class="bs-callout bs-callout-danger">
+<h4>This module is currently in beta release.  The module and/or documentation may be incomplete.</h4>
+</div>
+<p style="font-size: 1.2em; margin-top: 20px;">Calculates metrics on aligned RNA-seq data.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>David Deluca, Broad Institute</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>
+	gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong>8.7.13</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	This module calculates standard RNA-seq related metrics, such as depth of coverage, ribosomal RNA (rRNA) contamination, continuity of coverage, and GC bias.</p>
+<p>
+	RNA-SeQC is compatible with any alignment method that produces a specification-conforming <a href="http://samtools.sourceforge.net/">BAM file</a>.  Required input includes:</p>
+<ul>
+<li>
+		a <a href="http://samtools.sourceforge.net/" target="_blank">BAM file</a> or a zipped set of BAM files</li>
+<li>
+<a>a reference genome in </a><a href="http://www.bioperl.org/wiki/FASTA_sequence_format" target="_blank">FASTA format</a></li>
+</ul>
+<h2>
+	Metrics</h2>
+<p>
+	RNA-SeQC provides three types of quality control metrics:</p>
+<ul>
+<li>
+		read counts, including:</li>
+</ul>
+<p style="margin-left: 40px;">
+	o   total read number, number of unique reads, and number of duplicate reads</p>
+<p style="margin-left: 40px;">
+	o   duplication rate (number of duplicates/total reads)</p>
+<p style="margin-left: 40px;">
+	o   number of reads mapped/aligned and mapping rate (mapped reads/total reads)</p>
+<p style="margin-left: 40px;">
+	o   number of unique reads mapped and mapped unique rate (mapped unique reads/mapped reads)</p>
+<p style="margin-left: 40px;">
+	o   duplication rate (number of duplicates/total reads)</p>
+<p style="margin-left: 40px;">
+	o   number of reads mapped/aligned and mapping rate (mapped reads/total reads)</p>
+<p style="margin-left: 40px;">
+	o   number of unique reads mapped and mapped unique rate (mapped unique reads/mapped reads)</p>
+<p style="margin-left: 40px;">
+	o   strand specificity metrics</p>
+<ul>
+<li>
+		coverage, including:</li>
+</ul>
+<p style="margin-left: 40px;">
+	o   mean coverage, mean coefficient of variation across all transcripts, 5'/3' coverage, gaps in coverage, cumulative gap length, GC bias, and coverage plots</p>
+<ul>
+<li>
+		correlation, including:</li>
+</ul>
+<p style="margin-left: 40px;">
+	o   RPKM: this metric quantifies transcript levels in reads per kilobase of exon model per million mapped reads (RPKM). The RPKM measure of read density reflects the molar concentration of a transcript in the starting sample by normalizing for RNA length and for the total read number in the measurement. This facilitates transparent comparison of transcript levels both within and between samples.</p>
+<p>
+	For more information on the BAM format, which is a binary form of the SAM format, see the SAM file specification here: <a href="http://samtools.sourceforge.net/" target="_blank">http://samtools.sourceforge.net/</a></p>
+<h2>
+	Usage</h2>
+<p>
+	The RNA-seq data must be preprocessed in a particular manner for the RNASeQC module to work on it correctly.  The input BAM file must:</p>
+<ul>
+<li>
+		be coordinate-sorted</li>
+<li>
+		have read group information (Each read group <strong>must</strong> have an ID and contain the platform [PL] and sample [SM] tags; for the platform value, the module currently supports 454, LS454, Illumina, Solid, ABI_Solid, and CG [all values are case-sensitive]. Each read in the BAM file must be associated with exactly one read group.)</li>
+<li>
+		be accompanied by an indexed reference sequence</li>
+<li>
+		be accompanied by a sequence dictionary</li>
+<li>
+		have duplicate reads flagged</li>
+<li>
+		be indexed (if SortSam is used to index the BAM file, then the BAM and BAI files are located in the same folder)</li>
+</ul>
+<p style="margin-left:.25in;">
+<strong>NOTE: The contig names must be consistent between the BAM file, reference genome, and GTF file.</strong></p>
+<p>
+	The following decision tree illustrates the preprocessing that should be used for the BAM file before it can be run in the RNASeQC module</p>
+<p>
+	 </p>
+<p>
+<img alt="RNASeQC Decision Tree" src="/uploaded/content_rnaseqc_decisiontree.jpg" style="width: 653px; height: 859px;"/></p>
+<p>
+	 </p>
+<h2>
+	Interpreting Your Metrics</h2>
+<p>
+	Coming Soon. For now, please email us if you would like assistance with this (<a href="mailto:gp-help@broadinstitute.org">gp-help@broadinstitute.org</a>)</p>
+<h2>
+	References</h2>
+<p>
+	DeLuca DS, Levin JZ, Sivachenko A, Fennell T, Nazaire M-D, Williams C, Reich M, Winckler W, Getz G. RNA-SeQC: RNA-seq metrics for quality control and process optimization.  <em>Bioinformatics</em>. 2012;28:1530-1532. (<a href="http://bioinformatics.oxfordjournals.org/content/28/11/1530.long">full text and PDF</a>)</p>
+<p>
+	DePristo M, Banks E, Poplin R, Garimella K, Maguire J, Hartl C, Philippakis A, del Angel G, Rivas MA, Hanna M, McKenna A, Fennell T, Kernytsky A, Sivachenko A, Cibulskis K, Gabriel S, Altshuler D, Daly MA.  Framework for variation discovery and genotyping using next-generation DNA sequencing data. <em>Nature Genetics</em>. 2011 Apr; 43(5):491-498.</p>
+<p>
+	Levin JZ, Yassour M, Adiconis X, Nusbaum C, Thompson DA, Friedman N, Gnirke A, Regev A. Comprehensive comparative analysis of strand-specific RNA sequencing methods. <em>Nat Methods. </em>2010;7:709–715.</p>
+<p>
+	McKenna A, Hanna M, Banks E, Sivachenko A, Cibulskis K, Kernytsky A, Garimella K, Altshuler D, Gabriel S, Daly M, DePristo MA. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data. <em>Genome Res</em>. 2010 Sep; 20(9):1297-303. Epub 2010 Jul 19.</p>
+<p>
+	Picard tools.<a href="http://picard.sourceforge.net" target="_blank"> </a><a href="http://picard.sourceforge.net/">http://picard.sourceforge.net</a></p>
+<p>
+	RNA-SeQC Web Site: <a href="http://www.broadinstitute.org/cancer/cga/rna-seqc">http://www.broadinstitute.org/cancer/cga/rna-seqc</a></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				bam files <span style="color:red;">*</span></td>
+<td>
+<p>
+					An indexed BAM file or zipped set of indexed BAM files to be analyzed.</p>
+<p>
+					If you are supplying a single BAM file, it should be located in the same folder as its associated index file (BAI). (If SortSam is used to index the BAM file, then the BAM and BAI files are located in the same folder.)</p>
+<p>
+					If you are supplying a zipped set of BAM files, the ZIP archive must also include the appropriate BAI files.</p>
+<p>
+					The BAM file must have a proper BAM header with read groups. Each read group must contain the platform (PL) and sample (SM) tags.  For the platform value, the module currently supports (case-sensitive):</p>
+<ul>
+<li style="margin-left: 0.5in;">
+						454</li>
+<li style="margin-left: 0.5in;">
+						LS454</li>
+<li style="margin-left: 0.5in;">
+						Illumina</li>
+<li style="margin-left: 0.5in;">
+						Solid</li>
+<li style="margin-left: 0.5in;">
+						ABI_Solid</li>
+<li style="margin-left: 0.5in;">
+						CG</li>
+</ul>
+<p>
+					Each read in the BAM file must be associated with exactly one read group.</p>
+<p>
+					The order of the reads in the BAM file must match the contig ordering of the reference. Unfortunately, many BAM files have headers that are sorted in some other order; lexicographical order is a common alternative.  To reorder the reads in the BAM file to match the contig ordering in the reference file, use the Picard.ReorderSam module.</p>
+<p>
+					Remember: The contig names must be consistent between the BAM file, reference genome, and GTF file.</p>
+<p>
+					(Command line flag: -b &lt;bam.files&gt;)</p>
+</td>
+</tr>
+<tr>
+<td>
+				sample info file </td>
+<td>
+<p>
+<a>A TXT format sample info file containing a sample ID, sample file name, and notes column in tab-delimited format.  The sample ID is used to label the samples in the output results. </a>The sample file name is the path to the BAM file(s) specified in the BAM file input parameter.</p>
+				(Command line flag: -s &lt;sample.info.file&gt;)</td>
+</tr>
+<tr>
+<td>
+				single end </td>
+<td>
+<p>
+					Whether the bam file contains single end reads. Select no for paired-end reads. Defalt: <em>yes</em></p>
+<p>
+					(Command line flag: -singleEnd)</p>
+</td>
+</tr>
+<tr>
+<td>
+				annotation gtf </td>
+<td>
+<p>
+					A genome annotation to use. If the annotation you need is not in the provided drop-down list , you can upload an annotation <a href="http://mblab.wustl.edu/GTF22.html">GTF file</a> in the <em>annotation gtf file</em> parameter.  Either an annotation GTF must be specified here, or an annotation GTF file must be provided.</p>
+<p>
+					If you use one of the options in the drop-down list, note that these annotations provide transcript-level information, and thus the statistics will reflect that, rather than gene-level information.</p>
+<p>
+					Note also that the provided hg19 reference sequence requires contigs using in the '1' format.</p>
+				(Command line flag: -g &lt;annotation.gtf&gt;) </td>
+</tr>
+<tr>
+<td>
+				annotation gtf file </td>
+<td>
+<p>
+					A file containing a genome annotation in <a href="http://mblab.wustl.edu/GTF22.html">GTF format</a>. If the annotation file you need is not provided in <em>annotation gtf</em>, you can upload an annotation GTF file here. Either an annotation GTF must be specified, or an annotation GTF file must be provided here.  NOTE: The transcript_id and gene_id attributes are required in the GTF file.</p>
+<p>
+					The GTF file you provide determines whether your statistics will reflect gene-level or transcript-level information.  Note that if you provide information for transcript isoforms, RNASeQC will calculate metrics for isoforms.  The RPKM calculation does not do special handling for transcript isoforms.</p>
+				(Command line flag: -a &lt;annotation.gtf.file &gt;)</td>
+</tr>
+<tr>
+<td>
+				reference sequence </td>
+<td>
+<p>
+<a>The sequence for the reference genome in </a><a href="http://www.bioperl.org/wiki/FASTA_sequence_format">FASTA format</a>. The reference sequence provided here has an (.fai) and a sequence dictionary (.dict). Either a reference sequence or a reference sequence file (with index and dictionary) must be provided, but not both. </p>
+<p>
+					NOTE: The contig names in the reference sequence should match the contig names in the BAM file(s) and in the selected or supplied annotation GTF file. The provided hg19 reference sequence requires contigs using the '1' format</p>
+				(Command line flag: -r &lt;reference.sequence&gt;)</td>
+</tr>
+<tr>
+<td>
+				reference sequence file </td>
+<td>
+<p>
+<a>The sequence for the reference genome in </a><a href="http://www.bioperl.org/wiki/FASTA_sequence_format">FASTA format</a>. The reference sequence must have an index (.fai) and a sequence dictionary (.dict).  All three files (FASTA, FAI, and DICT) must either be located in the same directory OR specified in the reference sequence index and dictionary parameters.</p>
+<p>
+					NOTE: The contig names in the reference sequence should match the contig names in the BAM file(s) and in the selected or supplied annotation GTF file</p>
+				(Command line flag: -r &lt;reference.sequence&gt;)</td>
+</tr>
+<tr>
+<td>
+				reference sequence index </td>
+<td>
+<p>
+<a>A file (FAI) containing the index for the reference sequence.</a></p>
+<p>
+					If the FAI file or the DICT file is not in the same folder as the FASTA file, then you must specify this file.  If the FASTA, FAI, and DICT files are all in the same folder, you do not need to specify this file.</p>
+				(Command line flag: -i &lt;reference.sequence.index&gt;)</td>
+</tr>
+<tr>
+<td>
+				reference sequence dictionary </td>
+<td>
+<p>
+<a>A file (DICT) containing the dictionary for the reference sequence.</a></p>
+<p>
+					If the FAI file or the DICT file is not in the same folder as the FASTA file, then you must specify this file. If the FASTA, FAI, and DICT files are all in the same folder, you do not need to specify this file.</p>
+				(Command line flag: -d &lt;reference.sequence.dictionary&gt;)</td>
+</tr>
+<tr>
+<td>
+				num genes <span style="color:red;">*</span></td>
+<td>
+<p>
+					The number of top-expressed genes for which to calculate metrics. Default: 1000</p>
+<p>
+					Running the default number of genes requires at least 3GB of memory available for processing.  If you find that you run out of memory during a run, try reducing the number of genes.</p>
+				(Command line flag: -n &lt;num.genes&gt;)</td>
+</tr>
+<tr>
+<td>
+				transcript type field </td>
+<td>
+<p>
+					Specifies the column of the GTF file in which the transcript type is specified.  By default, the module looks for an attribute called transcript_type in the GTF file in order to find transcripts labeled as rRNA.  If the GTF file does not have an attribute called transcript_type, then you will need to include which attribute in the GTF file specifies whether the transcript is rRNA.</p>
+				(Command line flag: -ttype &lt;transcript.type.field&gt;)</td>
+</tr>
+<tr>
+<td>
+				rRNA interval file </td>
+<td>
+<p>
+					A file containing the genomic coordinates of rRNA. This file is in<a href="http://www.broadinstitute.org/gatk/guide/article?id=1204" target="_blank"> </a><a>GATK format</a><a href="http://www.broadinstitute.org/gatk/guide/article?id=1204" target="_blank"> </a>and uses the .list extension.  The file contains one genomic coordinate per line in the following format:</p>
+<p style="margin-left:.25in;">
+<em>chr:start-stop</em></p>
+<p>
+					If this file is not provided, the information is drawn from the annotation GTF file. (This will be the case if the annotation gtf in the drop down is selected) </p>
+<p>
+					Either an rRNA interval file <em>OR</em> an aligned rRNA reference file can be provided, but not both.</p>
+				(Command line flag: -rRNA &lt;rRNA.interval.file&gt;)</td>
+</tr>
+<tr>
+<td>
+				rRNA reference file index </td>
+<td>
+<p>
+					A zip of index files created by BWA for  ribosomal RNA (rRNA) reads,used to estimate rRNA content.  If this file is not provided, the information is drawn from the annotation GTF file. </p>
+<p>
+					Either an rRNA interval file <em>OR</em> rRNA reference file index can be provided, but not both.</p>
+				(Command line flag: -BWArRNA &lt;rRNA.reference.file&gt;)</td>
+</tr>
+<tr>
+<td>
+				num rRNA downsampling reads </td>
+<td>
+<p>
+					Downsamples to calculate rRNA rate more efficiently.  Default: 1000000</p>
+<p>
+					Set to 0 to disable.</p>
+				(Command line flag: -rRNAdSampleTarget &lt;num.rRNA.downsampling.reads&gt;)</td>
+</tr>
+<tr>
+<td>
+				transcript end length <span style="color:red;">*</span></td>
+<td>
+<p>
+					The length of the 3’ or 5’ end of a transcript. Available values are 10, 50, and 100. Default: <i>200</i></p>
+				(Command line flag: -e &lt;transcript.end.length&gt;)</td>
+</tr>
+<tr>
+<td>
+				transcript level metrics </td>
+<td>
+<p>
+					Whether to calculate transcript-level metrics in addition to sample-level metrics. Default: <em>no</em></p>
+				(Command line flag: -transcriptDetails)</td>
+</tr>
+<tr>
+<td>
+				gc content file </td>
+<td>
+<p>
+					A file containing GC content for each of the transcripts.  The file must be tab-delimited with 2 columns containing transcript name and GC content. The transcript name must appear in the GTF file.</p>
+<p>
+					If you provide a GC content file, you will get an additional section of results first stratified (ranked) by their GC content, and then metrics for the high-, middle-, and low-expressed transcripts in that ranking.</p>
+				(Command line flag: -c &lt;gc.content.file&gt;)</td>
+</tr>
+<tr>
+<td>
+				gc margin </td>
+<td>
+<p>
+					Used in conjunction with the GC content file to specify the percent GC content to use as boundaries.  For example, 0.25 would set a lower cutoff of 25% and an upper cutoff of 75%.  Default: 0.375</p>
+				(Command line flag: -gcMargin &lt;gc.margin&gt;)</td>
+</tr>
+<tr>
+<td>
+				num downsampling reads </td>
+<td>
+<p>
+					Calculate metrics on a random sampling of reads rather than the complete input file. The number of reads is indicated by the value of the num parameter.</p>
+				(Command line flag: -d &lt;num.downsampling.reads&gt;)</td>
+</tr>
+<tr>
+<td>
+				correlation comparison file </td>
+<td>
+<p>
+					A <a>GCT</a>  file containing expression values that are to be correlated with the values in the input file. Only the first sample in a <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gct" target="_blank">GCT</a> file is used to calculate the correlation between expression values. Note that the GCT file must contain the same gene symbols that appear in the annotation GTF file.</p>
+				(Command line flag: -corr &lt;correlation.comparison.file&gt;)</td>
+</tr>
+<tr>
+<td>
+				gap length </td>
+<td>
+				Whether to plot the distribution of gap lengths</td>
+</tr>
+<tr>
+<td>
+				GATK flags </td>
+<td>
+				Pass a string of flags directly to the GATK (e.g. "-DBQ 0" to set missing base qualities to zero).</td>
+</tr>
+<tr>
+<td>
+				output prefix <span style="color:red;">*</span></td>
+<td>
+				The prefix to use for the output file name</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ul>
+<li>
+		Required input files:
+		<ul>
+<li>
+				an indexed, coordinate-sorted BAM file with read group information and duplicate reads flagged</li>
+<li>
+				the index for the BAM file (.BAI) (if SortSam is used to index the BAM file, then the BAM and BAI files are located in the same folder)</li>
+<li>
+<a>a reference sequence (FASTA) (hg19 provided in dropdown)</a></li>
+<li>
+				genome annotation file in GTF format (hg18, hg19 provided in dropdown)</li>
+<li>
+				the index for the reference sequence (.FAI)</li>
+<li>
+				a sequence dictionary for the reference sequence (.DICT)</li>
+</ul>
+</li>
+<li>
+		Optional input files:
+		<ul>
+<li>
+				sample info file containing a sample ID, sample file name, and notes column in tab-delimited format</li>
+<li>
+				genome annotation file in GTF format (required if the annotation file is not available to be specified in the module)</li>
+<li>
+				one of either a file containing the genomic coordinates of rRNA, in GATK format (.LIST) or a zip of index files created by BWA file for  ribosomal RNA (rRNA) reads, used to estimate rRNA content.a tab-delimited file containing GC content for each of the transcripts; must contain 2 columns with transcript name and GC content</li>
+<li>
+				a GCT expression data file used to calculate the correlation between the expression values of the input file and those of another sample.</li>
+</ul>
+</li>
+</ul>
+<div>
+	 </div>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+<p>
+			ZIP archive</p>
+<p>
+			The HTML report contains metrics stating the total number of reads, depth of coverage, etc. The report also links to specific metrics files. The archive contains a number of other files containing more details of metrics and statistics.</p>
+<p>
+			The HTML report (index.html at the base level of the archive) contains the following information.</p>
+<h3>
+			index.html</h3>
+</li>
+</ol>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_readcountmetpt1.jpg" style="width: 800px; height: 425px;"/></p>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_readcountmetpt2.jpg" style="width: 800px; height: 509px;"/></p>
+<table border="1" width="100%">
+<tbody>
+<tr>
+<td style="width: 5%; text-align: center;">
+<img alt="" src="/cancer/software/genepattern/uploaded/content_callout_1.jpg" style="width: 16px; height: 16px;"/></td>
+<td style="width:95%">
+<ul>
+<li>
+						Total: Total reads sequenced (filtered to exclude reads with vendor fail or alternative alignment flags)</li>
+<li>
+						Alternative Alignments: Duplicate read entries providing alternative coordinates</li>
+<li>
+						Failed Vendor QC Check: Reads that have been designated as failed by the sequencer</li>
+<li>
+						Read Length: Maximum detected read length found</li>
+<li>
+						Estimated library size: Number of expected fragments based on the total reads and duplication rate assuming a Poisson distribution*.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td style="width: 5%; text-align: center;">
+<img alt="" src="/cancer/software/genepattern/uploaded/content_callout_2.jpg" style="width: 16px; height: 16px;"/></td>
+<td style="width:95%">
+<ul>
+<li>
+						Mapped: Total number of reads aligned/mapped</li>
+<li>
+						Mapping Rate: Ratio of total mapped reads to total reads</li>
+<li>
+						Mapped Unique: Number of reads that were aligned and did not have duplicate flags</li>
+<li>
+						Mapped Unique Rate of Total: Ratio of mapping of reads that were aligned and were not duplicates to total reads</li>
+<li>
+						Unique Rate of Mapped: Ratio of unique reads to all mapped reads</li>
+<li>
+						Duplication Rate of Mapped: Ratio of the number of duplicate reads to total mapped reads</li>
+<li>
+						Base Mismatch Rate: Ratio of the number of bases not matching the reference to the total number of bases aligned</li>
+<li>
+						rRNA: Number of all reads (duplicate and non-duplicate) aligning to ribosomal RNA regions</li>
+<li>
+						rRNA Rate: Ratio of all reads aligned to rRNA regions to total reads</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td style="width: 5%; text-align: center;">
+<img alt="" src="/cancer/software/genepattern/uploaded/content_callout_3.jpg" style="width: 16px; height: 16px;"/></td>
+<td style="width:95%">
+<ul>
+<li>
+						Mapped Pairs: Total number of pairs for which both ends map.</li>
+<li>
+						Unpaired Reads: Number of reads lacking a mate.</li>
+<li>
+						End 1 Mapping Rate: Ratio of the number of End 1 bases not matching the reference to the total number of mapped End 1 bases.</li>
+<li>
+						End 2 Mapping Rate: Ratio of the number of End 2 bases not matching the reference to the total number of mapped End 2 bases.</li>
+<li>
+						End 1 Mismatch Rate: Number of End 1 bases not matching the reference divided by the total number of mapped End 1 bases.</li>
+<li>
+						End 2 Mismatch Rate: Number of End 2 bases not matching the reference divided by the total number of mapped End 2 bases.</li>
+<li>
+						Fragment Length Mean and StdDev: The fragment length is the distance between the start of an upstream read and the end of the downstream pair mate.</li>
+<li>
+						Chimeric Pairs: Pairs whose mates map to different genes.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td style="width: 5%; text-align: center;">
+<img alt="" src="/cancer/software/genepattern/uploaded/content_callout_4.jpg" style="width: 16px; height: 16px;"/></td>
+<td style="width:95%">
+<ul>
+<li>
+						Intragenic Rate: The fraction of reads that map within genes (within introns or exons).</li>
+<li>
+						Exonic Rate: The fraction of reads that map within exons.</li>
+<li>
+						Intronic Rate: The fraction of reads that map within introns.</li>
+<li>
+						Intergenic Rate: The fraction of reads that map to the genomic space between genes.</li>
+<li>
+						Expression Profiling Efficiency: Ratio of exon reads to total reads.</li>
+<li>
+						Transcripts Detected: Total number of transcripts with at least 5 exon mapping reads†.</li>
+<li>
+						Genes Detected: Total number of genes with at least 5 exon mapping reads†.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td style="width: 5%; text-align: center;">
+<img alt="" src="/cancer/software/genepattern/uploaded/content_callout_5.jpg" style="width: 16px; height: 16px;"/></td>
+<td style="width:95%">
+<ul>
+<li>
+						End 1 Sense: Number of End 1 reads that were sequenced in the sense direction.</li>
+<li>
+						End 1 Antisense: Number of End 1 reads that were sequenced in the antisense direction.</li>
+<li>
+						End 2 Sense: Number of End 2 reads that were sequenced in the sense direction.</li>
+<li>
+						End 2 Antisense: Number of reads that were sequenced in the antisense direction.</li>
+<li>
+						End 1 % Sense: Percentage of intragenic End 1 reads that were sequenced in the sense direction.</li>
+<li>
+						End 2 % Sense: Percentage of intragenic End 2 reads that were sequenced in the sense direction.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+	*Poisson distribution: the probability of a given number of events occurring in a fixed interval if these events occur with a known average rate.<br/>
+	†Five reads were chosen as a default because this ensures a reasonable standard error.</p>
+<h2>
+	Coverage Metrics</h2>
+<p>
+	This section shows coverage metrics for the bottom expressed 1000, middle expressed 1000, and top expressed 1000 transcripts. The coverage metrics are generated separately on three sets of transcripts.  The set size (n) is defined by the user (n=1000 in the example).  The bottom n transcripts are those transcripts that have the lowest expression values (RPKM) but are non-zero.  The middle n are taken from the transcripts surrounding the median non-zero expression levels. The top n are taken as the highest expressed transcripts.</p>
+<p style="margin-left: 40px;">
+	NOTE: If a correlation comparison file is provided at runtime, Spearman and Pearson correlation coefficients of the RNA-seq log (RPKM) values will be calculated and shown in this area of the page. If multiple samples are provided, a correlation matrix is displayed, comparing samples among themselves.</p>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_coveragemetrics_v1_1_8.jpg" style="width: 800px; height: 519px;"/></p>
+<p>
+	For each set, the following metrics are computed:</p>
+<ul>
+<li>
+		mean coverage per base: coverage is averaged per base across each transcript, and averaged again across all transcripts</li>
+<li>
+		mean coefficient of variation: standard deviation in base coverage divided by mean coverage</li>
+<li>
+		number covered 5': the number of transcripts that have at least one read in their 5' end</li>
+<li>
+		5' 50-based normalization: 50 (this number is the value for the transcript end length parameter) refers to the definition of how many bases are considered at the end; this value is the ratio between the coverage at the 5' end and the average coverage of the full transcript, averaged over all transcripts; to obtain this metric:</li>
+</ul>
+<ol style="margin-left: 40px;">
+<li>
+		calculate the mean coverage of the transcript (every base has a coverage value, so the mean coverage is the average over all bases)</li>
+<li>
+		calculate the mean coverage of the 5' end of the transcript</li>
+<li>
+		calculate 5' coverage relative to the transcript's overall average coverage: 2/1</li>
+<li>
+		average the result from step #3 over all transcripts</li>
+</ol>
+<ul>
+<li>
+		number covered 3': the number of transcripts that have at least one read in their 3' end</li>
+<li>
+		3' 50-base normalization: the ratio between the coverage at the 3' end and the average coverage of the full transcript, averaged over all transcripts</li>
+<li>
+		number of gaps: number of regions with ≥5 bases with zero coverage</li>
+<li>
+		cumulative gap length: cumulative length of gap regions</li>
+<li>
+		gap percentage: the total cumulative gap length divided by the total cumulative transcript lengths</li>
+</ul>
+<h2>
+	Mean Coverage Plots</h2>
+<p>
+	The following plots show the mean coverage for the transcript length for low, medium, and high expressed transcripts.</p>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_rnaseqc_mean_lowexpressed.jpg" style="width: 701px; height: 476px;"/></p>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_rnaseqc_mean_medexpressed.jpg" style="width: 714px; height: 471px;"/></p>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_rnaseqc_mean_highexpressed.jpg" style="width: 711px; height: 476px;"/></p>
+<h2>
+	Mean coverage from the 3' end</h2>
+<p>
+	The following plot shows the mean coverage for low-expressed transcripts over the distance from the 3' end.</p>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_rnaseqc_mean3_lowexpressed.jpg" style="width: 696px; height: 468px;"/></p>
+<p>
+	The following plot shows the mean coverage for the medium-expressed transcripts over the distance from the 3' end.</p>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_rnaseqc_mean3_medexpressed.jpg" style="width: 696px; height: 468px;"/></p>
+<p>
+	The following plot shows the mean coverage for the high-expressed transcripts over the distance from the 3' end.</p>
+<p>
+	 </p>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_rnaseqc_mean3_highexpressed.jpg" style="width: 696px; height: 468px;"/></p>
+<h2>
+	Files and Runtime Parameter Summary</h2>
+<p>
+	Links to GC stratification reports will appear here if a GC content file is included at runtime. The entire report is generated for 3 transcript subsets corresponding to different levels of GC content. The default setting of high (&gt;62%), low (&lt;38%), and moderate (everything in between) was chosen such that the lower and upper sets correspond to the lower and upper quartiles of transcripts by GC content in the human transcript set. There are also links to the other files in the RNASeQC report, including a RPKM values, read count metrics, coverage plot data, and a single tab-delimited file containing all the metrics.</p>
+<p>
+<img alt="" src="/cancer/software/genepattern/uploaded/content_rnaseqc_filesummary.jpg" style="width: 800px; height: 592px;"/></p>
+<h2>
+	All Result Files</h2>
+<ul>
+<li>
+		metrics.tsv</li>
+<li>
+		meanCoverageNorm_high.txt</li>
+<li>
+		meanCoverageNorm_high.png</li>
+<li>
+		meanCoverage_high.txt</li>
+<li>
+		meanCoverage_high.png</li>
+<li>
+		index.html (detailed above)</li>
+<li>
+		gapLengthHist_high.txt</li>
+<li>
+		gapLengthHist_high.png</li>
+<li>
+		meanConverageNorm_medium.txt</li>
+<li>
+		meanCoverageNorm_medium.png</li>
+<li>
+		meanConverage_medium.txt</li>
+<li>
+		meanCoverage_medium.png</li>
+<li>
+		gapLengthHist_med.txt</li>
+<li>
+		gapLengthHist_med.png</li>
+<li>
+		meanCoverageNorm_low.png</li>
+<li>
+		meanCoverageNorm_low.txt</li>
+<li>
+		meanCoverage_low.png</li>
+<li>
+		meanCoverage_low.txt</li>
+<li>
+		gapLengthHist_low.txt</li>
+<li>
+		gapLengthHist_low.png</li>
+<li>
+		exons.rpkm.gct</li>
+<li>
+		rRNA_intervals.list</li>
+<li>
+		countMetrics.html</li>
+<li>
+		&lt;BAM file name&gt; folder
+		<ul>
+<li>
+				 </li>
+</ul>
+</li>
+</ul>
+<h2>
+	Example Data</h2>
+<p>
+	[provide example data, including input files and parameter settings]. (we'll put the input files on the ftp site and link to them from the doc)</p>
+<h2>
+	Requirements</h2>
+<p>
+	[any software requirements for running this, e.g., version of R, licensing]</p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNA-seq</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					Mac OS X, Linux</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					Java</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>2011-11-23</td>
+<td>Renamed from RNAseqMetrics</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2011-08-29</td>
+<td>Updated documentation</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

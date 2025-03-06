@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FilterLowshRNAs (v29)</title>
+    <meta name="slug" content="modules/docs/FilterLowshRNAs/29" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Removes shRNAs with low read counts in original DNA plasmid pool. Outputs a GCT file containing filtered shRNA data and a GCT file containing the mean read count for each shRNA in the original DNA plasmid pool.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir, Sara Howell;The Broad Institute </p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>showell@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p dir="ltr" style="margin-top: 0pt; margin-bottom: 0pt;">
+<span id="docs-internal-guid-e3bef8d5-9e29-463f-e5f1-ee18591f3404"><span style="background-color: transparent; vertical-align: baseline;">FilterLowshRNAs is a GenePattern module that implements a quality control step during the analysis of shRNA pooled screen data. The user inputs at least one and up to three GCT files containing shRNA data, with each file containing data from a separate batch. The cell lines where the shRNAs have low read counts in the original DNA plasmid pool are defined as NaN in each file and shRNAs where the read counts in the original DNA plasmid pool were low in all files are removed from the dataset entirely. </span><span style="font-family: 'times new roman', times, serif; font-size: 14px; line-height: 1.15; background-color: transparent; vertical-align: baseline; white-space: pre-wrap;"> </span></span></p>
+<h2>
+	References</h2>
+<p>
+	Contact author for more information</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				shRNA data file(s)<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+<p>
+					Format is a GCT file where each row corresponds to a unique shRNA sequence. At least one file is required and up to three files can be uploaded. </p>
+</td>
+</tr>
+<tr>
+<td>
+				File Prefix<span style="color:#ff0000;">*</span></td>
+<td>
+				User-defined prefix of output file names. </td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		shRNA data file(s)
+		<ul>
+<li>
+				The shRNA data file(s) are GCT files where each row corresponds to a unique shRNA sequence. </li>
+</ul>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		Achilles file with shRNAs filtered out                    <em>[File Prefix]</em>_Achilles_filtered.rnai.gct
+		<ul>
+<li>
+				A GCT file containing the shRNA data with the shRNA sequences containing low read counts in the original DNA plasmid pool. </li>
+</ul>
+</li>
+<li>
+		DNA references file with shRNAs filtered out         <em>[File Prefix]</em>_DNAreferences_filtered.rnai.gct
+		<ul>
+<li>
+				A GCT file containing all of the cell lines and their corresponding ready counts for the original DNA plasmid pool, based on the separate batch files.</li>
+</ul>
+</li>
+</ol>
+<h2>
+	Example Data</h2>
+<p>
+<span style="font-size: 12px;">Coming soon.</span></p>
+<h2>
+	Requirements</h2>
+<p>
+	Memory Requirements on the GenePattern Server: 8G</p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.15</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>29</td>
+<td>2014-04-11</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

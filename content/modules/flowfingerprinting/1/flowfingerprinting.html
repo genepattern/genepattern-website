@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FlowFingerprinting (v1)</title>
+    <meta name="slug" content="modules/docs/FlowFingerprinting/1" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">takes a flow set and generates a description of the multivariate probability distribution function of its flow cytometry data in the form of a fingerprint</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Karin Breuer, BC Cancer Agency</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>kbreuer@bccrc.ca, https://groups.google.com/a/broadinstitute.org/forum/#!forum/gp-flowcyt-help</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Summary</h2>
+<p class="p1">
+	The FlowFingerprinting module takes a flow set and generates a description of the multivariate probability distribution function of its flow cytometry data in the form of a fingerprint. As such, it is independent of a presumptive functional form for the distribution, in contrast with model-based methods such as Gaussian Mixture Modeling. Internally, this module uses the FlowFP package from R/BioConductor. FlowFingerprinting can be used for QC screening. </p>
+<p>
+	For more information on the FCS file format, see the <a href="http://www.broadinstitute.org/attachments/fcs_3_1_standard.pdf"><span class="s2">FCS 3.1 File Standard </span></a>(PDF). Algorithm</p>
+<h2>
+	References</h2>
+<p class="p1">
+	Gentleman R, Carey V, Bates D, Bolstad B, Dettling M, Dudoit S, Ellis B, Gautier L, Ge Y, Gentry J, Hornik K, Hothorn T, Huber W, Iacus S, Irizarry R, Leisch F, Li C, Maechler M, Rossini A, Sawitzki G, Smith C, Smyth G, Tierney L, Yang J, Zhang J. Bioconductor: open software development for computational biology and bioinformatics. <i>Genome Biology</i>. 2004;5(10):R80. </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				Input FCS data files </td>
+<td>
+				The FCS file(s) to be fingerprinted. A zip or directory of FCS files.</td>
+</tr>
+<tr>
+<td>
+				Model FCS data file </td>
+<td>
+				Training data (FCS file) for the underlying model. If none, the input FCS data is used for creating a default model. A directory containing an FCS file.</td>
+</tr>
+<tr>
+<td>
+				Model parameters </td>
+<td>
+				A comma-separated list of dimensions/parameters/channels that shall be used for the underlying model. Use either parameter names or indexes. All dimensions except for Time will be used if this parameter is not provided.</td>
+</tr>
+<tr>
+<td>
+				Model number of recursions </td>
+<td>
+				Number of times the FCS training data will be subdivided.</td>
+</tr>
+<tr>
+<td>
+				Model dequantize </td>
+<td>
+				Option to make all events in the training set unique.</td>
+</tr>
+<tr>
+<td>
+				Model sample size </td>
+<td>
+				Used to specify the per flowFrame sample size of the data to use in model generation. If NULL, all of the data in x is used. Setting this to a smaller number will speed up processing, at the cost of accuracy.</td>
+</tr>
+<tr>
+<td>
+				Output QC screening fingerprint stack </td>
+<td>
+				Graphical output in form of "stack" plot.</td>
+</tr>
+<tr>
+<td>
+				Output QC screening gate consistency </td>
+<td>
+				Graphical output in form of "qc" plot.</td>
+</tr>
+<tr>
+<td>
+				Output QC screening plate </td>
+<td>
+				Graphical output in form of "plate" plot.</td>
+</tr>
+<tr>
+<td>
+				Output csv file </td>
+<td>
+				Name for output CSV file.</td>
+</tr>
+<tr>
+<td>
+				Output file transformation </td>
+<td>
+				Transformation used on data for CSV output file. "raw" is the number of events in each bin, "normalized" is the ratio of the number of events divided by the expected number (the expected number of events is calculated by dividing the total number of events in the instance used to make the fingerprint by the number of features in the fingerprint). "log2norm" is the log2 of the normalized values.</td>
+</tr>
+<tr>
+<td>
+				Workflow parameter file </td>
+<td>
+				A CSV file containing parameters if module is used in pipeline.</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+<p>
+<span style="font-size: 12px;">Stack plot - A PNG image showing a stack plot. </span></p>
+</li>
+<li>
+<p>
+<span style="font-size: 12px;">Gates QC plot - A PNG image showing a quality control (QC) plot. </span></p>
+</li>
+<li>
+<p>
+<span style="font-size: 12px;">Plate plot - A PNG image showing a plate plot. </span></p>
+</li>
+<li class="li2">
+		CSV file - A CSV file, containing one feature vector per row. The columns contain the number of events per bin. </li>
+</ol>
+<h2 class="li2">
+	Usage</h2>
+<p class="p3">
+	Maximum memory and processing time was estimated based on processing 96 experiments with 7 parameters, using an Intel<span class="s1">® </span>Core2 Extreme CPU X9650 at 3.00GHz. </p>
+<p class="p4">
+	Maximum RAM: 5.6 GB </p>
+<p class="p5">
+	Maximum run time: 60 seconds </p>
+<h2>
+	Requirements</h2>
+<ul>
+<li class="p3">
+		GenePattern ≥3.2.1 </li>
+<li class="p3">
+		R =2.10 </li>
+<li class="p3">
+		flowCore ≥1.12.0 </li>
+<li class="p3">
+		flowViz ≥1.12.0 </li>
+<li class="p3">
+		flowFP ≥1.4.0 </li>
+</ul>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Flow Cytometry</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2012-07-13</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

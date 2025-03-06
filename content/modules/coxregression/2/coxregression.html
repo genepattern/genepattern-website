@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CoxRegression (v2) BETA</title>
+    <meta name="slug" content="modules/docs/CoxRegression/2" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<div class="bs-callout bs-callout-danger">
+<h4>This module is currently in beta release.  The module and/or documentation may be incomplete.</h4>
+</div>
+<p style="font-size: 1.2em; margin-top: 20px;">Cox regression using clinical data and .cls file</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Yujin Hoshida (Broad Institute)</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Summary </h2>
+<p class="p2"><span class="s1"> </span>Once a genomics marker or predictive model for clinical outcome is built, the next step is to test whether it really associates with outcome of new cohorts, or whether it has better predictive ability compared to already known clinical markers/predictive models. “Survival analysis” modules perform such analyses seamlessly after clustering/marker gene/prediction analyses. </p>
+<p class="p2">Cox proportional hazard modeling (Cox regression) is commonly used to assess association of variable(s) of interest with time-to-event data (e.g., death, tumor recurrence,…) [1-3]. For the CoxRegression module, a .cls file identifies the phenotype label for each sample and a separate tab-delimited text file defines all other clinical variables. The module generates a result file similar to the one shown below. Interpreting the results requires basic knowledge of biostatistics and survival data analysis. </p>
+<h2>Algorithm</h2>
+<p>[if applicable: a short overview of the algorithm in normal prose, followed by any details; write overview as if you are explaining to a novice]</p>
+<h2>References</h2>
+<p>Therneau TM. <i>Modeling Survival Data: Extending the Cox Model</i>. 2001, Springer, Berlin </p>
+<p class="p3">Lumley T. <i>survival 2.20</i>, R package, <span class="s1"><a href="http://www.r-project.org/">http://www.r-project.org/</a> </span></p>
+<p class="p2">Venables WN, Ripley BD. <i>Survival Analysis </i>in <i>Modern Applied Statistics with S-PLUS</i>, 3<span class="s2"><sup>rd </sup></span>Ed. 1999, Springer, New York. </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>input surv data filename <span style="color:red;">*</span></td>
+<td>input clinical data. Case ID in 1st column (.txt file)</td>
+</tr>
+<tr>
+<td>input cls filename </td>
+<td>input class information (.cls file)</td>
+</tr>
+<tr>
+<td>output file <span style="color:red;">*</span></td>
+<td>Name for the output file.</td>
+</tr>
+<tr>
+<td>time <span style="color:red;">*</span></td>
+<td>Column name for the survival time field.<br/>
+			Must be a column in the input surv data<br/>
+			file.</td>
+</tr>
+<tr>
+<td>status <span style="color:red;">*</span></td>
+<td>Column name for the censor field<br/>
+			(event=”1”, no event=”0”). Must be a<br/>
+			column in the input surv data file</td>
+</tr>
+<tr>
+<td>variable continuous <span style="color:red;">*</span></td>
+<td>Comma separated list of the continuous<br/>
+			dependent variables (e.g. age) to use<br/>
+			for the analysis. Each variable must be<br/>
+			a column in the input surv data file.</td>
+</tr>
+<tr>
+<td>variable category <span style="color:red;">*</span></td>
+<td>Comma separated list of the categorical<br/>
+			dependent variables (e.g. gender) to<br/>
+			use for the analysis. Each variable must<br/>
+			be a column in the input surv data file or<br/>
+			cls (to use the classes in the input cls<br/>
+			file).</td>
+</tr>
+<tr>
+<td>variable interaction terms <span style="color:red;">*</span></td>
+<td>Separate interaction variables with a<br/>
+			colon (e.g. sex:cls). Separate sets of interaction variables with a comma (e.g. sex:cls, sex:grade). Each variable must be a column in the input surv data file or cls (to use the classes in the input cls file).</td>
+</tr>
+<tr>
+<td>strata <span style="color:red;">*</span></td>
+<td>Fit is done for each strata. Use the default value unless you are familiar with clinical data analysis.</td>
+</tr>
+<tr>
+<td>input subgroup <span style="color:red;">*</span></td>
+<td>Analyze a subgroup of the data. Identify the subgroup by specifying a variable followed by a colon and a value for the variable. For example: gender:M or cls:1).</td>
+</tr>
+<tr>
+<td>variable selection <span style="color:red;">*</span></td>
+<td>Select the way dependent variables are entered into the model. Use the default value unless you are familiar with clinical data analysis.</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li>clinical data file
+	<p class="p2">Tab-delimited text file. The first row contains column heads. The first column must be the sample identifier; the column head is your choice; the order of samples in this file and the input cls file must match. Each subsequent column contains a clinical variable.</p>
+</li>
+</ol>
+<p class="p2" style="margin-left: 40px;">For example: </p>
+<table border="1" cellpadding="1" cellspacing="1" style="margin:40px;width:800px;">
+<tbody>
+<tr>
+<td>name</td>
+<td>time</td>
+<td>censor</td>
+<td>cls.clinical</td>
+<td>labdata1</td>
+<td>labdata2</td>
+<td>age</td>
+<td>sex</td>
+<td>grade</td>
+</tr>
+<tr>
+<td>case1</td>
+<td>207</td>
+<td>0</td>
+<td>poor</td>
+<td>0.9</td>
+<td>430</td>
+<td>72</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>case4</td>
+<td>49</td>
+<td>0</td>
+<td>poor</td>
+<td>2.7</td>
+<td>220</td>
+<td>54</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>case5</td>
+<td>267</td>
+<td>0</td>
+<td>poor</td>
+<td>28.7</td>
+<td>500</td>
+<td>53</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>case7</td>
+<td>8</td>
+<td>0</td>
+<td>poor</td>
+<td>2.4</td>
+<td>1090</td>
+<td>75</td>
+<td>0</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p class="p1" style="margin-left: 40px;">Identify continuous (e.g., age) or categorical (e.g., sex) variables for the analysis by entering the column heads in the <i>variable continuous </i>or <i>variable category </i>fields, respectively. Identify the survival time and censor columns for the analysis by entering the column heads “time” and “censor” in the <i>time </i>and <i>status </i>fields, respectively. </p>
+<h2>Output Files</h2>
+<ol>
+<li>CoxRegression_result.txt: Summary of the results. </li>
+</ol>
+<pre>
+# Cox regression results
+tie data handling: Efron approximation
+variable selection: none
+Call:
+coxph(formula = Surv(time, censor) ~ factor(cls), data = surv.data,
+method = "efron", robust = F)
+n= 100
+coef exp(coef) se(coef) z p
+factor(cls)2 1.93 6.86 0.364 5.3 1.2e-07
+exp(coef) exp(-coef) lower .95 upper .95
+factor(cls)2 6.86 0.146 3.36 14
+Rsquare= 0.331 (max possible= 0.988 )
+Likelihood ratio test= 40.2 on 1 df, p=2.3e-10
+Wald test = 28.1 on 1 df, p=1.18e-07
+Score (logrank) test = 37.5 on 1 df, p=8.9e-10
+</pre>
+<p style="margin-left: 40px;"> </p>
+<h2>Example Data</h2>
+<p class="p1"><a href="ftp://ftp.broadinstitute.org/pub/genepattern/example_files/CoxRegression/surv.txt"><span class="s1">surv.txt</span></a>, <a href="ftp://ftp.broadinstitute.org/pub/genepattern/example_files/CoxRegression/surv.cls"><span class="s1">surv.cls</span></a></p>
+<p class="p1">The example files contain mock data. To run an analysis using these files, enter the column head “time” in the <i>time </i>field, “censor” in the <i>status </i>field, and “cls” in the <i>variable category </i>field. </p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Survival Analysis</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R 2.0.1</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</body>
+</html>

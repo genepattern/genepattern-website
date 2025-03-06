@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RenameSamplesGCT (v1) BETA</title>
+    <meta name="slug" content="modules/docs/RenameSamplesGCT/1" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<div class="bs-callout bs-callout-danger">
+<h4>This module is currently in beta release.  The module and/or documentation may be incomplete.</h4>
+</div>
+<p style="font-size: 1.2em; margin-top: 20px;">Rename the samples within a GCT file</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Mark Cowley, Garvan Institute of Medical Research, Peter Wills Bioinformatics Centre &lt;m.cowley@garvan.org.au&gt;</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p class="p1">
+	GenePattern team, gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	The module takes a GCT and CLM file, and renames (and optionally reorders) the samples (ie the columns) in the GCT file. Optionally, a CLS file can be written using the information in the 3<span class="s1">rd </span>column of the CLM file. Note that all sample names in column 1 of the CLM file MUST be present in the GCT file. This module allows samples to be reordered and some samples to be excluded, since the order of the rows in the CLM file don’t have to match the order of the columns in the GCT file, and not all samples in the GCT file have to be mentioned in the CLM file.</p>
+<h2>
+	References</h2>
+<p>
+	[appropriate papers cited]</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				gct file <span style="color:red;">*</span></td>
+<td>
+				GCT file</td>
+</tr>
+<tr>
+<td>
+				clm file <span style="color:red;">*</span></td>
+<td>
+				CLM file</td>
+</tr>
+<tr>
+<td>
+				gct out file <span style="color:red;">*</span></td>
+<td>
+				Name of the GCT file to be created</td>
+</tr>
+<tr>
+<td>
+				export cls <span style="color:red;">*</span></td>
+<td>
+				Export a CLS file?</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+<p class="p1">
+			gct.file</p>
+<p class="p1">
+			This must be a valid GCT file. It will have sample names that you don’t like and want to change.</p>
+</li>
+<li>
+<p class="p1">
+			clm.file</p>
+<p class="p1">
+			This file maps the old sample names which are in your existing GCT file in column 1, 2 to the new names in column 2, and finally the class that each sample comes form in column 3.</p>
+</li>
+<li>
+<p class="p1">
+			gct.out.file</p>
+<p class="p1">
+			This is the name of the gct file that will be created.</p>
+</li>
+<li>
+<p class="p1">
+			export.cls</p>
+		Do you want to export a cls file? yes or no.</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+<p class="p1">
+			A gct file with renamed sample names</p>
+</li>
+</ol>
+<p class="p1" style="margin-left: 40px;">
+	The output file has the same number of samples, in the same order as specified in the CLM file. Note this allows you to reorder and rename the samples in one go. The number of genes is unchanged.</p>
+<h2>
+	Example Data</h2>
+<p>
+<a href="ftp://gpftp.broadinstitute.org/example_data/modules/RenameSamplesGCT/DBA_cel_small.gct">DBA_cel_small.gct</a></p>
+<p>
+<a href="ftp://gpftp.broadinstitute.org/example_data/modules/RenameSamplesGCT/DBA_cel_small.clm">DBA_cel_small.clm</a></p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Preprocess &amp; Utilities</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2014-07-07</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

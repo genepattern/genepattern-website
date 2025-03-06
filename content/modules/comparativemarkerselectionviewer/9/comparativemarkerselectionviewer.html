@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ComparativeMarkerSelectionViewer (v9)</title>
+    <meta name="slug" content="modules/docs/ComparativeMarkerSelectionViewer/9" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Views the results from ComparativeMarkerSelection</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Marc-Danie Nazaire (The Broad Institute), Thorin Tabor (University of California San Diego, The Broad Institute)</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p><a href="https://groups.google.com/forum/#!forum/genepattern-help" target="_blank">https://groups.google.com/forum/#!forum/genepattern-help</a></p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<p>The ComparativeMarkerSelectionViewer provides tools for reviewing and working with ComparativeMarkerSelection results. These tools include plots, a data table, expression profiles, filters, and creating dataset and feature list files. (A feature list is a text file with one feature per line.)</p>
+<p>ComparativeMarkerSelectionViewer is an interactive tool. For non-interactive access to annotations, heatmaps, and creation of datasets and features lists, see the HeatMapImage, and ExtractComparativeMarkerSelection modules.</p>
+<h2>Heatmap/Plots</h2>
+<p>Heatmap and plots are displayed in the upper portion of the viewer. Use the View menu to select the plot to display:</p>
+<ul>
+<li><strong>Heatmap </strong>(initially displayed) is a heatmap of the expression values sorted by the test statistic value.</li>
+<li><strong>Upregulated Features</strong> plots the descending test statistic values versus features sorted by the test statistic value. This plot is useful for visualizing the number of features that have a positive and negative test statistic value in each class.</li>
+<li><strong>Custom plots </strong> provide a pair-wise comparison of different statistics. To display custom plots click View &gt; Custom Plot. To compare different significance measures: use the drop-down lists below the plot to select the measures to display on the X and Y axes and click <em>Update</em>. The viewer updates the plot and to reflect the new comparison.</li>
+<li><strong>Histograms</strong> show the null distributions for each measure of significance.</li>
+<li>Use the following File&gt; Save Image menu item to save the heatmap or plot. When saving a heatmap the currently visible rows will be saved by default. Optionally the entire heatmap can be saved by selecting <em>include all features and samples. </em>There is a limit on the size of the heatmap when saving in PNG format. The limit is roughly (number of features * number of samples &lt;= 3580000).</li>
+</ul>
+<h2>Zoom in/out of plots</h2>
+<p>Use the mouse to click-and-drag over the plot area to zoom in.</p>
+<p>Use the Reset button (upper right of plot) to return the zoom to the default level. </p>
+<p>Note: Zoom in/out not available for heatmap.</p>
+<h2>Data Table</h2>
+<p>The table in the lower portion of the viewer lists the ComparativeMarkerSelection results. For a description of each column, see the <a href="/modules/docs/ComparativeMarkerSelection" target="_blank">ComparativeMarkerSelection documentation</a>. By default, the features in the table are ordered by score. To reorder the features, click the title of the key column; for example, to order features by rank, click <em>Rank</em>.  </p>
+<p>To choose which columns are shown in the table, click the Column Show/Hide toggle icon in the top-left corner of the table, just to the left of the search bar:<br/>
+<img alt="" src="/uploaded/content_cms_show_hide_column_toggle.png" style="width: 200px; height: 55px;"/></p>
+<p>Using <em>File&gt;Save Table</em>, you can export the table in tab delimited format for use in external programs such as Excel. This will result in a tab-delimited file with the contents of the table, leaving out any items excluded due to filters or columns hidden through the Column Show/Hide toggle.</p>
+<h2>Expression Profiles</h2>
+<p>The expression profile for a feature plots expression value per sample. A heatmap shows the same information, but color codes the expression values from red for the highest expression values through blue for lowest expression values. </p>
+<p>To display an expression profile:</p>
+<ol>
+<li>Select one feature from the data table.</li>
+<li>Click <em>View&gt;Profile. </em></li>
+</ol>
+<h2>Filters</h2>
+<p>Use filters to display only features that you are interested in:</p>
+<ol>
+<li>Select <em>Edit&gt;Filter Features&gt;Create/Edit Filters</em>. The Filter Features window appears.</li>
+<li>In the Filter Features window, set your filtering criteria and click OK. The viewer will then only show those features that meet your criteria.</li>
+<li>To redisplay all features, select <em>Edit&gt;Remove All Filters</em>.</li>
+</ol>
+<h2>Creating Datasets/Feature Lists</h2>
+<p>You can use the viewer to create a new dataset in GCT format or a feature list (a text file with one feature per line) containing a listing of the selected features in the table in from the ComparativeMarkerSelection results:</p>
+<ol>
+<li>Select the desired features from the table.</li>
+<li>Select <em>File&gt;Save Dataset</em> or <em>File&gt;Save Feature List</em>. A window appears.</li>
+<li>Choose a location and name for the new dataset/feature list.</li>
+<li>Click <em>OK</em> to save the new data set/feature.</li>
+</ol>
+<h2>References</h2>
+<p>Gould et al. <strong>Comparative Gene Marker Selection suite</strong>. Bioinformatics Advance Access published on May 18, 2006, DOI 10.1093/bioinformatics/btl196.</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="width: 200px;">comparative marker selection filename <span style="color:red;">*</span></td>
+<td style="width: 200px;">The output from ComparativeMarkerSelection</td>
+</tr>
+<tr>
+<td>dataset filename <span style="color: rgb(255, 0, 0);">*</span></td>
+<td>The dataset file used as input to ComparativeMarkerSelection</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li><strong>comparative marker selection filename</strong><br/>
+	The output file from ComparativeMarkerSelection in ODF format.</li>
+<li><strong>dataset filename</strong><br/>
+	The dataset file used as input to ComparativeMarkerSelection in <a href="/cancer/software/genepattern/file-formats-guide#GCT">GCT</a> format.</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					javascript</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					HTML, JQuery</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9</td>
+<td>2017-09-15</td>
+<td>Update to fix data table in upregulated graph, when used in the GenePattern Notebook env</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2016-06-06</td>
+<td>New Java Script module - replaces previous Java Applet visualizer</td>
+</tr>
+<tr>
+<td>7</td>
+<td>2015-03-17</td>
+<td>Fix for SecurityException when saving datasets</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2014-07-28</td>
+<td>Added filter by multiple criteria, hide table columns, export table. Fixed for use with Java 7. Many other improvements and bug fixes.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2013-09-20</td>
+<td>Added filter by rank, filter by multiple criteria, hide table columns, export table.  Fixed for use with Java 7.  Many other improvements and bug fixes.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2006-07-29</td>
+<td>Updated GeneCruiser library</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2006-03-09</td>
+<td>Updated to work with latest ComparativeMarkerSelection module</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2005-06-13</td>
+<td>Added maxT p-value and removed rank p-value</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

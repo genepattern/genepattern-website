@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ConumeeCNVAnalysis (v1)</title>
+    <meta name="slug" content="modules/docs/ConumeeCNVAnalysis/1" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Perform copy-number variation analysis using data generated from Illumina 450k or EPIC DNA methylation arrays. This module is meant to be used in conjunction with output generated from the "MethylationPreprocessing" module.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Clarence Mah</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>ckmah@ucsd.edu</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Introduction</h2>
+<p><span style="color: inherit; font-family: inherit;">This module implements methylation copy number variation (CNV) analysis using the <code><span style="font-family:courier new,courier,monospace;">conumee</span></code></span> R package. The following is from the package's vignette:</p>
+<blockquote>
+<p><span style="font-size:14px;">The <code style='font-family: "DejaVu Sans Mono", "Droid Sans Mono", "Lucida Console", Consolas, Monaco, monospace; font-size: 12px; color: rgb(64, 64, 64); background-color: rgb(240, 240, 240); white-space: pre;'>conumee</code> package provides tools for performing <span style="font-weight: 700;">co</span>py-<span style="font-weight: 700;">nu</span>mber variation (CNV) analysis using Illumina 450k or EPIC DNA <span style="font-weight: 700;">me</span>thylation arrays. Although the primary purpose of these arrays is the detection of genome-wide DNA methylation levels <span class="citation">[1]</span>, it can additionally be used to extract useful information about copy-number alterations, e.g. in clinical cancer samples. The approach was initially described in Sturm et al., 2012 <span class="citation">[2]</span>. Other tools following a similar strategy include <code style='font-family: "DejaVu Sans Mono", "Droid Sans Mono", "Lucida Console", Consolas, Monaco, monospace; font-size: 12px; color: rgb(64, 64, 64); background-color: rgb(240, 240, 240); white-space: pre;'>ChAMP</code> <span class="citation">[3]</span> and <code style='font-family: "DejaVu Sans Mono", "Droid Sans Mono", "Lucida Console", Consolas, Monaco, monospace; font-size: 12px; color: rgb(64, 64, 64); background-color: rgb(240, 240, 240); white-space: pre;'>CopyNumber450k</code> (now deprecated).</span></p>
+<p><span style="font-size:14px;">CNV analysis is performed using a two-step approach. First, the combined intensity values of both ‘methylated’ and ‘unmethylated’ channel of each CpG are normalized using a set of normal controls (i.e. with a flat genome not showing any copy-number alterations). This step is required for correcting for probe and sample bias (e.g. caused by GC-content, type I/II differences or technical variability). Secondly, neighboring probes are combined in a hybrid approach, resulting in bins of a minimum size and a minimum number of probes. This step is required to reduce remaining technical variability and enable meaningful segmentation results.</span></p>
+<p><span style="font-size:14px;">The <code style='font-family: "DejaVu Sans Mono", "Droid Sans Mono", "Lucida Console", Consolas, Monaco, monospace; font-size: 12px; color: rgb(64, 64, 64); background-color: rgb(240, 240, 240); white-space: pre;'>conumee</code> package has been written for seamless integration with frequently-used Bioconductor packages. It is recommended that methylation array data is loaded using the <code style='font-family: "DejaVu Sans Mono", "Droid Sans Mono", "Lucida Console", Consolas, Monaco, monospace; font-size: 12px; color: rgb(64, 64, 64); background-color: rgb(240, 240, 240); white-space: pre;'>minfi</code>package <span class="citation">[4]</span>. Segmentation is performed using the circular binary segmentation (CBS) algorithm implemented in the <code style='font-family: "DejaVu Sans Mono", "Droid Sans Mono", "Lucida Console", Consolas, Monaco, monospace; font-size: 12px; color: rgb(64, 64, 64); background-color: rgb(240, 240, 240); white-space: pre;'>DNAcopy</code> package <span class="citation">[5]</span>. Processing time is typically less than a minute per sample.</span></p>
+<p><span style="font-size:14px;">Finally, the <code style='font-family: "DejaVu Sans Mono", "Droid Sans Mono", "Lucida Console", Consolas, Monaco, monospace; font-size: 12px; color: rgb(64, 64, 64); background-color: rgb(240, 240, 240); white-space: pre;'>conumee</code> package also provides a set of plotting methods to create publication-grade CNV plots of the whole genome, selected chromosomes or previously defined regions of interest. Writing of text-based output files for visualization in other tools (e.g. the IGV browser) or downstream processing (e.g. using GISTIC) is also supported.</span></p>
+</blockquote>
+<p><span style="color: inherit; font-family: inherit; font-size: 30px;">References</span></p>
+<div id="ref-bibikovahigh2011">
+<ol>
+<li>Bibikova M, Barnes B, Tsan C, Ho V, Klotzle B, Le JM, Delano D, Zhang L, Schroth GP, Gunderson KL, Fan JB, Shen R: <strong>High density DNA methylation array with single CpG site resolution.</strong> <em>Genomics</em> 2011, <strong>98</strong>:288–295.</li>
+<li>Sturm D, Witt H, Hovestadt V, Khuong-Quang D-A, Jones DT, Konermann C, Pfaff E, Toenjes M, Sill M, Bender S, Kool M, Zapatka M, Becker N, Zucknick M, Hielscher T, Liu XY, Fontebasso AM, Ryzhova M, Albrecht S, Jacob K, Wolter M, Ebinger M, Schuhmann MU, Meter T van, Fruehwald MC, Hauch H, Pekrun A, Radlwimmer B, Niehues T, Komorowski G von, et al.: <strong>Hotspot mutations in H3F3A and IDH1 define distinct epigenetic and biological subgroups of glioblastoma.</strong> <em>Cancer Cell</em> 2012, <strong>22</strong>:425–437.</li>
+<li>Feber A, Guilhamon P, Lechner M, Fenton T, Wilson GA, Thirlwell C, Morris TJ, Flanagan AM, Teschendorff AE, Kelly JD, Beck S: <strong>Using high-density DNA methylation arrays to profile copy number alterations.</strong> <em>Genome Biology</em> 2014, <strong>15</strong>.</li>
+<li>Aryee MJ, Jaffe AE, Hector C, Christine L, Feinberg AP, Hansen KD, Irizarry RA: <strong>Minfi: A flexible and comprehensive bioconductor package for the analysis of infinium DNA methylation microarrays.</strong> <em>Bioinformatics</em> 2014, <strong>30</strong>:1363–1369.</li>
+<li>Olshen AB, Venkatraman E, Lucito R, Wigler M: <strong>Circular binary segmentation for the analysis of array-based DNA copy number data.</strong> <em>Biostatistics</em> 2004, <strong>5</strong>:557–572.</li>
+<li>Hovestadt V, Zapatka M. <em>conumee: Enhanced copy-number variation analysis using Illumina DNA methylation arrays.</em> R package version 1.9.0, <a href="http://bioconductor.org/packages/conumee/">http://bioconductor.org/packages/conumee/</a>.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sample data<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>Intensity values of the methylated and unmethylated channels of your sample data. "MethylSet" outputs from the "minfi" preprocessing module are accepted as input.</td>
+</tr>
+<tr>
+<td>control sample names</td>
+<td>Specify a ist of control sample names separated by commas if the control sample data is included in the "sample data" file. Otherwise, leave this blank if control samples data is separate.</td>
+</tr>
+<tr>
+<td>control samples data</td>
+<td>Intensity values of the methylated and unmethylated channels of your control samples data. "MethylSet" outputs from the "minfi" preprocessing module are accepted as input. Leave "control sample names" bank if a control samples data file is provided.</td>
+</tr>
+<tr>
+<td>array type<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>Specify the array type of your data. If your samples and controls data are on different arrays, choose "both". Default: EPIC.</td>
+</tr>
+<tr>
+<td>genes to highlight<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>A file with a list of genes (HUGO gene symbols) to highlight in output plots. Format as one gene symbol per line.</td>
+</tr>
+<tr>
+<td>ignore regions<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>A bed file specifying genomic regions to exclude from copy number analysis (hg19).</td>
+</tr>
+<tr>
+<td>sex chromosomes<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>Include analysis of X &amp; Y sex chromosomes. Default: Yes.</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li>Sample data
+	<ul>
+<li>Intensity values of the methylated and unmethylated channels of your sample data. "MethylSet" outputs from the "minfi" preprocessing module are accepted as input. Usually named <code>methyl_set.rds</code>.</li>
+</ul>
+</li>
+<li>Control samples data
+	<ul>
+<li>Intensity values of the methylated and unmethylated channels of your control samples data. "MethylSet" outputs from the "minfi" preprocessing module are accepted as input. Usually named <code style="font-size: 12.6px;">methyl_set.rds</code>. It is highly recommended to have multiple control samples.</li>
+</ul>
+</li>
+<li>Genes to highlight
+	<ul>
+<li>These genes will be annotated in the genome plot and chromosome plots. Each gene will also have its own CNV plot. Accepts a text file formatted as one gene symbol per line.</li>
+</ul>
+</li>
+<li>Ignore regions
+	<ul>
+<li>Probes in these regions will be completely excluded from any analysis. Accepts bed files as input.</li>
+</ul>
+</li>
+<li>Sex chromosomes
+	<ul>
+<li>Include analysis of X &amp; Y sex chromosomes.</li>
+</ul>
+</li>
+</ol>
+<h2>Output Files</h2>
+<ol>
+<li>[sample].cnvPlots.pdf
+	<ul>
+<li>Several copy number plots including a genome overview, individual chromosome plots, as well as gene plots derived from the list of genes to highlight.</li>
+</ul>
+</li>
+<li>[sample].cnv.seg
+	<ul>
+<li>A <code>.seg</code> file detailing copy numbers of each bin across the genome for further visualization (such as IGV) and analysis.</li>
+</ul>
+</li>
+<li>[sample].detail.cnv.seg
+	<ul>
+<li>A .seg file detailing copy numbers of each <code>gene</code> in provided <code>genes to highlight</code>.</li>
+</ul>
+</li>
+</ol>
+<h2>Example Data</h2>
+<p>Sample data consists of a subset of a samples from this CNS tumor study (<a href="https://www.nature.com/articles/nature26000">Capper et al. 2018</a>).</p>
+<p>GEO accession #: GSE90496</p>
+<table class="table table-striped" style="width: 1848px;">
+<thead>
+<tr>
+<th style="line-height: 1.42857;">Name</th>
+<th style="line-height: 1.42857;">File</th>
+<th style="line-height: 1.42857;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="line-height: 1.42857;">sample data</td>
+<td style="line-height: 1.42857;">ftp://gpftp.broadinstitute.org/methylation/controls.tar.gz</td>
+<td style="line-height: 1.42857;">2 glioblastoma tumor tissue samples.</td>
+</tr>
+<tr>
+<td style="line-height: 1.42857;">control samples data</td>
+<td style="line-height: 1.42857;">ftp://gpftp.broadinstitute.org/methylation/gbm_sample.tar.gz</td>
+<td style="line-height: 1.42857;">119 normal brain tissue samples.</td>
+</tr>
+<tr>
+<td style="line-height: 1.42857;">genes to highlight</td>
+<td style="line-height: 1.42857;">ftp://gpftp.broadinstitute.org/methylation/detail_genes.txt</td>
+<td style="line-height: 1.42857;">List of genes that are known frequently mutated genes across all brain tumors + glioblastoma specific genes.</td>
+</tr>
+<tr>
+<td style="line-height: 1.42857;">ignore regions</td>
+<td style="line-height: 1.42857;">ftp://gpftp.broadinstitute.org/methylation/ignore_regions.bed</td>
+<td style="line-height: 1.42857;">List of highly polymorphic regions specified by the conumee package.</td>
+</tr>
+</tbody>
+</table>
+<h2>Requirements</h2>
+<ul>
+<li>R v3.4.1</li>
+</ul>
+<h3>R Packages</h3>
+<ol>
+<li>optparse 1.4.4</li>
+<li>conumee 1.12.0</li>
+<li>minfi 1.24.0</li>
+<li>foreach</li>
+<li>doParallel</li>
+<li>parallel</li>
+<li>biomaRt 2.34.2</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GISTIC_2.0 (v7) BETA</title>
+    <meta name="slug" content="modules/docs/GISTIC_2.0/7" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<div class="bs-callout bs-callout-danger">
+<h4>This module is currently in beta release.  The module and/or documentation may be incomplete.</h4>
+</div>
+<p style="font-size: 1.2em; margin-top: 20px;">Genomic Identification of Significant Targets in Cancer (version 2.0.22)</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Steven Schumacher, Jen Dobson, Rameen Beroukhim, Gad Getz</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>Gad Getz, Rameen Beroukhim, Craig Mermel, Steven Schumacher, and Jen Dobson, <a href="https://groups.google.com/a/broadinstitute.org/forum/#!forum/gistic-forum" target="_blank">GISTIC-Forum</a></p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong>2.0.22</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Summary</h2>
+<p class="p1">The GISTIC module identifies regions of the genome that are significantly amplified or deleted across a set of samples. Each aberration is assigned a G-score that considers the amplitude of the aberration as well as the frequency of its occurrence across samples. False Discovery Rate q-values are then calculated for the aberrant regions, and regions with q-values below a user-defined threshold are considered significant. </p>
+<p class="p2">For each significant region, a “peak region” is identified, which is the part of the aberrant region with greatest amplitude and frequency of alteration. In addition, a “wide peak” is determined using a leave-one-out algorithm to allow for errors in the boundaries in a single sample. The “wide peak” boundaries are more robust for identifying the most likely gene targets in the region. </p>
+<p class="p2">Each significantly aberrant region is also tested to determine whether it results primarily from broad events (longer than half a chromosome arm), focal events, or significant levels of both. The GISTIC module reports the genomic locations and calculated q-values for the aberrant regions. It identifies the samples that exhibit each significant amplification or deletion, and it lists genes found in each “wide peak” region. </p>
+<p><span style="color:#ff0000;">Note: The GISTIC module is memory-intensive. </span></p>
+<h2>References</h2>
+<p class="p2">Mermel C, Schumacher S, et al. GISTIC2.0 facilitates sensitive and confident localization of the targets of focal somatic copy-number alteration in human cancers. <i>Genome Biology</i>. 2011;12:R41. </p>
+<p class="p2">Beroukhim R, Mermel C, et al. The landscape of somatic copy-number alteration across human cancers. <i>Nature</i>. 2010;463:899-905. </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>Name</th>
+<th style="width: 80px;">Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>refgene file <span style="color:red;">*</span></td>
+<td>-refgene</td>
+<td>The reference file including cytoband and gene location information.</td>
+</tr>
+<tr>
+<td>seg file <span style="color:red;">*</span></td>
+<td>-seg</td>
+<td>The segmentation file contains the segmented data for all the samples identified by GLAD, CBS, or some other segmentation algorithm. (See GLAD file format in the Genepattern file formats documentation.) It is a six column, tab-delimited file with an optional first line identifying the columns. Positions are in base pair units.</td>
+</tr>
+<tr>
+<td>markers file <span style="color:red;">*</span></td>
+<td>-mk</td>
+<td>The markers file identifies the marker names and positions of the markers in the original dataset (before segmentation). It is a three column, tab-delimited file with an optional header. If not already, markers are sorted by genomic position.</td>
+</tr>
+<tr>
+<td>array list file </td>
+<td>-alf</td>
+<td>The array list file is an optional file identifying the subset of samples to be used in the analysis. It is a one column file with an optional header. The sample identifiers listed in the array list file must match the sample names given in the segmentation file.</td>
+</tr>
+<tr>
+<td>cnv file </td>
+<td>-cnv</td>
+<td>There are two options for the cnv file. The first option allows CNVs to be identified by marker name. The second option allows the CNVs to be identified by genomic location.</td>
+</tr>
+<tr>
+<td>gene gistic <span style="color:red;">*</span></td>
+<td>-genegistic</td>
+<td>Flag indicating that the gene GISTIC algorithm should be used to calculate the significance of deletions at a gene level instead of a marker level.</td>
+</tr>
+<tr>
+<td>amplifications threshold <span style="color:red;">*</span></td>
+<td>-ta</td>
+<td>Threshold for copy number amplifications. Regions with a log2 ratio above this value are considered amplified.</td>
+</tr>
+<tr>
+<td>deletions threshold <span style="color:red;">*</span></td>
+<td>-td</td>
+<td>Threshold for copy number deletions. Regions with a log2 ratio below the negative of this value are considered deletions.</td>
+</tr>
+<tr>
+<td>join segment size <span style="color:red;">*</span></td>
+<td>-js</td>
+<td>Smallest number of markers to allow in segments from the segmented data. Segments that contain a number of markers less than or equal to this number are joined to the neighboring segment that is closest in copy number.</td>
+</tr>
+<tr>
+<td>qv thresh <span style="color:red;">*</span></td>
+<td>-qvt</td>
+<td>Threshholding value for q-values.</td>
+</tr>
+<tr>
+<td>remove X <span style="color:red;">*</span></td>
+<td>-rx</td>
+<td>Flag indicating whether to remove data from the X-chromosome before analysis.</td>
+</tr>
+<tr>
+<td>cap val <span style="color:red;">*</span></td>
+<td>-cap</td>
+<td>Minimum and maximum cap values on analyzed data. Regions with a log2 ratio greater than the cap are set to the cap value; regions with a log2 ratio less than -cap value are set to -cap.</td>
+</tr>
+<tr>
+<td>confidence level <span style="color:red;">*</span></td>
+<td>-conf</td>
+<td>Confidence level used to calculate the region containing a driver.</td>
+</tr>
+<tr>
+<td>run broad analysis <span style="color:red;">*</span></td>
+<td>-broad</td>
+<td>Flag indicating whether an additional broad-level analysis should be performed.</td>
+</tr>
+<tr>
+<td>broad length cutoff <span style="color:red;">*</span></td>
+<td>-brlen</td>
+<td>Threshold used to distinguish broad form focal events, given in units of fraction of chromosome arm.</td>
+</tr>
+<tr>
+<td>max sample segs <span style="color:red;">*</span></td>
+<td>-maxseg</td>
+<td>Maximum number of segments allowed for a sample in the input data. Samples with more segments than this threshold are excluded from the analysis.</td>
+</tr>
+<tr>
+<td>arm peel <span style="color:red;">*</span></td>
+<td>-armpeel</td>
+<td>Whether to perform arm level peel off. This helps separate peaks which cleans up noise.</td>
+</tr>
+<tr>
+<td>sample center <span style="color:red;">*</span></td>
+<td>-scent</td>
+<td>Method for centering each sample prior to the GISTIC analysis.</td>
+</tr>
+<tr>
+<td>gene collapse method <span style="color:red;">*</span></td>
+<td>-gcm</td>
+<td>Method for reducing marker-level copy number data to the gene-level copy number data in the gene tables. Markers contained in the gene are used when available, otherwise the flanking marker or markers are used.</td>
+</tr>
+<tr>
+<td>output prefix <span style="color:red;">*</span></td>
+<td>-fname</td>
+<td>The prefix for the output file name</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<div>
+<ol>
+<li>Reference Genome File (-refgene) (REQUIRED) 
+	<p>The reference genome file contains information about the location of genes and cytobands on a given build of the genome. Reference genome files are created in MATLAB <sup>TM</sup> and are not viewable with a text editor. The GISTIC 2.0 release includes the following reference genomes: hg16.mat, hg17.mat, hg18.mat, and hg19.mat).</p>
+</li>
+<li>Segmentation File (-seg) (REQUIRED)
+	<div>The segmentation file contains the segmented data for all the samples identified by GLAD, CBS, or some other segmentation algorithm. (See GLAD file format in the GenePattern file formats documentation.) It is a six column, tab-delimited file with an optional first line identifying the columns. Positions are in base pair units. Seg.CN values should be log transformed; if not, GISTIC will automatically log transform the values. The column headers are:
+	<ol>
+<li><i>Sample</i> (sample name)</li>
+<li><i>Chromosome</i> (chromosome number)</li>
+<li><i>Start Position</i> (segment start position, in bases)</li>
+<li><i>End Position</i> (segment end position, in bases)</li>
+<li><i>Num markers</i> (number of markers in segment)</li>
+<li><i>Seg.CN</i> (log2() -1 of copy number)]</li>
+</ol>
+</div>
+</li>
+<li>Markers File (-mk) (REQUIRED)
+	<div>The markers file identifies the marker names and positions of the markers in the original dataset (before segmentation). It is a three-column, tab-delimited file with an optional header. The column headers are:
+	<ol>
+<li><i>Marker Name</i> (marker name)</li>
+<li><i>Chromosome</i> (chromosome number)</li>
+<li><i>Marker Position </i> (in bases)</li>
+</ol>
+</div>
+</li>
+<li>Array List File (-alf) (OPTIONAL)
+	<p>The array list file is an optional file identifying the subset of samples to be used in the analysis. It is a one column file with an optional header (array). The sample identifiers listed in the array list file must match the sample names given in the segmentation file.</p>
+</li>
+<li>CNV File (-cnv) (OPTIONAL)
+	<div>There are two options for the CNV file. The first option allows CNVs to be identified by marker name. The second option allows the CNVs to be identified by genomic location.<br/>
+	Option #1: A two-column, tab-delimited file with an optional header row. The marker names given in this file must match the marker names given in the markers file. The CNV identifiers are for user use and can be arbitrary. The column headers are:
+	<ol>
+<li><i>Marker Name </i></li>
+<li><i>CNV Identifier </i></li>
+</ol>
+	Option #2: A 6-column, tab-delimited file with an optional header row. The CNV Identifier, Narrow Region Start, and Narrow Region End are for user use and can be arbitrary. The column headers are:
+
+	<ol>
+<li><i>CNV Identifier </i></li>
+<li><i>Chromosome </i></li>
+<li><i>Narrow Region Start </i></li>
+<li><i>Narrow Region End </i></li>
+<li><i>Narrow Region End</i></li>
+<li><i>Wide Region Start</i></li>
+<li><i>Wide Region End</i></li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<h2>Output Files</h2>
+<div>Tables of amplification peaks, followed by the genes contained in them, organized in "ragged columns." The amp genes file contains one column for each amplification peak identified in the GISTIC analysis. The first four rows are:
+<ol>
+<li>cytoband</li>
+<li>q value</li>
+<li>residual q value</li>
+<li>wide peak boundaries</li>
+</ol>
+These rows identify the lesion in the same way as the all lesions file. The remaining rows list the genes contained in each wide peak. For peaks that contain no genes, the nearest gene is listed in brackets.</div>
+<ol>
+<li>All Lesions File (all_lesions.conf_XX.txt, where XX is the confidence level)
+	<div>The all lesions file summarizes the results from the GISTIC run. It contains data about the significant regions of amplification and deletion as well as which samples are amplified or deleted in each of these regions. The identified regions are listed down the firstcolumn, and the samples are listed across the first row, starting in column 10.<br/>
+<strong>Region Data</strong><br/>
+	Columns 1-9 present the data about the significant regions as follows:
+	<ol>
+<li><i>Unique Name</i>: A name assigned to identify the region.</li>
+<li><i>Descriptor</i>: The genomic descriptor of that region</li>
+<li><i>Wide Peak Limits</i>: The “wide peak” boundaries most likely to contain the targeted genes. These are listed in genomic coordinates and marker (or probe) indices.</li>
+<li><i>Peak Limits</i>: The boundaries of the region of maximal amplification or deletion.</li>
+<li><i>Region Limits</i>: The boundaries of the entire significant region of amplification or deletion.</li>
+<li><i>q values</i>: The q-value of the peak region.</li>
+<li><i>Residual q values after removing segments shared with higher peaks </i>: The q-value of the peak region after removing (“peeling off”) amplifications or deletions that overlap other more significant peak regions in the same chromosome.</li>
+<li><i>Broad or Focal</i>: Identifies whether the region reaches significance due primarily to broad events (called “broad”), focal events (called “focal”), or independently significant broad and focal events (called “both”).</li>
+<li><i>Amplitude Threshold</i>: Key giving the meaning of values in the subsequent columns associated with each sample.</li>
+</ol>
+<p><strong>Sample Data</strong></p>
+<p>Each of the analyzed samples is represented in one of the columns following the lesion data (columns 10 through end). The data contained in these columns varies slightly by section of the file.</p>
+<div>The first section can be identified by the key given in column 9 – it starts in row 2 and continues until the row that reads <em>Actual Copy Change Give</em>n. This section contains summarized data for each sample. A ‘0’ indicates that the copy number of the sample was not amplified or deleted beyond the threshold amount in that peak region. A ‘1’ indicates that the sample had low-level copy number aberrations (exceeding the low threshold indicated in column 9), and a ‘2’ indicates that the sample had high-level copy number aberrations (exceeding the high threshold indicated in column 9).</div>
+<div> </div>
+<div>The second section can be identified as the rows in which column 9 reads <em>Actual Copy Change Given</em>. The second section exactly reproduces the first section, except that here the actual changes in copy number are provided rather than zeroes, ones, and twos.</div>
+<div> </div>
+<div>The final section is similar to the first section, except that here only broad events are included. A "1" in the samples columns (columns 10+) indicates that the median copy number of the sample across the entire significant region exceeded the threshold given in column 9. That is, it indicates whether the sample had a geographically extended event, rather than a focal amplification or deletion covering little more than the peak region.</div>
+<div> </div>
+<div><img alt="" src="/cancer/software/genepattern/attachments/lesions_conf_region_gistic.png" style="height: 321px; width: 720px;"/></div>
+</div>
+</li>
+<li>Amplification Genes File (Amp_genes.conf_XX.txt, where XX is the confidence level)</li>
+<li>Deletion Genes File (Del_genes.conf_XX.txt, where XX is the confidence level)
+	<div>Tables of deletion peaks, followed by the genes contained in them, organized in "ragged columns." The del genes file contains one column for each deletion identified in the GISTIC analysis. The file format for the del genes file is identical to the format for the amp genes file.</div>
+<div><img alt="" src="/cancer/software/genepattern/uploaded/content_del_genes_conf_xx.png" style="height: 95px; width: 531px;"/></div>
+</li>
+<li>GISTIC Scores File (scores.gistic)
+	<div>A table of segmented q-values, scores, and amplification/deletion frequencies for the sample set. The scores file lists the q-values [presented as -log10(q)], G-scores, average amplitudes among aberrant samples, and frequency of aberration, across the genome for both amplifications and deletions. The scores file is viewable with the <a href="http://www.broadinstitute.org/software/igv/">Integrative Genomics Viewer (IGV</a>). <img alt="" src="/cancer/software/genepattern/attachments/gistic_scores_small4.png" style="height: 120px; width: 600px;"/></div>
+</li>
+<li>Segmented Copy Number (raw_copy_number.pdf and raw_copy_number.png)
+	<div>The segmented copy number file (both PDF and PNG) is a heat map image of the segmented copy number profiles in the input data. <img alt="" src="/cancer/software/genepattern/attachments/segmentationfile_raw_copy_number.png" style="width: 576px; height: 367px;"/></div>
+</li>
+<li>Amplification GISTIC plot (amp_qplot.pdf and amp_qplot.png)
+	<div>The amplification plot (in both PDF and PNG format) shows the G-scores (top) and q-values (bottom) with respect to amplifications for all markers over the entire region analyzed.</div>
+<img alt="" src="/cancer/software/genepattern/attachments/segmentationfile_amp_qplot.png" style="width: 380px; height: 481px;"/></li>
+<li>Deletion GISTIC plot (del_qplot.pdf and del_quplot.png)
+	<div>The deletion plot (in both PDF and PNG format) shows the G-scores (top) and q-values (bottom) with respect to deletions for all markers over the entire region analyzed.</div>
+<img alt="" src="/cancer/software/genepattern/attachments/segmentationfile_del_qplot.png" style="width: 380px; height: 481px;"/></li>
+<li>all_thresholded.by_genes.txt
+	<div>The table in this file is obtained by applying both low- and high-level thresholds to the gene copy levels of all the samples. The entries with value +/- 2 exceed the high-level thresholds for amps/dels, and those with +/- 1 exceed the low-level thresholds but not the high-level thresholds. The low-level thresholds are just the 'amplifications_threshold' and 'deletions_threshold' noise threshold input values (typically 0.1 or 0.3) and are the same for every threshold.<br/>
+	By contrast, the high-level amplification (or deletion) thresholds are calculated on a sample-by-sample basis and are based on the maximum (or minimum) median arm-level amplification (or deletion) copy number found in the sample. The idea, for deletions anyway, is that this level is a good approximation for hemizygous given the purity and ploidy of the sample. The actual cutoffs used for each sample can be found in a table in the sample_cutoffs.txt file.</div>
+</li>
+<li>Other result files include:
+	<ul>
+<li>regions_track.conf_XX.bed</li>
+<li>broad_significance_results.txt (only output if run.broad.analysis is set to "yes")</li>
+<li>broad_values_by_arm.txt (only output if run.broad.analysis is set to "yes")</li>
+<li>freqarms_vs_ngenes.pdf (only output if run.broad.analysis is set to "yes")</li>
+<li>arraylistfile.txt (only output if an array.list.file is provided as input)</li>
+<li>all_data_by_genes.txt</li>
+<li>broad_data_by_genes.txt</li>
+<li>focal_data_by_genes.txt</li>
+<li>sample_cutoffs.txt</li>
+<li>amp_qplot.v2.pdf and amp_qplot.v2.ps (do not contain gene labels)</li>
+<li>del_qplot.v2.pdf and del_qplot.v2.ps (do not contain gene labels)</li>
+</ul>
+</li>
+</ol>
+<h2>Troubleshooting</h2>
+<p class="p1">Please see the GenePattern FAQ (<a href="http://www.broadinstitute.org/cancer/software/genepattern/doc/faq"><span class="s1">http://www.broadinstitute.org/cancer/software/genepattern/doc/faq</span></a>) for assistance with specific errors. </p>
+<h2>Example Data</h2>
+<ul>
+<li><a href="ftp://ftp.broadinstitute.org/pub/GISTIC2.0/examplefiles/segmentationfile.txt">Example segmentation file</a> (the segmentation file contains segmented data for all the samples identified by some segmentation algorithm)</li>
+<li><a href="ftp://ftp.broadinstitute.org/pub/GISTIC2.0/examplefiles/markersfile.txt">Example markers file</a> (the markers file identifies the marker names and positions of the markers in the original dataset before segmentation)</li>
+<li><a href="ftp://ftp.broadinstitute.org/pub/GISTIC2.0/examplefiles/arraylistfile.txt">Example array list file</a> (the array list file is an optional file identifying the subset of samples to be used in the analysis)</li>
+<li><a href="ftp://ftp.broadinstitute.org/pub/GISTIC2.0/examplefiles/cnvfile.txt">Example CNV file</a> (the optional CNV file identifies CNVs by either marker name or genomic location)</li>
+</ul>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					SNP Analysis</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					64-bit</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					Linux</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					MATLAB</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td>2012-10-12</td>
+<td>Added description of the all_thresholded.by_genes.txt output file to the documentation.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2012-06-20</td>
+<td>GISTIC module v.5 contains the update to GISTIC 2.0.16. There are extensive changes to the algorithms and result files, from GISTIC 1.0. See Mermel et al (2011) for more info</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

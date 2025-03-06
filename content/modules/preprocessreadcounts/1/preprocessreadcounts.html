@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PreprocessReadCounts (v1) BETA</title>
+    <meta name="slug" content="modules/docs/PreprocessReadCounts/1" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<div class="bs-callout bs-callout-danger">
+<h4>This module is currently in beta release.  The module and/or documentation may be incomplete.</h4>
+</div>
+<p style="font-size: 1.2em; margin-top: 20px;">Preprocess RNA-Seq count data in a GCT file so that it is suitable for use in GenePattern analyses.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Arthur Liberzon, David Eby, Broad Institute</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Introduction</h2>
+<p>This module is used to preprocess RNA-Seq data into a form suitable for use downstream in other GenePattern analyses such as GSEA, ComparativeMarkerSelection, NMFConsensus, as well as GENE-E and other visualizers.  Many of these tools were originally designed to handle microarray data - particularly from Affymetrix arrays - and so we must be mindful of that origin when preprocessing data for use with them.</p>
+<p>The module does this by using a mean-variance modeling technique <strong>[1]</strong> to transform the dataset to fit an approximation of a normal distribution, with the goal of thus being able to apply classic normal-based microarray-oriented statistical methods and workflows.</p>
+<h2>Algorithm</h2>
+<p>This modeling technique is called 'voom' and is part of the 'limma' package of Bioconductor <strong>[1] [2]</strong>.  Use of this method requires the user to supply raw read counts as produced by HTSeq or RSEM.  These counts should not be normalized and also should not be RPKM or FPKM values.  The MergeHTSeqCounts module in GenePattern is capable of producing a suitable GCT from HTSeq output.</p>
+<p>The module first performs a filtering pass on the dataset to remove any features (rows) without at least 1 read per million in <em>n</em> of the samples, where <em>n</em> is the size of the smallest group of replicates (recommended in <strong>[3]</strong>).  Note that this not a simple threshold on the count but rather a filtering using CPM (counts per million) values calculated just for this purpose.  The raw values are still used for variance modeling; these CPM values are only used for filtering and then subsequently discarded.  The module will automatically determine the smallest group of samples (<em>n</em>) based on their classifications in the user-supplied CLS file.</p>
+<ul>
+<li>The threshold level can be adjusted using the <em>expression.value.filter.threshold</em>  advanced parameter, though the default value follows the recommendations from <strong>[1]</strong> and <strong>[3]</strong> and should suffice for most users.</li>
+</ul>
+<p>Next, the module performs normalization of the dataset using Trimmed Mean of M-values (TMM) <strong>[4]</strong> on the raw counts of any remaining features that pass the filter.  Finally, the module performs the mean-variance transformation to approximate a normal distribution using the 'voom' method of the 'limma' package, returning a new dataset with values in logCPM (log2 counts per million) that can be used with classic normal-based microarray-oriented statistical methods and workflows.</p>
+<h2>References</h2>
+<ol>
+<li>Law CW, Chen Y, Shi W and Smyth GK (2014). "voom: precision weights unlock linear model analysis tools for RNA-seq read counts." <em>Genome Biology</em>, <strong>15</strong>:R29 (<a href="http://www.genomebiology.com/2014/15/2/R29">link</a>)</li>
+<li><span style="line-height: 1.42857;">Smythe GK (2015). "Package 'limma'" </span><a href="https://bioconductor.org/packages/3.0/bioc/manuals/limma/man/limma.pdf" style="line-height: 1.42857; background-color: rgb(255, 255, 255);">documentation</a><span style="line-height: 1.42857;"> from Bioconductor 3.0.</span></li>
+<li>Anders S, McCarthy DJ, Chen Y, Okoniewski M, Smyth GK, Huber W, Robinson MD (2013). " Count-based differential expression analysis of RNA sequencing data using R and Bioconductor." <em>Nat. Protocols</em>, <strong>8</strong>, 1765-1786. (<a href="http://dx.doi.org/10.1038/nprot.2013.099">link</a>)</li>
+<li>Robinson, MD, and Oshlack, A (2010). A scaling normalization method for differential expression analysis of RNA-seq data. <em>Genome Biology</em> <strong>11</strong>, R25</li>
+<li><span style="line-height: 1.42857;">Ritchie ME, Phipson B, Wu D, Hu Y, Law CW, Shi W and Smyth GK (2015). "limma powers differential expression analyses for RNA-sequencing and microarray studies." </span><em style="line-height: 1.42857;">Nucleic Acids Research</em><span style="line-height: 1.42857;">, </span><strong style="line-height: 1.42857;">43</strong><span style="line-height: 1.42857;">(7), pp. e47.</span></li>
+<li><span style="line-height: 1.42857;">Robinson MD, McCarthy DJ and Smyth GK (2010). edgeR: a Bioconductor package for differential expression analysis of digital gene expression data. <em>Bioinformatics</em> <strong>26</strong>, 139-140</span></li>
+<li><span style="line-height: 1.42857;">Chen Y, McCarthy DJ, Robinson MD and Smyth GK (2015). "Package 'edgeR'" <a href="https://bioconductor.org/packages/3.0/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf">Users Guide</a> from Bioconductor 3.0.</span></li>
+</ol>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>input file <span style="color:red;">*</span></td>
+<td>A GCT file containing raw RNA-Seq counts, such as is produced by MergeHTSeqCounts</td>
+</tr>
+<tr>
+<td>cls file <span style="color:red;">*</span></td>
+<td>A categorical CLS file specifying the phenotype classes for the samples in the GCT file.</td>
+</tr>
+<tr>
+<td>output file <span style="color:red;">*</span></td>
+<td>Output file name</td>
+</tr>
+<tr>
+<td>expression value filter threshold <span style="color:red;">*</span></td>
+<td>Threshold to use when filtering CPM expression values; rows are kept only if the values (in CPM) for all columns are greater than this threshold</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li>&lt;input.file&gt;<br/>
+	A GCT file containing raw read counts for your RNA-Seq data.</li>
+<li>&lt;cls.file&gt;<br/>
+	A categorical CLS file specifying the phenotype classes for the samples in the GCT.</li>
+</ol>
+<h2>Output Files</h2>
+<ol>
+<li>&lt;output.file&gt;  (by default, &lt;input.file_basename&gt;.preprocessed.gct<br/>
+	A GCT file containing the preprocessed dataset.  Note that this may have fewer rows than the original GCT due to the filter.</li>
+</ol>
+<h2>Example Data</h2>
+<p>Input:</p>
+<p><a href="ftp://gpftp.broadinstitute.org/example_data/modules/PreprocessReadCounts/input/MergedHTSeqCounts_GSE52778.gct" target="_blank">ftp://gpftp.broadinstitute.org/example_data/modules/PreprocessReadCounts/input/MergedHTSeqCounts_GSE52778.gct</a></p>
+<p><a href="ftp://gpftp.broadinstitute.org/example_data/modules/PreprocessReadCounts/input/MergedHTSeqCounts_GSE52778.cls" target="_blank">ftp://gpftp.broadinstitute.org/example_data/modules/PreprocessReadCounts/input/MergedHTSeqCounts_GSE52778.cls</a></p>
+<h2>Requirements</h2>
+<p>The module requires R-3.1.3 with the 'getopt_1.20.0' and 'optparse_1.3.2' packages from CRAN and the 'limma' and 'edgeR' packages from Bioconductor 3.0.</p>
+<p>[Update this section with pointers to new R docs as they become available]</p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Preprocess &amp; Utilities</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R3.1.3</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.4</td>
+<td>2015-11-24</td>
+<td>Prerelease building towards Beta</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

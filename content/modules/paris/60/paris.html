@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PARIS (v60)</title>
+    <meta name="slug" content="modules/docs/PARIS/60" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Feature selection by class comparison or comparison against a continuous vector (Probability Analysis by Ranked Information Score)</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir, Pablo Tamayo</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>bweir@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	PARIS is a flexible GenePattern module which uses a mutual information based metric to rank sample data (cell line shRNA/gene dependencies, genomic features, etc.) based on a target profile(one value per sample/ cell line).The module can handle both binary variables (for example, comparing mutant vs wildtype cell lines denoted by 0,1) and continuous variables (for example, comparing to the expression of a gene) as the target profile vector.</p>
+<h2>
+	Algorithm</h2>
+<p>
+	The metric used by PARIS is based on the estimation of the differential mutual information between the phenotype of interest (the target profile) and each feature in the data.  The differential muttual information is normalized, based on the joint phenotype-feature entropy.</p>
+<p>
+	The joint entropy <em>H(t, x)</em> and the Mutual Information, <em>MI(t, x)</em> between the target profile <em>t </em>and a given essentiality profile <em>x</em> are function of empirical probability distributions [Cover and Thomas 2006].</p>
+<p>
+	These probability distributions are determined from the data profiles using kernel density and cross-validation bandwidth estimation [Sheather 2004, Venables and Ripley 2002 and Scott 1992]. The mutual information is normalized (<em>NMI</em>) using the joint entropy. This provides a universal metric [Li et al. 2004] that takes into account differences in entropy across essentiality profiles. We also rescale the <em>NMI</em> with the score of the target against itself.</p>
+<p>
+	and add a “directionality” factor according to the sign of the correlation coefficient. In this way a perfect match (anti-match) corresponds to a score of +1 (-1) and a random match to 0.  The significance of a given <em>RNMI</em> matching score is estimated by an empirical permutation test where the target values are randomly permuted and compared with all the essentiality profiles in order to make a global null distribution and compute nominal p-values and False Discovery Rates [Benjamini and Hochberg 1995]. The <em>RNMI</em> matching score has important advantages when compared to other association metrics such as increased sensitivity to non-linear correlations and wider dynamic range at the top of the matching scale which is especially useful when comparing against multiple genomic features [Botvinnik et al. 2014]. The use of information-based measures of association is not new [Linfoot 1957, Joe 1989] but it has only been applied systematically to practical inferential problems, and genomics in particular, over the last decade [Kraskov et al. 2004, Correa and Lindstrom 2012, Butte and Kohane 2000, Steuer et al. 2002, Margolin et al. 2006]. Recently there has been a renew appreciation of the potential of  information-based approaches [Speed 2011, Reshef et al. 2011, Botvinnik et al 2014].</p>
+<h2>
+	References</h2>
+<p>
+	Contact author</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				target.profile<span style="color: red;">*</span></td>
+<td>
+				Input target profile file (generally feature data, one value per sample). Format can either be a .cls file or a .gct file where one row defines the target profile.</td>
+</tr>
+<tr>
+<td>
+				target<span style="color: red;">*</span></td>
+<td>
+				Target gene or ID from target.profile file.  This needs to match a row from the .gct file (in the ‘Description’ column) or needs to match the group of interest in 2nd line of .cls file.</td>
+</tr>
+<tr>
+<td>
+				data<span style="color: red;">*</span></td>
+<td>
+				Input data file in .gct file format (data to be ranked based on target profile)</td>
+</tr>
+<tr>
+<td>
+				permtype<span style="color: red;">*</span></td>
+<td>
+				Permutation type: standard permutations or lineage corrected permutations.   Default: standard (standard; subclass.stratified).</td>
+</tr>
+<tr>
+<td>
+				prefix<span style="color: red;">*</span></td>
+<td>
+				Prefix for output filenames.</td>
+</tr>
+<tr>
+<td>
+				type flag<span style="color: red;">*</span></td>
+<td>
+				Gene level data or shRNA level data to be ranked. Default: gene (shRNA; gene).</td>
+</tr>
+<tr>
+<td>
+				quality<span style="color: red;">*</span></td>
+<td>
+				Controls how many permutations are run. Default: normal  (draft; normal; final).</td>
+</tr>
+<tr>
+<td>
+				direction<span style="color: red;">*</span></td>
+<td>
+				Direction of feature mapping.  Default: positive (positive; negative).</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		target.profile
+		<ul>
+<li>
+				The target.profile file is either a .cls file for the comparison of interest, or a .gct file where a single row acts as the classifier.  Specify the row of the .gct file that will be the target profile, using the ‘target’ input field.</li>
+</ul>
+</li>
+<li>
+		data
+		<ul>
+<li>
+				The data file is a .gct formatted file, all rows in it will be ranked based on the comparison specified.<br/>
+				 </li>
+</ul>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		Results file:                                             [prefix]_FS_RESULTS.txt
+		<ul>
+<li>
+				Ranked list of all genes/ shRNAs/ features in the data file, using the RNMI (mutual information) metric, based on the target profile tested.  Confidence intervals are only given for the top and bottom 25 genes and are calculated by bootstrapping. </li>
+<li>
+				The file includes the following columns: Rank, Gene, Feature, RNMI - Ranked normalized mutual information value, 5% CI - 5 % confidence interval, 50% CI - 50 % confidence interval, 95% CI - 95 % confidence interval, p-val (global) - p-value based on permutation testing, FDR -  false discovery rate</li>
+</ul>
+</li>
+<li>
+		Top/bottom 25 heatmap figure file        [prefix]_FS_RESULTS.pdf
+		<ul>
+<li>
+				Heat map figure of the top and bottom 25 ranked genes/ shRNAs/ features from the comparison, showing the original data (rows) across all samples (columns).  Samples are sorted by phenotype based on the classifier file (top red-blue bar), then by clustering the top and bottom 25 genes.</li>
+</ul>
+</li>
+<li>
+		Sample order for heatmap file              CellLine_ClusterOrder.[prefix]_FS_RESULTS.txt
+		<ul>
+<li>
+				A text file listing the sample names, in the order presented in the heatmap figure file. This can be used as a ‘column annotation’ in GENE-E.</li>
+</ul>
+</li>
+<li>
+		Ranked list results file for GSEA          GSEAranked_format.[prefix].rnk
+		<ul>
+<li>
+				Ranked list of all genes/ shRNAs/ features in the data file, using the RNMI (mutual information) metric, based on the target profile tested.  Contains the ranked list in order, with only the gene name and RNMI value as columns.  This is compatible with running GSEA (Gene Set Enrichment Analysis) based on a ‘pre-ranked’ list.<br/>
+				Example:<br/>
+				Name        RNMI<br/>
+				CDC37       0.0886<br/>
+				SERPINA12        0.0867<br/>
+				IARS2        0.0814<br/>
+				MYB            0.0762<br/>
+				ABL1        0.0746<br/>
+				MUS81        0.0736<br/>
+				SPI1            0.0701<br/>
+<br/>
+<br/>
+				 </li>
+</ul>
+</li>
+</ol>
+<h2>
+	Example Data</h2>
+<p>
+	 Coming soon.</p>
+<h2>
+	Requirements</h2>
+<p>
+	R-2.15</p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>60</td>
+<td>2014-04-11</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

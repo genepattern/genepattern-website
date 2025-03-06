@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>removeSamples (v17)</title>
+    <meta name="slug" content="modules/docs/removeSamples/17" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Remove samples from a dataset (columns from a .gct), using a list of samples provided</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir;Broad Institute </p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>bweir@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	removeSamples is a GenePattern module that removes user-defined samples from a dataset. The user inputs their dataset as a GCT file, along with a text file containing the list of samples to be removed. The module outputs a GCT file containing the dataset with the user-defined samples removed. </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				gct file<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				Data file containing samples to be removed in a GCT file format.</td>
+</tr>
+<tr>
+<td>
+				removelist<span style="color:#ff0000;">*</span></td>
+<td>
+				Text file containing the list of samples to remove. Each sample should be on a separate line and must match a sample name in the data file exactly. </td>
+</tr>
+<tr>
+<td>
+				extension<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				User defined prefix for the output file name. </td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		gct file
+		<ul>
+<li>
+				Data file containing samples to be removed in a GCT file format. </li>
+</ul>
+</li>
+<li>
+		removelist
+		<ul>
+<li>
+				Text file containing the list of samples to remove. Each sample should be on a separate line and must match a sample name in the data file exactly. </li>
+</ul>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		Data file with samples removed          <em>[extension]</em>.rnai.gct
+		<ul>
+<li>
+				A GCT file containing the user-inputted dataset with the samples in the removelist text file removed from the dataset. </li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.15</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</body>
+</html>

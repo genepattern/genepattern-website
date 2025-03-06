@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>shRNAremoveOverlap (v8)</title>
+    <meta name="slug" content="modules/docs/shRNAremoveOverlap/8" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Remove shRNAs (from a GCT data file) not present in a list of user defined shRNAs (rows). Used to remove shRNAs overlapping in sequence &gt; 3 basepairs. </p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir;The Broad Institute</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>bweir@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	shRNAremoveOverlap is a GenePattern module that removes shRNAs which overlap in sequence by greater than three basepairs from a GCT data file. Generally, it keeps shRNAs (rows) in a GCT data file, based on a user-defined list of shRNAs. The module outputs a new, smaller GCT file containing the dataset with any overlapping shRNAs removed (only keeps the shRNAs from the user-defined list). </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				list<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				The list of shRNAs that are not overlapping (the list of shRNAs to keep).</td>
+</tr>
+<tr>
+<td>
+				gct file<span style="color:#ff0000;">*</span></td>
+<td>
+				Data file containing shRNA data (GCT file format).</td>
+</tr>
+<tr>
+<td>
+				mapping<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				The shRNA to gene mapping file.</td>
+</tr>
+<tr>
+<td>
+				prefix<span style="color:#ff0000;">*</span></td>
+<td>
+				User-defined prefix for output file name. </td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		list
+		<ul>
+<li>
+				The list of shRNAs that are not overlapping. Each shRNA needs to be on a separate line of the file. </li>
+</ul>
+</li>
+<li>
+		gct file
+		<ul>
+<li>
+				Data file containing shRNA data (GCT file format).</li>
+</ul>
+</li>
+<li>
+		mapping file
+		<ul>
+<li>
+				The shRNA to gene mapping file.</li>
+</ul>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		Data file with overlapping shRNAs removed           [prefix]_filtered2.rnai.gct  
+		<ul>
+<li>
+				A GCT file containing the dataset with any overlapping shRNAs removed (only keeps the shRNAs from the user defined list). </li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.15</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>2014-03-24</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

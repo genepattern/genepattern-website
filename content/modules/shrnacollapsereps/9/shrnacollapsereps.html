@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>shRNAcollapseReps (v9)</title>
+    <meta name="slug" content="modules/docs/shRNAcollapseReps/9" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Collapses replicate samples in a gct data file, based on the naming in a sample information file.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir;Broad Institute </p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>bweir@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	shRNAcollapseReps is a GenePattern module that collapses replicate samples in a user-inputted shRNA dataset. The module outputs a GCT file containing the user-inputted dataset with the replicate cell line samples collapsed by taking the mean value per shRNA. It also returns a text file containing the sample info of the cell lines in the dataset, based on the provided sample info file. </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				gct file<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				Data file containing shRNA data.</td>
+</tr>
+<tr>
+<td>
+				sample info file<span style="color:#ff0000;">*</span></td>
+<td>
+				Text file containing cell line sample information.</td>
+</tr>
+<tr>
+<td>
+				prefix<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				User defined prefix of output file names.</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		gct file
+		<ul>
+<li>
+				The gct file contains shRNA data, with columns as cell line samples and rows as shRNAs. </li>
+</ul>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		Data  file with replicate samples collapsed         <em>[prefix]</em>_meanrep.rnai.gct
+		<ul>
+<li>
+				A GCT file containing the user-inputted dataset with the replicate cell line samples collapsed.</li>
+</ul>
+</li>
+<li>
+		Sample info file            <em>[prefix]</em>_SampleInfo.txt
+		<ul>
+<li>
+				A text file containing the sample information contained in the user provided sample info file, subsetted to only cell lines in the dataset. </li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.15</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9</td>
+<td>2014-04-11</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

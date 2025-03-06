@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ReplicatesQC (v11)</title>
+    <meta name="slug" content="modules/docs/ReplicatesQC/11" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Removes cell line replicate samples that fail quality control check of cell line replicate correlations and distribution scores.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir, Sara Howell;The Broad Institute </p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong>showell@broadinstitute.org</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	ReplicatesQC is a GenePattern module that implements quality control steps during the analysis of shRNA pooled screen data. The user inputs at least one and up to three GCT files containing shRNA data, with each file containing data from a separate batch. The correlation scores for cell line replicates are calculated and a replicate sample will fail QC if the correlation score is less than the threshold, which is the 75th percentile of the non-replicate correlation scores. The distribution scores for cell line replicates are calculated and a replicate sample will fail QC if the distribution score is less than the threshold, which is the mean of the distribution scores minus the standard deviation of the distribution scores. If there are not at least 3 replicate samples passing QC for each cell line, all replicates for that cell line will be added to the failed replicate sample list. </p>
+<h2>
+	References</h2>
+<p>
+	Contact author</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				shRNA data file<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				Format is a GCT file where each row corresponds to a unique shRNA sequence. At least one file is required and up to three files can be uploaded. </td>
+</tr>
+<tr>
+<td>
+				extension<span style="color:#ff0000;">*</span></td>
+<td>
+				User-defined prefix of output file names. </td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		shRNA data file
+		<ul>
+<li>
+				Format is a GCT file where each row corresponds to a unique shRNA sequence. </li>
+</ul>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		File containing the replicates that failed quality control <strong>               </strong>removelist_reps_<em>[extension]</em>.txt
+		<ul>
+<li>
+				A text file containing the replicates that failed quality control, along with the reason why each replicate failed.</li>
+</ul>
+</li>
+<li>
+		Boxplot of non-replicate correlations                   NonReplicate_corr_boxplot_<em>[extension]</em>.pdf
+		<ul>
+<li>
+				A pdf of the boxplot of non-replicate correlations, displaying the distribution of non-replicate correlation values. Cell line replicates pass the correlation quality control step if their correlation values exceed the 75th percentile of the non-replicate correlation values. </li>
+</ul>
+</li>
+<li>
+		File containing replicate correlation values                     Replicate_Correlations_<em>[extension]</em>.txt
+		<ul>
+<li>
+				A text file containing the pairwise replicate correlations for all cell lines. The 75th percentile of the non-replicate correlation values is included at the beginning of the file, which is the threshold a replicate needs to exceed in order to pass quality control.</li>
+</ul>
+</li>
+<li>
+		File listing replicate samples that fail the replicate correlation requirements                        Reproducibility_Failing_Samples_<em>[extension]</em>.txt
+		<ul>
+<li>
+				A text file containing the replicate samples that have a correlation score lower than the threshold.</li>
+</ul>
+</li>
+<li>
+		File listing replicate samples that fail the distribution score requirements                        Distribution_Failing_Samples_<em>[extension]</em>.txt
+		<ul>
+<li>
+				A text file containing the replicate samples that have a distribution score lower than the threshold, which is the 75th percentile of the distribution scores. </li>
+</ul>
+</li>
+<li>
+		File listing all replicate samples with their distribution scores.             Distribution_All_Samples_<em>[extension]</em>.txt
+		<ul>
+<li>
+				A text file containing all replicate samples, along with their distribution scores.</li>
+</ul>
+</li>
+<li>
+		File containing replicate sample information                Reps_Sample_Info_<em>[extension]</em>.txt
+		<ul>
+<li>
+				A text file containing a summary of the replicate sample, the cell line name, and the distribution score.</li>
+</ul>
+</li>
+<li>
+		Histogram of distribution scores                Histogram_75thprctile_<em>[extension]</em>.pdf
+		<ul>
+<li>
+				A pdf of the histogram of distribution scores. The red line represents the first threshold (the mean of distribution scores minus the standard deviation of distribution scores) and the magenta line represents the second threshold (the mean of distribution scores minus two times the standard deviation of distribution scores). </li>
+</ul>
+</li>
+<li>
+		Boxplot of cell lines with worst distribution scores                     Worst_75th_prctile_<em>[extension]</em>.pdf
+		<ul>
+<li>
+				A pdf of the boxplot of cell lines with the worst distribution scores. The red line represents the first threshold (the mean of distribution scores minus the standard deviation of distribution scores) and the magenta line represents the second threshold (the mean of distribution scores minus two times the standard deviation of distribution scores). </li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.15</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11</td>
+<td>2014-04-11</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

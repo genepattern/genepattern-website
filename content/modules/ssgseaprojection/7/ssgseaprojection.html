@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ssGSEAProjection (v7)</title>
+    <meta name="slug" content="modules/docs/ssGSEAProjection/7" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Performs single sample GSEA Projection</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>GenePattern</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Description</h2>
+<p>Project each sample within a data set onto a space of gene set enrichment scores using the ssGSEA projection methodology described in Barbie et al., 2009. </p>
+<h2>Summary</h2>
+<p>Single-sample GSEA (ssGSEA), an extension of Gene Set Enrichment Analysis (GSEA), calculates separate enrichment scores for each pairing of a sample and gene set.  Each ssGSEA enrichment score represents the degree to which the genes in a particular gene set are coordinately up- or down-regulated within a sample.</p>
+<h2>Discussion</h2>
+<p>When analyzing genome-wide transcription profiles from microarray data, a typical goal is to find genes significantly differentially correlated with distinct sample classes defined by a particular phenotype (e.g., tumor vs. normal). These findings can be used to provide insights into the underlying biological mechanisms or to classify (predict the phenotype of) a new sample.  Gene Set Enrichment Analysis (GSEA) addressed this problem by evaluating whether a priori defined sets of genes, associated with particular biological processes (such as pathways), chromosomal locations, or experimental results are enriched at either the top or bottom of a list of differentially expressed genes ranked by some measure of differences in a gene’s expression across sample classes.  Examples of ranking metrics are fold change for categorical phenotypes (e.g., tumor vs. normal) and Pearson correlation for continuous phenotypes (e.g., age).  Enrichment provides evidence for the coordinate up- or down-regulation of a gene set’s members and the activation or repression of some corresponding biological process.</p>
+<p>Where GSEA generates a gene set’s enrichment score with respect to phenotypic differences across a collection of samples within a dataset, ssGSEA calculates a separate enrichment score for each pairing of sample and gene set, independent of phenotype labeling. In this manner, ssGSEA transforms a single sample's gene expression profile to a <em>gene set </em>enrichment profile.  A gene set's enrichment score represents the activity level of the biological process in which the gene set's members are coordinately up- or down-regulated.  This transformation allows researchers to characterize cell state in terms of the activity levels of biological processes and pathways rather than through the expression levels of individual genes.</p>
+<p>In working with the transformed data, the goal is to find biological processes that are differentially active across the phenotype of interest and to use these measures of process activity to characterize the phenotype.  Thus, the benefit here is that the ssGSEA projection transforms the data to a higher-level (pathways instead of genes) space representing a more biologically interpretable set of features on which analytic methods can be applied.</p>
+<p>As a practical matter, ssGSEAProjection essentially reduces the dimensionality of the set.  You can look for correlations between the gene set enrichment scores and the phenotype of interest (e.g., tumor vs. normal) using the GCT output with a module like ComparativeMarkerSelection.  You could also try clustering the data set; whichever gene sets stand out as strong predictors of the phenotype of interest, specific clusters can then be mapped to biochemical pathways, giving you insight into what is driving the phenotype of interest.</p>
+<p>While the GCT can be passed along to any module accepting that format, it does not make sense to run it through GSEA.</p>
+<p>This module implements the single-sample GSEA projection methodology described in Barbie et al, 2009.</p>
+<h2>References</h2>
+<ol>
+<li>Subramanian A, Tamayo P, Mootha VK, Mukherjee S, Ebert BL, Gillette MA, Paulovich A, Pomeroy SL, Golub TR, Lander ES, Mesirov JP. Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles. <em>PNAS</em>. 2005;102(43):15545-15550. <a href="http://www.pnas.org/content/102/43/15545.abstract">http://www.pnas.org/content/102/43/15545.abstract</a></li>
+<li>Barbie DA, Tamayo P, et al. Systematic RNA interference reveals that oncogenic KRAS-driven cancers require TBK1. <em>Nature</em>. 2009;462:108-112.</li>
+</ol>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table class="table table-striped" id="module_params_table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">input gct file <span style="color:red;">*</span></td>
+<td valign="top"><a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gct">GCT</a> file containing input dataset’s gene expression data.  The dataset must contain gene expression data for a minimum of two samples.</td>
+</tr>
+<tr>
+<td valign="top">output file prefix</td>
+<td valign="top">The prefix used for the name of the output GCT file.  If unspecified, output prefix will be set to &lt;prefix of input GCT file&gt;.PROJ.  The output GCT file will contain the projection of input dataset onto a space of gene set enrichments scores.</td>
+</tr>
+<tr>
+<td valign="top">gene sets database</td>
+<td valign="top">
+<p>Gene sets database from <a href="http://www.broadinstitute.org/gsea/index.jsp">the GSEA website</a>.</p>
+			Note: <em>Gene sets database file</em> and <em>gene sets database list file</em> override this parameter.</td>
+</tr>
+<tr>
+<td valign="top">gene sets database file</td>
+<td valign="top">
+<p>Gene sets database files in either <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gmt">GMT</a> or <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gmx">GMX</a> format.  Upload a gene set if your gene set is not listed as a choice for the gene sets database parameter.</p>
+			Note: An optional parameter, which when set overrides the <em>gene sets database</em> parameter.</td>
+</tr>
+<tr>
+<td valign="top">gene sets database list file</td>
+<td valign="top">
+<p>.txt file containing a list of GMT and GMX gene set description files (one gene set description filename per line). This optional parameter should be used if projecting expression data across gene sets spanning multiple gene sets database files.  The listed gene sets database files must be uploaded to GenePattern server.  This list file is typically generated using the GenePattern ListFiles module.</p>
+			Note: An optional parameter, which when set overrides the <em>gene sets database</em> and <em>gene sets database file</em> parameters.</td>
+</tr>
+<tr>
+<td valign="top">gene symbol column <span style="color:red;">*</span></td>
+<td valign="top">Input GCT file column containing gene symbol names.  In most cases, this will be column 1. (default: <em>Column 1</em>)</td>
+</tr>
+<tr>
+<td valign="top">gene set selection <span style="color:red;">*</span></td>
+<td valign="top">Comma-separated list of gene set names on which to project the input expression data.  Alternatively, this field may be set to <em>ALL</em>, indicating that the input expression dataset is to be projected to all gene sets defined in the specified gene set database(s). (default: <em>ALL</em>)</td>
+</tr>
+<tr>
+<td valign="top">sample normalization method <span style="color:red;">*</span></td>
+<td valign="top">Normalization method applied to expression data.  Supported methods are <em>rank</em>, <em>log.rank</em>, and <em>log</em>.  (Default: <em>rank</em>)</td>
+</tr>
+<tr>
+<td valign="top">weighting exponent <span style="color:red;">*</span></td>
+<td valign="top">Exponential weight employed in calculation of enrichment scores.  The default value of 0.75 was selected after extensive testing.  The module authors strongly recommend against changing from default. (Default: <em>0.75</em>)</td>
+</tr>
+<tr>
+<td valign="top">min gene set size <span style="color:red;">*</span></td>
+<td valign="top">Exclude from the projection gene sets whose overlap with the genes listed in the input GCT file are less than this value. (Default: 10)</td>
+</tr>
+<tr>
+<td valign="top">combine mode <span style="color:#ff0000;">*</span></td>
+<td valign="top">
+<p> </p>
+<p><span style="font-family: Verdana,Arial,Helvetica,sans-serif; line-height: 14px;">Options for combining enrichment scores for paired *_UP and *_DN gene sets.  (Default: combine.add)</span></p>
+<p><span style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">For gene set collections that do not utilize _UP and _DN suffixes at the ends of set names, the </span><span style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:italic;font-variant:normal;text-decoration:none;vertical-align:baseline;">combine mode</span><span style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;"> parameter option is irrelevant as all the modes give the same output. </span></p>
+<p>For Gene set collections that utilize _UP and _DN suffixes, which include MSigDB v5's <em>C2.all</em>, <em>C2.CGP</em>, <em>C6.all</em>, and <em>C7.all</em>, recombine sets in two different ways:</p>
+<ul>
+<li style="list-style-type: disc; font-size: 15px; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-weight: normal; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:italic;font-variant:normal;text-decoration:none;vertical-align:baseline;">Combine.add</span><span style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;"> mode [default] keeps the original paired sets with independent scores and adds the new combined set with combined score to the output file, increasing the number of gene sets by the number of paired sets. </span></li>
+<li style="list-style-type: disc; font-size: 15px; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-weight: normal; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><span style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:italic;font-variant:normal;text-decoration:none;vertical-align:baseline;">Combine.replace</span><span style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;"> replaces the original paired gene sets with a new combined gene set and thus reduces the number of gene sets in the output by half the paired sets. </span>Combined sets report combined enrichment scores.</li>
+<li style="list-style-type: disc; font-size: 15px; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-weight: normal; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"><em>Combine.off </em>keeps _UP and _DN sets separate.</li>
+</ul>
+<p style="list-style-type: disc; font-size: 15px; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-weight: normal; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; line-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;"> </p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li> input expression dataset<br/>
+<br/>
+	The GCT file containing the input dataset’s gene expression data (see the GCT file format information at <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gct">http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gct</a>).  Gene symbols are typically listed in the column with header <em>Name</em>; however, GCT files containing RNAi data may list the gene symbol name in alternative columns.  The “gene symbol column name” parameter specifies which of the input GCT file’s columns contains the gene symbols.<br/>
+<br/>
+	The input GCT file’s row identifiers must draw from the same family of gene identifiers (the same ontology or name space, such as HUGO Gene Nomenclature) as those used to identify genes in the gene sets database file (see next item below).  Typically these are human gene symbols.<br/>
+<br/>
+	If a GCT file’s row identifiers are probe IDs, and gene sets are defined through a list of human gene symbols, it will be necessary to collapse all probe set expression values for a given gene into a single expression value and use a human gene symbol to represent that gene.  The CollapseDataset GenePattern module can make this transformation.</li>
+</ol>
+<p style="margin-left: 40px;">The GCT file must contain gene expression data for at least two samples.</p>
+<ol start="2">
+<li>gene sets database file<br/>
+<br/>
+	An optional GMT or GMX file containing a collection of gene set definitions (see <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gmt">the GMT file format </a> and <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gmx">the GMX file format </a>in the GenePattern file formats documentation).</li>
+</ol>
+<p> </p>
+<ol start="3">
+<li> gene sets database list file<br/>
+<br/>
+	An optional text file containing a list of gene set definition files (each in the GMT or GMX format).  Each line in the text file contains a single filename.  Typically this file is generated by the GenePattern ListFiles module and is used when projecting expression data onto gene sets defined across multiple gene sets database files.  No duplicate gene set names are allowed across the listed gene sets database files.</li>
+</ol>
+<p> </p>
+<h2>Output Files</h2>
+<ol>
+<li><span style="font-size: 12px;"> output enrichment score dataset<br/>
+<br/>
+	A GCT file containing the input dataset’s projection onto a space of specified gene sets.  This GCT file may serve as input into GenePattern’s many clustering and classification algorithms. </span></li>
+</ol>
+<p style="margin-left: 40px;">In the case of experimentally derived gene sets with _UP and _DN suffixes appended to otherwise identical gene set names, <em>combine modes</em> of <em>combine.add</em> and <em>combine.replace </em>will either add to the set or replace the original gene set pair with a combined gene set with the suffix removed from the name thereby creating new gene set names that may impact downstream applications using these files in combination with the original gene set collection file. Check that downstream applications utilize subsets of gene sets within a collection for compatibility with the <em>combine.add</em> mode output.</p>
+<p> </p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Projection</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>2016-02-04</td>
+<td>Updated to give access to MSigDB v5.1.  Updated to R-2.15 and made fixes for portability.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2015-06-16</td>
+<td>Add built-in support for MSigDB v5.0, which includes new hallmark gene sets.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2014-08-11</td>
+<td>Added combine mode parameter</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2013-06-17</td>
+<td>Updated list of gene sets to include v4.0 MSigDB collections</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2013-02-15</td>
+<td>Updated list of gene sets databases to include v3.1 MSigDB collection, updated FTP download code, made documentation more biologist-friendly.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2012-09-19</td>
+<td>Added support for reading of gmx-formatted gene set description files</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2012-07-03</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

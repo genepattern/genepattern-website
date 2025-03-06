@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AffySTExpressionFileCreator (v1) BETA</title>
+    <meta name="slug" content="modules/docs/AffySTExpressionFileCreator/1" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<div class="bs-callout bs-callout-danger">
+<h4>This module is currently in beta release.  The module and/or documentation may be incomplete.</h4>
+</div>
+<p style="font-size: 1.2em; margin-top: 20px;">Creates a GCT file from a set of CEL files from Affymetrix ST arrays.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>David Eby, Broad Institute</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>gp-help@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Summary</h2>
+<p><strong>Please Note that version 0.14 is currently only available in beta on GenePattern Team hosted servers. We are working to release updates which will be available for use on all platforms. </strong>Feel free to <a href="http://www.broadinstitute.org/contact">contact </a>us with any questions.</p>
+<p>This module creates a gene expression dataset from a set of CEL files for Affymetrix ST arrays.  It is similar to <a href="http://www.broadinstitute.org/modules/docs/ExpressionFileCreator">ExpressionFileCreator</a>, which operates on CEL files from the older 3' biased IVT-based Affymetrix arrays.  The conversion is done using the <a href="http://biostatistics.oxfordjournals.org/content/4/2/249.long">Robust Multi-array Average (RMA) algorithm</a> as provided by <a href="http://www.bioconductor.org/packages/2.14/bioc/manuals/oligo/man/oligo.pdf">the 'oligo' package</a> in Bioconductor.  <span style="color: rgb(34, 34, 34);">The result is a matrix containing one intensity value per probe set per sample in the <a href="http://www.broadinstitute.org/gp_guides/file-formats/sections/gct">GCT</a> file format. </span></p>
+<p><strong><span style="color: rgb(34, 34, 34);">Note that the RMA algorithm will log-transform the data during processing.  </span></strong><span style="color: rgb(34, 34, 34);">This may affect downstream processing by other modules, some of which will produce erroneous results with log-transformed data unless adjustments are made.  For example, the ComparativeMarkerSelection module has a parameter that must be set for it to accept and adjust for log-transformed data.</span></p>
+<p>Multiple CEL files can be uploaded directly to the <em>input file</em> parameter for processing.  The parameter also accepts CELs packaged as a ZIP or TAR bundle or supplied as a directory input if your GenePattern server is configured to allow it.  You can provide multiple ZIPs, TARs, or directory inputs as well, or mix all of these forms.  The CEL files can be compressed in GZ format and the TAR bundles can be in GZ, XZ, or BZ2 format.  Any directory inputs will be recursively searched for CEL files (uncompressed or in GZ format) to include in the dataset; ZIPs and TARs in these inputs will <strong>not</strong> be included, however.</p>
+<p>You can supply an optional <a href="http://www.broadinstitute.org/gp_guides/file-formats/sections/clm">CLM file</a> listing the CEL files to be included in the dataset, their order, their phenotypic categories, and their alternate sample names.  Note that if there are any files submitted for a job but not listed in the included CLM file, those files will <strong>not</strong> be included in the dataset.  The column order of the dataset will match the order of the CLM listing.  If no CLM file is provided, the CEL file names will be used as sample names and the order will match the module's processing order.  This can be somewhat unpredictable, so if order is important then the use of a CLM is recommended.</p>
+<div style="color: rgb(34, 34, 34);">The default behavior is to <em>normalize</em> and <em>background correct</em> the dataset upon extraction, but the appropriate parameters can be set to 'no' if raw data extraction is desired.</div>
+<div style="color: rgb(34, 34, 34);"> </div>
+<div style="color: rgb(34, 34, 34);">Also by default, the dataset will be annotated with gene identifiers for each probeset; set <em>annotate probes</em> to 'no' if you don't want these included.  Where available, the Entrez Gene number, RefSeq ID, and gene symbol will be provided in the "Description" column of the dataset, in the format "[<em>EntrezGene number</em>] // [<em>RefSeq ID</em>] // [<em>gene symbol</em>]".  The text "NA" is given instead if any of these are missing.  These annotations come from the Bioconductor bundle for the array set being analyzed.  Unfortunately, no annotation information is available for organisms other than Human, Mouse, or Rat.</div>
+<div style="color: rgb(34, 34, 34);"> </div>
+<div style="color: rgb(34, 34, 34);"><span style="color: rgb(0, 0, 0);">For users with Human, Mouse, or Rat CEL files, you may wish to use the ReannotateGCT module with the </span><a href="ftp://gseaftp.broadinstitute.org/pub/gsea/annotations/">CHIP files from the GSEA project</a><span style="color: rgb(0, 0, 0);"> to reannotate your GCT files as these have been reviewed and curated by GSEA staff to work better with GSEA and MSigDB than the Affymetrix-provided annotations.</span></div>
+<div style="color: rgb(34, 34, 34);"> </div>
+<div style="color: rgb(34, 34, 34);"><span style="color: rgb(0, 0, 0);">Lastly, the module is capable of producing a set of plots in multiple formats that may be useful for QC purposes.  See the Output Files section below for more details.  Plot generation is turned off by default as it can be quite time-consuming.</span></div>
+<h2>References</h2>
+<p>Carvalho BS and Irizarry RA (2010). “A Framework for Oligonucleotide Microarray Preprocessing.” <a href="http://dx.doi.org/10.1093/bioinformatics/btq431">Bioinformatics. ISSN 1367-4803</a>.</p>
+<p>Carvalho BS and Irizarry RA (2014). "Package 'oligo'" <a href="http://www.bioconductor.org/packages/2.14/bioc/manuals/oligo/man/oligo.pdf">documentation</a> from Bioconductor 2.14.</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Parameters</h2>
+<table class="table table-striped" id="module_params_table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>input file <span style="color:red;">*</span></td>
+<td>One or more Affymetrix ST CEL files either uploaded directly, packaged into a ZIP or TAR bundle, or supplied through a directory input.  The CEL files can be in GZ format and the TAR can be in GZ, XZ, or BZ2 format.  The parameter will accept multiple inputs in any of these forms.</td>
+</tr>
+<tr>
+<td>normalize <span style="color:red;">*</span></td>
+<td>Whether to normalize data using quantile normalization.</td>
+</tr>
+<tr>
+<td>background correct <span style="color:red;">*</span></td>
+<td>Whether to perform background correction.</td>
+</tr>
+<tr>
+<td>clm file </td>
+<td>A tab-delimited text file containing one scan, sample, and class per line.</td>
+</tr>
+<tr>
+<td>annotate probes <span style="color:red;">*</span></td>
+<td>Whether to annotate probes with the gene symbol and description.</td>
+</tr>
+<tr>
+<td>output file base <span style="color:red;">*</span></td>
+<td>The base name of the output file(s). File extensions will be added automatically.</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>Input Files</h2>
+<ol>
+<li>input.file<br/>
+	One or more Affymetrix ST CEL files.  These can be supplied as individual CEL files, in a ZIP or TAR bundle, or in a directory.  The CEL files can be in GZ format and the TAR can be in GZ, XZ, or BZ2 format.  Note that the CEL file names must be unique, ignoring any compression format extensions.  Also note that all CEL files must be of the same array type.</li>
+<li>clm.file<br/>
+	An optional <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/clm">CLM file</a> listing the CEL files to be included in the dataset, their order, their phenotypic categories, and their alternate sample names.  Note that if there are any files submitted for a job but not listed in the included CLM file, those files will <strong>not</strong> be included in the dataset.  The column order of the dataset will match the order of the CLM listing.  If no CLM file is provided, the CEL file names will be used as sample names and the order will match the module's processing order.  This can be somewhat unpredictable, so if order is important then the use of a CLM is recommended.</li>
+</ol>
+<h2>Output Files</h2>
+<ol>
+<li>&lt;output.file.base&gt;.gct<br/>
+	The expression dataset in <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/gct">GCT</a> format.</li>
+<li>&lt;output.file.base&gt;.cls<br/>
+	A categorical label <a href="http://www.broadinstitute.org/cancer/software/genepattern/gp_guides/file-formats/sections/cls">CLS</a> file, listing the categories of all the samples in the dataset as determined by the input CLM file.</li>
+<li>&lt;output.file.base&gt;.QC.Density_histogram.pdf (or .png or .svg)<br/>
+	A histogram plot of the density estimates for each sample.  This may be useful for QC purposes.</li>
+<li>&lt;output.file.base&gt;.QC.Boxplot.pdf (or .png or .svg)<br/>
+	A boxplot of the observed intensities for each sample.  This may be useful for QC purposes.</li>
+<li>&lt;output.file.base&gt;.QC.[sample name]_MAplot.pdf (or .png or .svg)<br/>
+	A plot of Average Intensity vs. log ratio (M vs. A, or MA) for each sample versus a reference array.  <span style="color: rgb(34, 34, 34);">This <a href="http://en.wikipedia.org/wiki/MA_plot">Wikipedia entry</a> </span><span style="color: rgb(34, 34, 34);">gives some background on MA plots.</span></li>
+<li>&lt;output.file.base&gt;.QC.[sample name]_Cel_image.pdf (or .png or .svg)<br/>
+	A psuedo-image of the array for each sample, based on the observed intensities.  This may be useful for QC purposes.</li>
+</ol>
+<h2>Example Data</h2>
+<p>[Yet to be posted]</p>
+<h2>Requirements</h2>
+<p>Requires R 3.1.3 and a set of R package dependencies from CRAN and Bioconductor.  R 3.1.3 must be installed and configured by the GenePattern administrator before this module can be installed [Instructions yet to be posted.  Will link to an updated version of our Admin Guide on the subject].  The package dependencies will be automatically installed when the module is installed.</p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					Preprocess &amp; Utilities</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.14</td>
+<td>2015-10-22</td>
+<td>Updated to make use of the R package installer.</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

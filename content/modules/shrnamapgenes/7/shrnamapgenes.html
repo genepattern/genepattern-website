@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>shRNAmapGenes (v7)</title>
+    <meta name="slug" content="modules/docs/shRNAmapGenes/7" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Maps shRNAs in a gct data file to genes based on a mapping file.</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Barbara Weir; Broad Institute </p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong><p>
+	bweir@broadinstitute.org</p>
+</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong></p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Introduction</h2>
+<p>
+	shRNAmapGenes is a GenePattern module that maps shRNAs in a user-uploaded dataset to genes based on an 'shRNA to gene' mapping file. The module outputs a GCT file containing the original dataset with the name of the gene appended to the shRNA sequence in the name column, as well as the name of the gene in the description column. If an shRNA maps to more than one gene, that row of data is duplicated so that both shRNA/gene combinations occur in the final data matrix. </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				gct file<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				Data file containing shRNA data (GCT file format). The shRNA identifier (usually the sequence) should exist in the first (Name) column. </td>
+</tr>
+<tr>
+<td>
+				mapping file<span style="color:#ff0000;">*</span></td>
+<td>
+				The shRNA to gene mapping file.</td>
+</tr>
+<tr>
+<td>
+				prefix<span style="color: rgb(255, 0, 0);">*</span></td>
+<td>
+				User defined prefix of output file name. </td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<ol>
+<li>
+		gct file
+		<ul>
+<li>
+				Data file containing shRNA data (GCT file format). The shRNA identifier (usually the sequence) should exist in the first (Name) column. </li>
+</ul>
+</li>
+<li>
+		mapping file
+		<ul>
+<li>
+				The shRNA to gene mapping file. </li>
+</ul>
+</li>
+</ol>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		Data file with shRNAs mapped to genes          [prefix]_mapped.rnai.gct
+		<ul>
+<li>
+				A GCT file containing the original dataset with the shRNAs mapped to genes. The first column (Name) will contain the shRNA sequence with the gene name appended to it and the second column  (Description) will contain the gene name. </li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					RNAi</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					R-2.15</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>2014-07-28</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>2014-03-24</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

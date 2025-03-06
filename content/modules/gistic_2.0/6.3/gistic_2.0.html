@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GISTIC_2.0 (v6.3)</title>
+    <meta name="slug" content="modules/docs/GISTIC_2.0/6.3" />
+    <meta name="template" content="module_doc" />
+</head>
+<body>
+<p style="font-size: 1.2em; margin-top: 20px;">Genomic Identification of Significant Targets in Cancer (version 2.0.22)</p>
+<div class="row">
+<div class="col-sm-4">
+<p><strong>Author: </strong>Steven Schumacher, Jen Dobson, Rameen Beroukhim, Gad Getz</p>
+</div>
+<div class="col-sm-4">
+<p><strong>Contact: </strong></p>
+</div>
+<div class="col-sm-4">
+<p><strong>Algorithm Version: </strong>2.0.22</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Summary</h2>
+<p class="p1">
+	The GISTIC module identifies regions of the genome that are significantly amplified or deleted across a set of samples. Each aberration is assigned a G-score that considers the amplitude of the aberration as well as the frequency of its occurrence across samples. False Discovery Rate q-values are then calculated for the aberrant regions, and regions with q-values below a user-defined threshold are considered significant. </p>
+<p class="p2">
+	For each significant region, a “peak region” is identified, which is the part of the aberrant region with greatest amplitude and frequency of alteration. In addition, a “wide peak” is determined using a leave-one-out algorithm to allow for errors in the boundaries in a single sample. The “wide peak” boundaries are more robust for identifying the most likely gene targets in the region. </p>
+<p class="p2">
+	Each significantly aberrant region is also tested to determine whether it results primarily from broad events (longer than half a chromosome arm), focal events, or significant levels of both. The GISTIC module reports the genomic locations and calculated q-values for the aberrant regions. It identifies the samples that exhibit each significant amplification or deletion, and it lists genes found in each “wide peak” region. </p>
+<p>
+<span style="color:#ff0000;">Note: The GISTIC module is memory-intensive. </span></p>
+<h2>
+	References</h2>
+<p class="p2">
+	Mermel C, Schumacher S, et al. GISTIC2.0 facilitates sensitive and confident localization of the targets of focal somatic copy-number alteration in human cancers. <i>Genome Biology</i>. 2011;12:R41. </p>
+<p class="p2">
+	Beroukhim R, Mermel C, et al. The landscape of somatic copy-number alteration across human cancers. <i>Nature</i>. 2010;463:899-905. </p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Parameters</h2>
+<table id="module_params_table">
+<thead>
+<tr>
+<th>
+				Name</th>
+<th style="width: 80px;">
+				Flag</th>
+<th>
+				Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+				refgene file <span style="color:red;">*</span></td>
+<td>
+				-refgene</td>
+<td>
+				The reference file including cytoband and gene location information.</td>
+</tr>
+<tr>
+<td>
+				seg file <span style="color:red;">*</span></td>
+<td>
+				-seg</td>
+<td>
+				The segmentation file contains the segmented data for all the samples identified by GLAD, CBS, or some other segmentation algorithm. (See GLAD file format in the Genepattern file formats documentation.) It is a six column, tab-delimited file with an optional first line identifying the columns. Positions are in base pair units.</td>
+</tr>
+<tr>
+<td>
+				markers file <span style="color:red;">*</span></td>
+<td>
+				-mk</td>
+<td>
+				The markers file identifies the marker names and positions of the markers in the original dataset (before segmentation). It is a three column, tab-delimited file with an optional header. If not already, markers are sorted by genomic position.</td>
+</tr>
+<tr>
+<td>
+				array list file </td>
+<td>
+				-alf</td>
+<td>
+				The array list file is an optional file identifying the subset of samples to be used in the analysis. It is a one column file with an optional header. The sample identifiers listed in the array list file must match the sample names given in the segmentation file.</td>
+</tr>
+<tr>
+<td>
+				cnv file </td>
+<td>
+				-cnv</td>
+<td>
+				There are two options for the cnv file. The first option allows CNVs to be identified by marker name. The second option allows the CNVs to be identified by genomic location.</td>
+</tr>
+<tr>
+<td>
+				gene gistic <span style="color:red;">*</span></td>
+<td>
+				-genegistic</td>
+<td>
+				Flag indicating that the gene GISTIC algorithm should be used to calculate the significance of deletions at a gene level instead of a marker level.</td>
+</tr>
+<tr>
+<td>
+				amplifications threshold <span style="color:red;">*</span></td>
+<td>
+				-ta</td>
+<td>
+				Threshold for copy number amplifications. Regions with a log2 ratio above this value are considered amplified.</td>
+</tr>
+<tr>
+<td>
+				deletions threshold <span style="color:red;">*</span></td>
+<td>
+				-td</td>
+<td>
+				Threshold for copy number deletions. Regions with a log2 ratio below the negative of this value are considered deletions.</td>
+</tr>
+<tr>
+<td>
+				join segment size <span style="color:red;">*</span></td>
+<td>
+				-js</td>
+<td>
+				Smallest number of markers to allow in segments from the segmented data. Segments that contain a number of markers less than or equal to this number are joined to the neighboring segment that is closest in copy number.</td>
+</tr>
+<tr>
+<td>
+				qv thresh <span style="color:red;">*</span></td>
+<td>
+				-qvt</td>
+<td>
+				Threshholding value for q-values.</td>
+</tr>
+<tr>
+<td>
+				remove X <span style="color:red;">*</span></td>
+<td>
+				-rx</td>
+<td>
+				Flag indicating whether to remove data from the X-chromosome before analysis.</td>
+</tr>
+<tr>
+<td>
+				cap val <span style="color:red;">*</span></td>
+<td>
+				-cap</td>
+<td>
+				Minimum and maximum cap values on analyzed data. Regions with a log2 ratio greater than the cap are set to the cap value; regions with a log2 ratio less than -cap value are set to -cap.</td>
+</tr>
+<tr>
+<td>
+				confidence level <span style="color:red;">*</span></td>
+<td>
+				-conf</td>
+<td>
+				Confidence level used to calculate the region containing a driver.</td>
+</tr>
+<tr>
+<td>
+				run broad analysis <span style="color:red;">*</span></td>
+<td>
+				-broad</td>
+<td>
+				Flag indicating whether an additional broad-level analysis should be performed.</td>
+</tr>
+<tr>
+<td>
+				broad length cutoff <span style="color:red;">*</span></td>
+<td>
+				-brlen</td>
+<td>
+				Threshold used to distinguish broad form focal events, given in units of fraction of chromosome arm.</td>
+</tr>
+<tr>
+<td>
+				max sample segs <span style="color:red;">*</span></td>
+<td>
+				-maxseg</td>
+<td>
+				Maximum number of segments allowed for a sample in the input data. Samples with more segments than this threshold are excluded from the analysis.</td>
+</tr>
+<tr>
+<td>
+				arm peel <span style="color:red;">*</span></td>
+<td>
+				-armpeel</td>
+<td>
+				Whether to perform arm level peel off. This helps separate peaks which cleans up noise.</td>
+</tr>
+<tr>
+<td>
+				sample center <span style="color:red;">*</span></td>
+<td>
+				-scent</td>
+<td>
+				Method for centering each sample prior to the GISTIC analysis.</td>
+</tr>
+<tr>
+<td>
+				gene collapse method <span style="color:red;">*</span></td>
+<td>
+				-gcm</td>
+<td>
+				Method for reducing marker-level copy number data to the gene-level copy number data in the gene tables. Markers contained in the gene are used when available, otherwise the flanking marker or markers are used.</td>
+</tr>
+<tr>
+<td>
+				output prefix <span style="color:red;">*</span></td>
+<td>
+				-fname</td>
+<td>
+				The prefix for the output file name</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span style="color: red;">*</span> - required</p>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h2>
+	Input Files</h2>
+<div>
+<ol>
+<li>
+			Reference Genome File (-refgene) (REQUIRED) <br/>
+<p>
+				The reference genome file contains information about the location of genes and cytobands on a given build of the genome. Reference genome files are created in
+				MATLAB <sup>TM</sup> and are not viewable with a text editor. The GISTIC 2.0 release includes the following reference genomes: hg16.mat, hg17.mat, hg18.mat, and hg19.mat).</p>
+</li>
+<li>
+			Segmentation File (-seg) (REQUIRED)
+			<p>
+				The segmentation file contains the segmented data for all the samples identified by GLAD, CBS, or some other segmentation algorithm. (See GLAD file format in the GenePattern file formats documentation.) It is a six column, tab-delimited file with an optional first line identifying the columns. Positions are in base pair units. Seg.CN values should be log transformed; if not, GISTIC will automatically log transform the values. The column headers are:
+				<ol>
+<li>
+<i>Sample</i> (sample name)</li>
+<li>
+<i>Chromosome</i> (chromosome number)</li>
+<li>
+<i>Start Position</i> (segment start position, in bases)</li>
+<li>
+<i>End Position</i> (segment end position, in bases)</li>
+<li>
+<i>Num markers</i> (number of markers in segment)</li>
+<li>
+<i>Seg.CN</i> (log2() -1 of copy number)]</li>
+</ol>
+</p>
+</li>
+<li>
+			Markers File (-mk) (REQUIRED)
+			<p>
+				The markers file identifies the marker names and positions of the markers in the original dataset (before segmentation). It is a three-column, tab-delimited file with an optional header. The column headers are:
+				<ol>
+<li>
+<i>Marker Name</i> (marker name)</li>
+<li>
+<i>Chromosome</i> (chromosome number)</li>
+<li>
+<i>Marker Position </i> (in bases)</li>
+</ol>
+</p>
+</li>
+<li>
+			Array List File (-alf) (OPTIONAL)
+			<div>
+				The array list file is an optional file identifying the subset of samples to be used in the analysis. It is a one column file with an optional header (array). The sample identifiers listed in the array list file must match the sample names given in the segmentation file.</div>
+</li>
+<li>
+			CNV File (-cnv) (OPTIONAL)
+			<div>
+				There are two options for the CNV file. The first option allows CNVs to be identified by marker name. The second option allows the CNVs to be identified by genomic location.<br/>
+				Option #1: A two-column, tab-delimited file with an optional header row. The marker names given in this file must match the marker names given in the markers file. The CNV identifiers are for user use and can be arbitrary. The column headers are:
+				<ol>
+<li>
+<i>Marker Name </i></li>
+<li>
+<i>CNV Identifier </i></li>
+</ol>
+				Option #2: A 6-column, tab-delimited file with an optional header row. The CNV Identifier, Narrow Region Start, and Narrow Region End are for user use and can be arbitrary. The column headers are:
+				<ol>
+<li>
+<i>CNV Identifier </i></li>
+<li>
+<i>Chromosome </i></li>
+<li>
+<i>Narrow Region Start </i></li>
+<li>
+<i>Narrow Region End </i></li>
+<li>
+<i>Narrow Region End</i></li>
+<li>
+<i>Wide Region Start</i></li>
+<li>
+<i>Wide Region End</i></li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<h2>
+	Output Files</h2>
+<ol>
+<li>
+		All Lesions File (all_lesions.conf_XX.txt, where XX is the confidence level)<br/>
+		[Description of the content, file format, and how to interpret the results.]</li>
+</ol>
+<h2>
+	Example Data</h2>
+<p>
+	[provide example data, including input files and parameter settings]. (we’ll put the input files on the ftp site and link to them from the doc)</p>
+<h2>
+	Requirements</h2>
+<p>
+	[any software requirements for running this, e.g., version of R, licensing]</p>
+</div>
+</div>
+<h2>Platform Dependencies</h2>
+<div class="row">
+<div class="col-md-3">
+<p><strong>Task Type:</strong><br/>
+					SNP Analysis</p>
+</div>
+<div class="col-md-3">
+<p><strong>CPU Type:</strong><br/>
+					any</p>
+</div>
+<div class="col-md-3">
+<p><strong>Operating System:</strong><br/>
+					linux</p>
+</div>
+<div class="col-md-3">
+<p><strong>Language:</strong><br/>
+					MATLAB</p>
+</div>
+</div>
+<h2>Version Comments</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Version</th>
+<th>Release Date</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>2014-07-30</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
