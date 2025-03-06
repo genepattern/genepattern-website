@@ -1,14 +1,16 @@
 name: Deploy
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   workflow_dispatch:
 jobs:
   Deploy:
-    uses: genepattern/genepattern-website/.github/workflows/pelican.yml@main
+    uses: "getpelican/pelican/.github/workflows/github_pages.yml@main"
     permissions:
       contents: read
       pages: write
       id-token: write
     with:
       settings: "publishconf.py"
+      python: "3.11"
