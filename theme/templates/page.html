@@ -26,11 +26,57 @@
                 {{ page.content }}
             </div>
             <div class="col-md-3">
-                <div class="bs-docs-sidebar hidden-print gp-side-menu affix-top" role="complementary">
-                    <ul class="nav bs-docs-sidenav">
-                    </ul>
+                <div id="toc" class="bs-docs-sidebar hidden-print gp-side-menu affix-top" role="complementary">
                 </div>
             </div>
         </div>
     </div>
+
+    <script type="application/javascript">
+        function generateTableOfContents() {
+            const content = document.querySelector("#content");
+            if (!content) return null;
+
+            const headers = Array.from(content.querySelectorAll("h1, h2, h3, h4"));
+            if (headers.length === 0) return null;
+
+            const toc = document.createElement("ul");
+            toc.classList.add("nav");
+            let stack = [{ level: 0, ul: toc }];
+
+            headers.forEach(header => {
+                const level = parseInt(header.tagName.charAt(1));
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+
+                header.id = header.id || `toc-${stack.length}`;
+                a.href = `#${header.id}`;
+                a.textContent = header.textContent;
+                li.appendChild(a);
+
+                while (stack.length > 1 && stack[stack.length - 1].level >= level) {
+                    stack.pop();
+                }
+
+                let parentUl = stack[stack.length - 1].ul;
+                let newUl = document.createElement("ul");
+                newUl.classList.add("nav");
+
+                if (stack[stack.length - 1].level < level) {
+                    li.appendChild(newUl);
+                    stack.push({ level, ul: newUl });
+                }
+
+                parentUl.appendChild(li);
+            });
+
+            return toc;
+        }
+
+        $(document).ready(() => {
+            const toc = generateTableOfContents();
+            toc.classList.add("nav", "bs-docs-sidenav");
+            document.querySelector("#toc").append(toc);
+        });
+    </script>
 {% endblock %}

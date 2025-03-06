@@ -32,7 +32,13 @@
             </div>
             <div class="col-md-3">
                 <div class="bs-docs-sidebar hidden-print gp-side-menu affix-top" role="complementary">
+                    <h3>Previous Blog Posts</h3>
                     <ul class="nav bs-docs-sidenav">
+                        {% for article in articles %}
+                            {% if loop.index <= 10 %}
+                                <li><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></li>
+                            {% endif %}
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
