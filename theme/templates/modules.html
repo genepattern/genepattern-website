@@ -105,11 +105,11 @@
 
         async function load_modules() {
             let payload;
-            try {
-                const response = await fetch("https://cloud.genepattern.org/gp/rest/v1/tasks/all.json");
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                payload = await response.json();
-            } catch (error) {
+            // try {
+            //     const response = await fetch("https://cloud.genepattern.org/gp/rest/v1/tasks/all.json");
+            //     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            //     payload = await response.json();
+            // } catch (error) {
                 payload = {
                     "all_modules": [{
                         "lsid": "urn:lsid:broad.mit.edu:cancer.software.genepattern.module.analysis:00176:2",
@@ -1799,7 +1799,7 @@
                         "description": "This function performs spatial clustering on gene expression data using the STclust method.",
                         "version": "2",
                         "documentation": "",
-                        "categories": ["clustering"],
+                        "categories": ["spatial transcriptomics", "clustering"],
                         "suites": [],
                         "tags": []
                     }, {
@@ -1808,7 +1808,7 @@
                         "description": "STdiff function for differential expression analysis in spatial transcriptomics data.",
                         "version": "1",
                         "documentation": "",
-                        "categories": ["differential expression"],
+                        "categories": ["spatial transcriptomics", "differential expression"],
                         "suites": [],
                         "tags": []
                     }, {
@@ -2494,7 +2494,7 @@
                         "Weighted Voting Prediction Model": ["urn:lsid:broad.mit.edu:cancer.software.genepattern.module.analysis:00027:3"]
                     }
                 };
-            }
+            // }
 
             build_dropdown(payload);
             build_table(payload);
