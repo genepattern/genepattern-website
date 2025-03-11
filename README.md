@@ -23,7 +23,7 @@ For small changed editing the files directly on Github should be sufficient. How
 build the site locally and preview your changes befoe committing them to the `main` branch. If you want to build the 
 site locally:
 
-1. Clone this repository and cd into it
+1. Clone this repository and `cd` into it
 2. Install the required dependencies: `pip install -r requirements.txt`
 3. Build the site using Pelican: `pelican`
 4. Start the development server: `pelican --listen`
