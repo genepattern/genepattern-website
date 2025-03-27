@@ -16,7 +16,10 @@
 
 <p>The following modules are provided.</p>
 
-<p><img class="img img-responsive" src="/uploaded/spatialge-modules.jpg" alt="spatialGE modules" /></p>
+<figure class="figure">
+	<img class="figure-img img-responsive" src="/uploaded/spatialge-modules.jpg" alt="spatialGE modules" />
+	<figcaption class="figure-caption">For the sake of brevity, all module name are listed without the <em>spatialGE.</em> prefix at the beginning of the name.</figcaption>
+</figure>
 
 <h2>spatialGE.Preprocessing</h2>
 
@@ -28,9 +31,11 @@
 
 <h2>spatialGE.STplot</h2>
 
-<p>Generates plots displaying gene expression, cluster memberships and metadata within a spatial context. For best use,
-	data from <code>spatialGE.Preprocessing</code>, <code>spatialGE.STenrich</code>, <code>spatialGE.STclust</code> or
-	<code>spatialGE.STdiff</code> should be sent to <code>spatialGE.STplot.Launcher</code>.</p>
+<p>Generates plots displaying gene expression, cluster memberships and metadata within a spatial context.</p>
+<p>Data should be sent to the module <code>spatialGE.STplot.Launcher</code>, which prompts the user for more input and
+	then launches an appropriately configured <code>spatialGE.STplot</code> analysis.</p>
+<p>Accepts data from <code>spatialGE.Preprocessing</code>, <code>spatialGE.STenrich</code>, <code>spatialGE.STclust</code>
+	and <code>spatialGE.STdiff</code>.</p>
 <ul>
 	<li>Please refer to the <a href="https://github.com/genepattern/spatialGE.STplot.Launcher/blob/main/docs/v1/index.md" target="_blank">spatialGE.STplot.Launcher documentation</a>.</li>
 	<li>Also available is the <a href="https://github.com/genepattern/spatialGE.STplot/blob/main/docs/v1/index.md" target="_blank">spatialGE.STplot documentation</a>.</li>
@@ -72,6 +77,8 @@
 <p>Reads the output of <code>spatialGE.STclust</code> and then launches an analysis to test for genes for which there is
 	evidence of expression spatial gradients with respect to a "reference" tissue niche/domain (e.g., higher expression
 	closer to reference tissue niche, lower expression as farther from reference tissue niche).</p>
+<p>Data should be sent to the module <code>spatialGE.STgradient.Launcher</code>, which prompts the user for more input and
+	then launches an appropriately configured <code>spatialGE.STgradient</code> analysis.</p>
 <ul>
 	<li>Please refer to the <a href="https://github.com/genepattern/spatialGE.STgradient.Launcher/blob/main/docs/v1/index.md" target="_blank">spatialGE.STgradient.Launcher documentation</a>.</li>
 	<li>Also available is the <a href="https://github.com/genepattern/spatialGE.STgradient/blob/main/docs/v1/index.md" target="_blank">spatialGE.STgradient documentation</a>.</li>
