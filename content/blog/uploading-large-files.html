@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Uploading large files to GenePattern</title>
-    <meta name="slug" content="genepattern-needs-your-support" />
-    <meta name="date" content="2024-04-25 15:50:00" />
+    <meta name="slug" content="uploading-large-files" />
+    <meta name="date" content="2025-06-05 15:50:00" />
     <meta name="authors" content="GenePattern Team" />
     <style>
         .common-span {
@@ -53,16 +53,15 @@
     <span class="common-span">
         TL;DR;
         <ol>
-            <li id="browser">Upload in the Browser</li>
-            <li id="globus">Transfer using Globus</li>
-            <li id="s3'">Use S3 URIs</li>
-            
+            <li> <a href="#browser">Upload in the Browser</a></li>
+            <li> <a href="#globus">Transfer using Globus</a></li>
+            <li>  <a href="#s3">Use S3 URIs</a></li>
         </ol>
+        First though, make sure you have enough disk space on the GenePattern server to hold your files.
     </span>
 </p>
 <p dir="ltr" class="common-p">
     <span class="common-span">
-        <h3>Make sure you have space...</h3>
         If you are going to work with more than 30GB of data files, contact the GenePattern team to request a larger disk quota. 
         Send us a message on the GenePattern help forum at <a href="https://groups.google.com/g/genepattern-help" target="_blank">https://groups.google.com/g/genepattern-help</a> 
         to start this process.
@@ -70,7 +69,7 @@
 </p>
 <p dir="ltr" class="common-p">
     <span class="common-span">
-        <a href="#browser"><h3>Uploads in the Browser</h3></a>
+        <h3 id="browser">Uploads in the Browser</h3>
         Know that uploads on the job run page are limited to 2GB in size.  This limit applies to the file uploads that are direct 
         to a file type parameter on the job run page.  This is not the place for your really big uploads.
     </span>
@@ -89,7 +88,7 @@
 </p>
 <p dir="ltr" class="common-p">
     <span class="common-span">
-        <a href="#browser"><h3>Transfer Using Globus</h3></a>
+       <h3 id="globus">Transfer Using Globus</h3>
         Another option is to use Globus to transfer files to the GenePattern server. Detailed directions for using Globus are available
         <a href="https://www.genepattern.org/user-guide/#toc-3" target="_blank">here</a>.  It's important to initiate the globus transfer
         from within GenePattern.  The GenePattern Globus server is not publicly read/write in order to prevent your data from being
@@ -102,7 +101,7 @@
 </p>
 <p dir="ltr" class="common-p">
     <span class="common-span">
-        <a href="#s3"><h3>Use S3 URIs</h3></a>
+        <h3 id="s3">Use S3 URIs</h3>
         The third option is to use S3 URIs to refer to files that are already in a S3 bucket.  If the files are in a public S3 bucket,
         you can use the S3 URI directly in a file type parameter.  Simply enter the S3 URI in the "add Path or URL" input
         for a file. If the files are in a private S3 bucket, you will need to set up a presigned URL for the file.  You can
