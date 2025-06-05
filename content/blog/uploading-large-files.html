@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Uploading large files to GenePattern</title>
+    <meta name="slug" content="genepattern-needs-your-support" />
+    <meta name="date" content="2024-04-25 15:50:00" />
+    <meta name="authors" content="GenePattern Team" />
+    <style>
+        .common-span {
+            font-size: 12pt;
+            font-family: Arial, sans-serif;
+            color: #000000;
+            background-color: transparent;
+            font-weight: 400;
+            font-style: normal;
+            font-variant: normal;
+            text-decoration: none;
+            vertical-align: baseline;
+            white-space: pre-wrap;
+        }
+        .common-p {
+            line-height: 1.38;
+            background-color: #ffffff;
+            margin-top: 0pt;
+            margin-bottom: 12pt;
+            padding: 12pt 0pt 0pt 0pt;
+        }
+        .common-p-no-padding {
+            line-height: 1.38;
+            background-color: #ffffff;
+            margin-top: 0pt;
+            margin-bottom: 0pt;
+            padding: 0pt 0pt 12pt 0pt;
+        }
+        .common-p-margin {
+            line-height: 1.38;
+            background-color: #ffffff;
+            margin-top: 12pt;
+            margin-bottom: 0pt;
+            padding: 0pt 0pt 12pt 0pt;
+        }
+    </style>
+</head>
+<body>
+<p dir="ltr" id="docs-internal-guid-/572a3d0b-7fff-2856-bcfb-e6d51093de95" class="common-p" style="margin-bottom: 0pt;">
+    <span class="common-span">
+        Many modern GenePattern analyses are consuming multi-gigabyte input files. For example, AmpliconSuite runs 
+        might use fastq files that are 70GB or larger.  Here are some tips for uploading and analyzing large files in GenePattern.
+    </span>
+</p>
+<p dir="ltr" id="docs-internal-guid-/572a3d0b-7fff-2856-bcfb-e6d51093de95" class="common-p" style="margin-bottom: 0pt;">
+    <span class="common-span">
+        TL;DR;
+        <ol>
+            <li id="browser">Upload in the Browser</li>
+            <li id="globus">Transfer using Globus</li>
+            <li id="s3'">Use S3 URIs</li>
+            
+        </ol>
+    </span>
+</p>
+<p dir="ltr" class="common-p">
+    <span class="common-span">
+        <h3>Make sure you have space...</h3>
+        If you are going to work with more than 30GB of data files, contact the GenePattern team to request a larger disk quota. 
+        Send us a message on the GenePattern help forum at <a href="https://groups.google.com/g/genepattern-help" target="_blank">https://groups.google.com/g/genepattern-help</a> 
+        to start this process.
+    </span>
+</p>
+<p dir="ltr" class="common-p">
+    <span class="common-span">
+        <a href="#browser"><h3>Uploads in the Browser</h3></a>
+        Know that uploads on the job run page are limited to 2GB in size.  This limit applies to the file uploads that are direct 
+        to a file type parameter on the job run page.  This is not the place for your really big uploads.
+    </span>
+</p>
+<p dir="ltr" class="common-p">
+    <span class="common-span">
+        However, you can upload files of arbitrary size to the Files tab.  One AmpliconSuite user uploaded two 60GB fastq
+        files this way. Uploads to the Files tab actually skip the GenePattern server and instead go directly to our
+        Amazon Web Services (AWS) S3 bucket on AWS machines which have extremely high bandwidth and great connectivity. 
+        The challenge in uploading large files though the browser is to prevent the browser from doing a page refresh
+        or the computer from going to sleep after it is started.  If you have a job running on GenePattern, it will refresh the
+        page periodically, so don't start a big upload when any jobs are currently running.  Since the upload could take an hour
+        or more, you also don't want your computer to go to sleep.  If you are using a Mac, you can use a utility like Caffeine 
+        to prevent your computer from going to sleep.
+    </span>
+</p>
+<p dir="ltr" class="common-p">
+    <span class="common-span">
+        <a href="#browser"><h3>Transfer Using Globus</h3></a>
+        Another option is to use Globus to transfer files to the GenePattern server. Detailed directions for using Globus are available
+        <a href="https://www.genepattern.org/user-guide/#toc-3" target="_blank">here</a>.  It's important to initiate the globus transfer
+        from within GenePattern.  The GenePattern Globus server is not publicly read/write in order to prevent your data from being
+        visible to other users.  Initiating the transfer from withing GenePattern, allows us to set up ACLs on a directory to ensure
+        privacy.  A common issue with large Globus transfers is that the transfer will fail if your files are coming from a 
+        Globus Connect Personal endpoint, and the endpoint host goes to sleep or disconnects.  This is often seen when the endpoint
+        is running on a user's laptop or desktop computer.  Here again apps like Caffeine can help prevent the computer from going to sleep.
+        Only you can stop yourself from closing the laptop while a transfer is in process.
+    </span>
+</p>
+<p dir="ltr" class="common-p">
+    <span class="common-span">
+        <a href="#s3"><h3>Use S3 URIs</h3></a>
+        The third option is to use S3 URIs to refer to files that are already in a S3 bucket.  If the files are in a public S3 bucket,
+        you can use the S3 URI directly in a file type parameter.  Simply enter the S3 URI in the "add Path or URL" input
+        for a file. If the files are in a private S3 bucket, you will need to set up a presigned URL for the file.  You can
+        refer to the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html">AWS documentation 
+        for how to create a presigned URL</a>.  Once you have the presigned URL, you can use it in the "add Path or URL" input
+        for the file parameter.
+    </span>
+</p>
+<p dir="ltr" class="common-p">
+    <span class="common-span">
+        If you have any questions about uploading large files to GenePattern, please reach out to us on the 
+        <a href="https://groups.google.com/g/genepattern-help" target="_blank">GenePattern help forum</a>.
+    </span>
+</p>
+        
+<p dir="ltr" class="common-p" style="margin-bottom: 0pt;">
+    <span class="common-span">The GenePattern Team</span>
+</p>
+</body>
+</html>
