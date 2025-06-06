@@ -51,53 +51,62 @@
 </p>
 <p dir="ltr" id="docs-internal-guid-/572a3d0b-7fff-2856-bcfb-e6d51093de95" class="common-p" style="margin-bottom: 0pt;">
     <span class="common-span">
-        TL;DR;
+        There are 3 paths to uploading large files in GenePattern:
         <ol>
             <li> <a href="#browser">Upload in the Browser</a></li>
             <li> <a href="#globus">Transfer using Globus</a></li>
             <li>  <a href="#s3">Use S3 URIs</a></li>
         </ol>
-        First though, make sure you have enough disk space on the GenePattern server to hold your files.
+        
     </span>
 </p>
 <p dir="ltr" class="common-p">
     <span class="common-span">
-        If you are going to work with more than 30GB of data files, contact the GenePattern team to request a larger disk quota. 
+        If you are going to work with more than the standard 30GB quota for data files, contact the GenePattern team to request a temporary larger disk quota. 
         Send us a message on the GenePattern help forum at <a href="https://groups.google.com/g/genepattern-help" target="_blank">https://groups.google.com/g/genepattern-help</a> 
         to start this process.
     </span>
 </p>
+
 <p dir="ltr" class="common-p">
     <span class="common-span">
         <h3 id="browser">Uploads in the Browser</h3>
-        Know that uploads on the job run page are limited to 2GB in size.  This limit applies to the file uploads that are direct 
-        to a file type parameter on the job run page.  This is not the place for your really big uploads.
+        You can upload files of arbitrary size to the Files tab.  One AmpliconSuite user uploaded two 60GB fastq
+        files this way. Uploads to the Files tab skip the GenePattern server and go directly to our
+        Amazon Web Services (AWS) S3 bucket using the extremely high bandwidth and great connectivity that AWS servers enjoy.
+    </span>
+<img alt="highlights of where to upload in browser" src="/uploaded/upload-large-file-browser.png" style="width: 600px; padding-top:20px; "/>
+</p>
+<p dir="ltr" class="common-p">
+    <span class="common-span">
+         The challenge in uploading large files this way is to prevent the browser from doing a page refresh
+        or the computer from going to sleep after it is started.  If you have a job running on GenePattern, it will refresh the
+        page periodically, so don't start a big upload when you have any jobs are currently running.  Since the upload could take an hour
+        or more, you also don't want your computer to go to sleep.  If you are using a Mac, you can use a utility like Caffeine 
+        to prevent your computer from going to sleep, similar options exist for other operating systems.
     </span>
 </p>
 <p dir="ltr" class="common-p">
     <span class="common-span">
-        However, you can upload files of arbitrary size to the Files tab.  One AmpliconSuite user uploaded two 60GB fastq
-        files this way. Uploads to the Files tab actually skip the GenePattern server and instead go directly to our
-        Amazon Web Services (AWS) S3 bucket on AWS machines which have extremely high bandwidth and great connectivity. 
-        The challenge in uploading large files though the browser is to prevent the browser from doing a page refresh
-        or the computer from going to sleep after it is started.  If you have a job running on GenePattern, it will refresh the
-        page periodically, so don't start a big upload when any jobs are currently running.  Since the upload could take an hour
-        or more, you also don't want your computer to go to sleep.  If you are using a Mac, you can use a utility like Caffeine 
-        to prevent your computer from going to sleep.
+        The File upload button on the run job page is limited to files under 2GB in size.  
+        This is not the place for your really big uploads, use the Files tab instead.
     </span>
 </p>
 <p dir="ltr" class="common-p">
     <span class="common-span">
        <h3 id="globus">Transfer Using Globus</h3>
         Another option is to use Globus to transfer files to the GenePattern server. Detailed directions for using Globus are available
-        <a href="https://www.genepattern.org/user-guide/#toc-3" target="_blank">here</a>.  It's important to initiate the globus transfer
-        from within GenePattern.  The GenePattern Globus server is not publicly read/write in order to prevent your data from being
+        in the <a href="https://www.genepattern.org/user-guide/#toc-3" target="_blank">GenePattern User Guide</a>.  
+        It's important to initiate the Globus transfer
+        from within GenePattern.  The GenePattern Globus server does not allow public read or write in order to prevent user data from being
         visible to other users.  Initiating the transfer from withing GenePattern, allows us to set up ACLs on a directory to ensure
         privacy.  A common issue with large Globus transfers is that the transfer will fail if your files are coming from a 
-        Globus Connect Personal endpoint, and the endpoint host goes to sleep or disconnects.  This is often seen when the endpoint
-        is running on a user's laptop or desktop computer.  Here again apps like Caffeine can help prevent the computer from going to sleep.
-        Only you can stop yourself from closing the laptop while a transfer is in process.
+        Globus Connect Personal endpoint, and the endpoint host goes to sleep or disconnects.  This is seen when the endpoint
+        is running on a laptop or desktop computer and the laptop is closed or the desktop goes to sleep from lack of user
+        interaction.  Here again apps like Caffeine can help prevent the computer from going to sleep.
     </span>
+   <img alt="highlights of where to upload  using globus" src="/uploaded/upload-large-file-globus.png" style="width: 600px; padding-top:20px; "/>
+
 </p>
 <p dir="ltr" class="common-p">
     <span class="common-span">
@@ -109,6 +118,8 @@
         for how to create a presigned URL</a>.  Once you have the presigned URL, you can use it in the "add Path or URL" input
         for the file parameter.
     </span>
+    <img alt="highlights of where to upload  S3 URIs" src="/uploaded/upload-large-file-s3.png" style="width: 600px; padding-top:20px;"/>
+
 </p>
 <p dir="ltr" class="common-p">
     <span class="common-span">
