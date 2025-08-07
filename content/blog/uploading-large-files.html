@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Uploading Large Files to GenePattern</title>
+    <meta name="slug" content="uploading-large-files" />
+    <meta name="date" content="2025-06-06 9:50:00" />
+    <meta name="authors" content="GenePattern Team" />
+</head>
+<body>
+    <p>Many modern GenePattern analyses require multi-gigabyte input files. For example, AmpliconSuite runs might use FASTQ files that are 70GB or larger. Here are some tips for uploading and analyzing large files in GenePattern.</p>
+
+    <h3>Methods for Uploading Large Files</h3>
+    <p>There are three ways to upload large files to GenePattern:</p>
+    <ol>
+        <li><a href="#browser">Upload in the Browser</a></li>
+        <li><a href="#globus">Transfer Using Globus</a></li>
+        <li><a href="#s3">Use S3 URIs</a></li>
+    </ol>
+    <p>If you need more than the standard 30GB quota for data files, contact the GenePattern team to request a temporary larger disk quota. You can start this process by sending a message on the GenePattern help forum at <a href="https://groups.google.com/g/genepattern-help" target="_blank">https://groups.google.com/g/genepattern-help</a>.</p>
+
+    <h3 id="browser">Uploads in the Browser</h3>
+    <p>You can upload files of arbitrary size to the <strong>Files</strong> tab. For example, one AmpliconSuite user successfully uploaded two 60GB FASTQ files this way. Uploads to the <strong>Files</strong> tab bypass the GenePattern server and go directly to our Amazon Web Services (AWS) S3 bucket, leveraging AWS's high bandwidth and excellent connectivity.</p>
+     <img alt="highlights of where to upload  in the browser" src="/uploaded/upload-large-file-browser.png" style="width: 600px; padding-top:20px;padding-bottom: 20px;"/>
+    <p><strong>Tips for Browser Uploads:</strong></p>
+    <ul>
+        <li>Avoid starting a large upload when you have jobs running on GenePattern,
+            as the page may refresh periodically.  If the page refreshes, the upload stops.</li>
+        <li>Prevent your computer from going to sleep during the upload process. On macOS, you can use a utility like <strong>Caffeine</strong> to keep your computer awake. Similar options are available for other operating systems.</li>
+        <li>Note that the <strong>File Upload</strong> button on the <strong>Run Job</strong> page is limited to files under 2GB. Use the <strong>Files</strong> tab for larger uploads.</li>
+    </ul>
+
+    <h3 id="globus">Transfer Using Globus</h3>
+    <p>Another option is to use <strong>Globus</strong> to transfer files to the GenePattern server. Detailed instructions for using Globus are available in the <a href="https://www.genepattern.org/user-guide/#toc-3" target="_blank">GenePattern User Guide</a>.</p>
+     <img alt="highlights of where to upload  using Globus" src="/uploaded/upload-large-file-globus.png" style="width: 600px; padding-top:20px;padding-bottom: 20px;"/>
+    <p><strong>Important Notes:</strong></p>
+    <ul>
+        <li>Initiate the Globus transfer from within GenePattern to ensure privacy. This allows us to set up access control lists (ACLs) on directories to 
+            protect your data and it allows GenePattern to find the files and add them to your Files tab.  
+            <b>Do not initiate transfers from the Globus Dashboard</b> - such files will not become visible within GenePattern.</li>
+        <li>Transfers may fail if your files are coming from a Globus Connect Personal endpoint and the host computer goes to sleep or disconnects. This often happens when the endpoint is running on a laptop or desktop computer. Utilities like <strong>Caffeine</strong> can help prevent this issue.</li>
+    </ul>
+
+    <h3 id="s3">Use S3 URIs</h3>
+    <p>The third option is to use <strong>S3 URIs</strong> to reference files already stored in an S3 bucket.</p>
+     <img alt="highlights of where to upload  S3 URIs" src="/uploaded/upload-large-file-s3.png" style="width: 600px; padding-top:20px;padding-bottom: 20px;"/>
+    <p><strong>Tips for Using S3 URIs:</strong></p>
+    <ul>
+        <li>For files in a public S3 bucket, simply enter the S3 URI in the "Add Path or URL" input for a file parameter.</li>
+        <li>For files in a private S3 bucket, create a pre-signed URL for the file. Refer to the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html" target="_blank">AWS documentation</a> for instructions on generating pre-signed URLs. Once created, use the pre-signed URL in the "Add Path or URL" input.</li>
+    </ul>
+
+    <p>If you have any questions about uploading large files to GenePattern, please reach out to us on the <a href="https://groups.google.com/g/genepattern-help" target="_blank">GenePattern help forum</a>.</p>
+</body>
+</html>
