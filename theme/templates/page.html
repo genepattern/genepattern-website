@@ -43,13 +43,14 @@
             const toc = document.createElement("ul");
             toc.classList.add("nav");
             let stack = [{ level: 0, ul: toc }];
+            let headerId = 1; // Add counter for unique IDs
 
             headers.forEach(header => {
                 const level = parseInt(header.tagName.charAt(1));
                 const li = document.createElement("li");
                 const a = document.createElement("a");
 
-                header.id = header.id || `toc-${stack.length}`;
+                header.id = header.id || `toc-${headerId++}`; // Use incrementing counter
                 a.href = `#${header.id}`;
                 a.textContent = header.textContent;
                 li.appendChild(a);
