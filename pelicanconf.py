@@ -41,3 +41,21 @@ DEFAULT_PAGINATION = 5
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
+
+# Sitemap plugin configuration
+PLUGINS = ['pelican.plugins.sitemap']
+
+# Primary XML sitemap with metadata (priorities and change frequencies)
+SITEMAP = {
+    'format': 'xml',
+    'priorities': {
+        'articles': 0.4,
+        'indexes': 0.5,
+        'pages': 0.8,
+    },
+    'changefreqs': {
+        'articles': 'monthly',
+        'indexes': 'daily',
+        'pages': 'monthly',
+    }
+}
