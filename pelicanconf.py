@@ -16,7 +16,7 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 PAGE_PATHS = ['pages', 'modules']
-STATIC_PATHS = ['uploaded']
+STATIC_PATHS = ['uploaded', '.nojekyll']
 
 DEFAULT_DATE_FORMAT = ("%A, %B %d, %Y at %I:%M%p")
 
