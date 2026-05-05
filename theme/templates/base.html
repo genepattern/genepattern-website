@@ -43,6 +43,35 @@
 			<link href="{{ FEED_DOMAIN }}/{% if TAG_FEED_RSS_URL %}{{ TAG_FEED_RSS_URL.format(slug=tag.slug) }}{% else %}{{ TAG_FEED_RSS.format(slug=tag.slug) }}{% endif %}" type="application/rss+xml" rel="alternate" title="{{ SITENAME|striptags }} Tags RSS Feed" />
 		{% endif %}
 	{% endblock head %}
+	<style>
+		.gp-sunset-banner {
+			background-color: #b71c1c;
+			color: #fff;
+			padding: 14px 20px;
+			border-bottom: 3px solid #7f0000;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+		.gp-sunset-banner a { color: #fff; font-weight: bold; text-decoration: underline; }
+		.gp-sunset-banner a:hover { color: #ffe082; }
+		.gp-sunset-banner p { margin: 6px 0; }
+		.gp-sunset-banner ul { margin: 8px 0 8px 24px; padding: 0; }
+		.gp-sunset-banner li { margin-bottom: 4px; }
+		.gp-sunset-banner .banner-collapsed { display: none; }
+		.gp-sunset-banner.is-collapsed .banner-full { display: none; }
+		.gp-sunset-banner.is-collapsed .banner-collapsed { display: block; }
+		.gp-sunset-toggle {
+			background: rgba(255,255,255,0.15);
+			border: 1px solid rgba(255,255,255,0.5);
+			color: #fff;
+			cursor: pointer;
+			padding: 3px 12px;
+			border-radius: 3px;
+			font-size: 13px;
+			white-space: nowrap;
+		}
+		.gp-sunset-toggle:hover { background: rgba(255,255,255,0.3); }
+	</style>
 </head>
 <body>
 	{% block body %}
@@ -119,6 +148,32 @@
 				{% endblock nav %}
 			</div>
 		{% endblock header %}
+
+		<div class="gp-sunset-banner" id="gp-sunset-banner">
+			<div class="banner-full">
+				<p>On June 15, 2026, the main, freely available GenePattern server, <a href="http://cloud.genepattern.org">cloud.genepattern.org</a>, will be retired from service and all user data deleted. If you have any data you would like to retain, please download it before that date. This notice also applies to the <a href="http://notebook.genepattern.org">GenePattern Notebook</a> and <a href="http://g2nb.org">g2nb</a> applications.</p>
+				<p>If you would like to use any of the GenePattern analyses or run GenePattern locally, you can do any of the following:</p>
+				<ul>
+					<li><strong>Run a local GenePattern server.</strong> Instructions can be found on the releases page at <a href="https://github.com/genepattern/genepattern-server/releases">https://github.com/genepattern/genepattern-server/releases</a></li>
+					<li><strong>Run GenePattern modules via an LLM.</strong> Use the local GenePattern runner utility <a href="https://github.com/genepattern/local_genepattern_runner_mcp">https://github.com/genepattern/local_genepattern_runner_mcp</a> to run analyses on your own computer without a GenePattern server. This supports running modules from a terminal window or installing a MCP server to allow your LLM (e.g. Claude Desktop) to run modules for you.</li>
+					<li><strong>Download the GenePattern modules</strong> and run them as command-line tools. The collection of publicly released GenePattern modules is available at <a href="https://github.com/genepattern/GenePatternModuleCatalog/">https://github.com/genepattern/GenePatternModuleCatalog/</a>.</li>
+				</ul>
+				<p>The GenePattern website, <a href="http://www.genepattern.org">www.genepattern.org</a>, will continue to be available.</p>
+				<p>It has been the pleasure of the GenePattern team to serve the analysis needs of the worldwide genomics community since 2004.</p>
+				<div style="text-align:center; margin-top:10px;">
+					<button class="gp-sunset-toggle" onclick="gpToggleBanner()">Collapse &#9650;</button>
+				</div>
+			</div>
+			<div class="banner-collapsed">
+				On June 15, 2026, the main, freely available GenePattern server, <a href="http://cloud.genepattern.org">cloud.genepattern.org</a>, will be retired from service&#8230;
+				<button class="gp-sunset-toggle" onclick="gpToggleBanner()" style="margin-left:8px;">More &#9660;</button>
+			</div>
+		</div>
+		<script>
+			function gpToggleBanner() {
+				document.getElementById('gp-sunset-banner').classList.toggle('is-collapsed');
+			}
+		</script>
 
 		{% block content %}
 		{% endblock content %}
